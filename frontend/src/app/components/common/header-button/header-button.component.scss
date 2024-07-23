@@ -1,0 +1,14 @@
+.header-button-container {
+  border-radius: 8px;
+  background-color: var(--border);
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  .button-icon {
+    color: var(--black);
+  }
+}

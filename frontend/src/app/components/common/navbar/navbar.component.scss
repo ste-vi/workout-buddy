@@ -1,0 +1,56 @@
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 8.56vh;
+  width: 100%;
+  max-width: 1024px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-bottom: auto;
+  position: fixed;
+  bottom: 0;
+  background-color: white;
+
+  .nav-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    gap: 4px;
+    color: var(--gray-2);
+
+    .active-nav-icon {
+      margin-top: 8px;
+      color: var(--secondary-3);
+    }
+
+    .active-dot {
+      background-color: var(--secondary-3);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      margin-left: 4px;
+      margin-right: 4px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .profile-icon {
+      scale: 0.82;
+    }
+  }
+
+  .main-action-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 50%;
+    scale: 1.8;
+  }
+}
+
+

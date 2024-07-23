@@ -1,0 +1,28 @@
+<div class="navbar-container card-shadow">
+
+  <div class="nav-icon-container">
+    <mat-icon svgIcon="home"
+              [class.active-nav-icon]="currentPage === 'dashboard'"
+              (click)="navigateTo('/dashboard')"></mat-icon>
+    <div *ngIf="currentPage === 'dashboard'" class="active-dot"></div>
+  </div>
+  <div class="nav-icon-container">
+    <mat-icon svgIcon="progress" [class.active-nav-icon]="currentPage === 'progress'"
+              (click)="navigateTo('/dashboard')"></mat-icon>
+    <div *ngIf="currentPage === 'progress'" class="active-dot"></div>
+  </div>
+  <div class="main-action-container primary-background">
+    <mat-icon svgIcon="add-circle"></mat-icon>
+  </div>
+  <div class="nav-icon-container">
+    <mat-icon svgIcon="camera" [class.active-nav-icon]="currentPage === 'track'"
+              (click)="navigateTo('/dashboard')"></mat-icon>
+    <div *ngIf="currentPage === 'track'" class="active-dot"></div>
+  </div>
+  <div class="nav-icon-container">
+    <mat-icon svgIcon="profile" [class.active-nav-icon]="currentPage === 'profile'" class="profile-icon"
+              (click)="navigateTo('/profile')"></mat-icon>
+    <div *ngIf="currentPage === 'profile'" class="active-dot"></div>
+  </div>
+
+</div>
