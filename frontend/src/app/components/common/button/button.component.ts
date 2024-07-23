@@ -10,7 +10,7 @@ import {NgClass, NgIf} from '@angular/common';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
-  @Input() background: string = 'primary-background';
+  @Input() backgroundColor: string = 'primary-background';
   @Input() name: string = '';
   @Input() iconBefore: string | undefined = undefined;
   @Input() iconAfter: string | undefined = undefined;

@@ -10,7 +10,8 @@ import {NgClass, NgIf} from "@angular/common";
   styleUrl: './medium-button.component.scss',
 })
 export class MediumButtonComponent {
-  @Input() background: string = 'primary-background';
+  @Input() classes: string[] = []
+  @Input() textClasses: string[] = []
   @Input() name: string = '';
   @Input() iconBefore: string | undefined = undefined;
   @Input() iconAfter: string | undefined = undefined;

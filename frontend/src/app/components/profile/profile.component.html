@@ -1,4 +1,4 @@
-<div class="profile-container container">
+<div class="profile-container container black-color">
 
   <div class="profile-container-header">
     <app-header-button icon="left-arrow"></app-header-button>
@@ -15,22 +15,22 @@
           <div class="user-progress s-text">You're getting stronger!</div>
         </div>
       </div>
-      <div class="profile-edit-button">
-        <app-medium-button name="Edit"></app-medium-button>
+      <div class="profile-edit-button ">
+        <app-medium-button name="Edit" [classes]="['primary-background', 'white-color']"></app-medium-button>
       </div>
     </div>
 
     <div class="user-metrics-container">
       <div class="metric-card card-shadow">
-        <div class="primary-background m-text card-value"><b>186 cm</b></div>
+        <div class="primary-background m-text primary-background-text"><b>186 cm</b></div>
         <div class="gray-1-color s-text">Height</div>
       </div>
       <div class="metric-card card-shadow">
-        <div class="primary-background m-text card-value"><b>90 kg</b></div>
+        <div class="primary-background m-text primary-background-text"><b>90 kg</b></div>
         <div class="gray-1-color s-text">Weight</div>
       </div>
       <div class="metric-card card-shadow">
-        <div class="primary-background m-text card-value"><b>24 yo</b></div>
+        <div class="primary-background m-text primary-background-text"><b>24 yo</b></div>
         <div class="gray-1-color s-text">Age</div>
       </div>
     </div>

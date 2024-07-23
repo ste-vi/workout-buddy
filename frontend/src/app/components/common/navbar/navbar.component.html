@@ -11,7 +11,9 @@
               (click)="navigateTo('/dashboard')"></mat-icon>
     <div *ngIf="currentPage === 'progress'" class="active-dot"></div>
   </div>
-  <div class="main-action-container primary-background">
+  <div class="main-action-container primary-background"
+       [ngClass]="{'secondary-background': currentPage === 'start-workout'}"
+       (click)="navigateTo('/start-workout')">
     <mat-icon svgIcon="add-circle"></mat-icon>
   </div>
   <div class="nav-icon-container">

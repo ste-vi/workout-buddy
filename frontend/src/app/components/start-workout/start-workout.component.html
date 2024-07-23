@@ -1,0 +1,29 @@
+<div class="start-workout-container container black-color">
+  <div class="start-workout-container-header">
+    <app-header-button icon="left-arrow"></app-header-button>
+    <b class="l-text">Start workout</b>
+    <app-header-button icon="two-dots"></app-header-button>
+  </div>
+
+  <div class="suggested-workout-container">
+    <div class="m-text semi-bold card-margin-bottom">Suggested workout</div>
+    <div class="workout-card card-shadow primary-background-reversed">
+      <div class="workout-card-header">
+        <div class="m-text semi-bold white-color">Chest + Triceps</div>
+        <mat-icon svgIcon="two-dots" class="s-svg-icon white-color"></mat-icon>
+      </div>
+      <div class="workout-card-body s-text white-color">
+        <div>
+          <span>11 exercises | 20 sets | ~ 30 min</span>
+        </div>
+        <div>10 days ago</div>
+      </div>
+      <div class="workout-card-footer">
+        <app-medium-button [classes]="['white-background', 'black-color']"
+                           [textClasses]="['primary-background', 'primary-background-text']" name="View details"></app-medium-button>
+        <app-medium-button [classes]="['white-background', 'black-color']"
+                           [textClasses]="['primary-background', 'primary-background-text']" name="Start"></app-medium-button>
+      </div>
+    </div>
+  </div>
+</div>
