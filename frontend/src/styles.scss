@@ -7,6 +7,7 @@
 }
 
 :root {
+  // colors
   --primary-1: #92A3FD;
   --primary-2: #9DCEFF;
   --secondary-1: #C58BF2;
@@ -17,6 +18,14 @@
   --gray-2: #ADA4A5;
   --gray-3: #DDDADA;
   --border: #F7F8F8;
+  --success: #42D742;
+  --warning: #FFD600;
+  --danger: #FF0000;
+
+  // scales
+
+  --hover-scale: 1.03;
+  --active-scale: 0.97;
 }
 
 html, body {
@@ -61,6 +70,18 @@ html, body {
 
 .white-color {
   color: white;
+}
+
+.success {
+  color: var(--success);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.danger {
+  color: var(--danger);
 }
 
 // elements sizes
@@ -127,7 +148,11 @@ h4 {
   margin-top: 1.875rem !important;
 }
 
-.card-margin-bottom {
+.card-padding-top {
+  padding-top: 0.938rem;
+}
+
+.card-padding-bottom {
   padding-bottom: 0.938rem;
 }
 
@@ -147,6 +172,31 @@ h4 {
   visibility: hidden;
 }
 
+// tags
+
+.tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .tag {
+    background-image: linear-gradient(274deg, var(--primary-2) 0%, var(--primary-1) 100%);
+    color:white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    cursor: pointer;
+
+    &:hover {
+      scale: var(--hover-scale);
+    }
+
+    &:active {
+      scale: var(--active-scale);
+    }
+  }
+}
+
 // container
 
 .container {
@@ -161,5 +211,40 @@ h4 {
   &::-webkit-scrollbar {
     width: 0;
   }
+}
 
+// modals
+
+.right-modal {
+  position: fixed;
+  top: 0;
+  right: 50%;;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: white;
+  animation: rise-from-right 0.15s ease-in-out;
+  z-index: 1;
+}
+
+// animations
+
+@keyframes rise-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes rise-from-right {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }

@@ -12,11 +12,11 @@
   box-shadow: 0 10px 22px rgba(149, 173, 254, 0.30);
 
   &:hover {
-    scale: 1.03;
+    scale: var(--hover-scale);
   }
 
   &:active {
-    scale: 0.97;
+    scale: var(--active-scale);
   }
 
 }

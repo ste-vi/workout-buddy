@@ -19,49 +19,52 @@
         </div>
         <div class="last-workout-time">
           <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
-          <div>{{ suggestedWorkoutTemplate.lastExecutionDate | timeAgo }}</div>
+          <div>{{ suggestedWorkoutTemplate.lastPerformedWorkout.date | timeAgo }}</div>
         </div>
       </div>
       <div class="workout-card-footer">
         <app-medium-button [classes]="['white-background', 'black-color']"
                            [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                           name="View details"></app-medium-button>
+                           name="View details"
+                           (click)="openWorkoutTemplateDetails(suggestedWorkoutTemplate)"></app-medium-button>
         <app-medium-button [classes]="['white-background', 'black-color']"
                            [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
                            name="Start"></app-medium-button>
       </div>
     </div>
+  </div>
+
+  <div class="workout-container">
+    <div class="workout-container-header m-text semi-bold">
+      <div>Templates</div>
+      <mat-icon svgIcon="add" class="black-color add-template-icon"></mat-icon>
     </div>
-
-
-    <div class="workout-container">
-      <div class="workout-container-header m-text semi-bold">
-        <div>Templates</div>
-        <mat-icon svgIcon="add" class="black-color add-template-icon"></mat-icon>
+    <div class="workout-card blue-shadow primary-background-reversed" *ngFor="let template of workoutTemplates">
+      <div class="workout-card-header">
+        <div class="m-text semi-bold white-color">{{ template.name }}</div>
+        <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
       </div>
-      <div class="workout-card blue-shadow primary-background-reversed" *ngFor="let template of workoutTemplates">
-        <div class="workout-card-header">
-          <div class="m-text semi-bold white-color">{{ template.name }}</div>
-          <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
-        </div>
-        <div class="workout-card-body s-text white-color">
-          <div>
+      <div class="workout-card-body s-text white-color">
+        <div>
           <span>{{ template.exercises.length }} exercises | {{ template.totalSets }}
             sets | {{ template.estimatedDuration }}</span>
-          </div>
-          <div class="last-workout-time">
-            <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
-            <div>{{ template.lastExecutionDate | timeAgo }}</div>
-          </div>
         </div>
-        <div class="workout-card-footer">
-          <app-medium-button [classes]="['white-background', 'black-color']"
-                             [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                             name="View details"></app-medium-button>
-          <app-medium-button [classes]="['white-background', 'black-color']"
-                             [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                             name="Start"></app-medium-button>
+        <div class="last-workout-time">
+          <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
+          <div>{{ template.lastPerformedWorkout.date | timeAgo }}</div>
         </div>
       </div>
+      <div class="workout-card-footer">
+        <app-medium-button [classes]="['white-background', 'black-color']"
+                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           name="View details"
+                           (click)="openWorkoutTemplateDetails(template)"></app-medium-button>
+        <app-medium-button [classes]="['white-background', 'black-color']"
+                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           name="Start"></app-medium-button>
+      </div>
     </div>
+  </div>
+
+  <app-workout-template-details></app-workout-template-details>
 </div>

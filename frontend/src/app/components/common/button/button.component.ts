@@ -11,6 +11,7 @@ import {NgClass, NgIf} from '@angular/common';
 })
 export class ButtonComponent {
   @Input() backgroundColor: string = 'primary-background';
+  @Input() textClasses: string[] = []
   @Input() name: string = '';
   @Input() iconBefore: string | undefined = undefined;
   @Input() iconAfter: string | undefined = undefined;

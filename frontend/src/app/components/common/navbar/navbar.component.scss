@@ -23,11 +23,11 @@
     color: var(--gray-2);
 
     &:hover {
-      scale: 1.03;
+      scale: var(--hover-scale);
     }
 
     &:active {
-      scale: 0.97;
+      scale: var(--active-scale);
     }
 
     .active-nav-icon {

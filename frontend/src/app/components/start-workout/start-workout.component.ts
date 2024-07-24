@@ -5,8 +5,10 @@ import { MediumButtonComponent } from '../common/medium-button/medium-button.com
 import { MatIcon } from '@angular/material/icon';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
 import { WorkoutTemplate } from '../../models/workout-template';
-import {NgForOf, NgIf} from '@angular/common';
-import { TimeAgoPipe } from '../../pipes/TimeAgoPipe';
+import { NgForOf, NgIf } from '@angular/common';
+import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
+import { WorkoutTemplateDetailsService } from '../../services/communication/workout-template-details.service';
+import {WorkoutTemplateDetailsComponent} from "../workout-template-details/workout-template-details.component";
 
 @Component({
   selector: 'app-start-workout',
@@ -19,6 +21,7 @@ import { TimeAgoPipe } from '../../pipes/TimeAgoPipe';
     NgIf,
     TimeAgoPipe,
     NgForOf,
+    WorkoutTemplateDetailsComponent,
   ],
   templateUrl: './start-workout.component.html',
   styleUrl: './start-workout.component.scss',
@@ -27,7 +30,10 @@ export class StartWorkoutComponent implements OnInit {
   protected suggestedWorkoutTemplate: WorkoutTemplate | any = undefined;
   protected workoutTemplates: WorkoutTemplate[] = [];
 
-  constructor(private workoutTemplateService: WorkoutTemplateService) {}
+  constructor(
+    private workoutTemplateService: WorkoutTemplateService,
+    private workoutTemplateDetailsService: WorkoutTemplateDetailsService,
+  ) {}
 
   ngOnInit(): void {
     this.workoutTemplateService
@@ -37,5 +43,9 @@ export class StartWorkoutComponent implements OnInit {
     this.workoutTemplateService
       .getWorkoutTemplates()
       .subscribe((array) => (this.workoutTemplates = array));
+  }
+
+  openWorkoutTemplateDetails(workoutTemplate: WorkoutTemplate) {
+    this.workoutTemplateDetailsService.openModal(workoutTemplate);
   }
 }

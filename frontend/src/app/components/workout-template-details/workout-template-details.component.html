@@ -1,0 +1,72 @@
+<div class="workout-template-details-container right-modal black-color" *ngIf="isOpen"
+     (swiperight)="onSwipeRight()">
+  <div class="workout-template-details-container-header">
+    <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
+    <app-header-button icon="two-dots"></app-header-button>
+  </div>
+
+  <div class="workout-template-details">
+    <div class="subtitle semi-bold">
+      {{ template.name }}
+    </div>
+    <div class="s-text gray-1-color">
+      {{ template.exercises.length }} exercises | {{ template.totalSets }} sets | {{ template.estimatedDuration }}
+    </div>
+    <div class="tags s-text card-padding-top">
+      <div class="tag" *ngFor="let tag of template.tags">{{ tag.name }}</div>
+    </div>
+    <div class="info-cards s-text">
+      <div class="info-card card-shadow">
+        <div class="semi-bold">
+          {{ template.lastPerformedWorkout.duration }}
+        </div>
+        <div class="semi-bold">
+          {{ template.lastPerformedWorkout.date | timeAgo }}
+        </div>
+        <div class="gray-1-color">
+          Last performed
+        </div>
+      </div>
+      <div class="info-card card-shadow">
+        <div class="semi-bold success trend-value">
+          <div class="success">{{ template.volumeTrend.percentage }} %</div>
+        </div>
+        <div class="semi-bold success trend-value">
+          <div class="success">{{ template.volumeTrend.value }}</div>
+        </div>
+        <div class="gray-1-color">
+          Volume trend
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercises-list-container">
+    <div class="l-text black-color semi-bold">Exercises</div>
+    <div class="exercises">
+      <div class="exercise" *ngFor="let exercise of template.exercises">
+        <div class="exercise-header">
+          <div class="exercise-image secondary-background"></div>
+        </div>
+        <div class="exercise-body">
+          <div class="upper-section">
+            <div class="m-text semi-bold">{{ exercise.name }}</div>
+            <div class="gray-1-color s-text">{{ exercise.sets.length }} {{ exercise.sets.length > 1 ? 'sets' : 'set'}}</div>
+          </div>
+          <div class="lower-section gray-1-color s-text">
+            <div>{{ exercise.bodyPart }}</div>
+            <div class="pr-set">
+              <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
+              <div>
+                {{ exercise.prSet.reps }} * {{ exercise.prSet.weight }} kg
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <app-button name="Start Workout" [textClasses]="['white-color', 'semi-bold']"></app-button>
+</div>

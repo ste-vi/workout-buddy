@@ -8,6 +8,14 @@
   justify-content: center;
   cursor: pointer;
 
+  &:hover {
+    scale: var(--hover-scale);
+  }
+
+  &:active {
+    scale: var(--active-scale);
+  }
+
   .button-icon {
     color: var(--black);
   }

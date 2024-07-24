@@ -1,5 +1,5 @@
 <div class="button l-text" [ngClass]="backgroundColor">
   <mat-icon *ngIf="iconBefore" [svgIcon]="iconBefore" class="s-svg-icon"></mat-icon>
-  <div>{{ name }}</div>
+  <div [ngClass]="textClasses">{{ name }}</div>
   <mat-icon *ngIf="iconAfter" [svgIcon]="iconAfter" class="s-svg-icon"></mat-icon>
 </div>
