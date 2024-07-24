@@ -1,29 +1,67 @@
 <div class="start-workout-container container black-color">
   <div class="start-workout-container-header">
-    <app-header-button icon="left-arrow"></app-header-button>
+    <app-header-button icon="left-arrow" class="not-visible"></app-header-button>
     <b class="l-text">Start workout</b>
     <app-header-button icon="two-dots"></app-header-button>
   </div>
 
-  <div class="suggested-workout-container">
-    <div class="m-text semi-bold card-margin-bottom">Suggested workout</div>
-    <div class="workout-card card-shadow primary-background-reversed">
+  <div class="workout-container" *ngIf="suggestedWorkoutTemplate">
+    <div class="m-text semi-bold">Suggested workout</div>
+    <div class="workout-card blue-shadow primary-background-reversed">
       <div class="workout-card-header">
-        <div class="m-text semi-bold white-color">Chest + Triceps</div>
-        <mat-icon svgIcon="two-dots" class="s-svg-icon white-color"></mat-icon>
+        <div class="m-text semi-bold white-color">{{ suggestedWorkoutTemplate.name }}</div>
+        <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
       </div>
       <div class="workout-card-body s-text white-color">
         <div>
-          <span>11 exercises | 20 sets | ~ 30 min</span>
+          <span>{{ suggestedWorkoutTemplate.exercises.length }} exercises | {{ suggestedWorkoutTemplate.totalSets }}
+            sets | {{ suggestedWorkoutTemplate.estimatedDuration }}</span>
         </div>
-        <div>10 days ago</div>
+        <div class="last-workout-time">
+          <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
+          <div>{{ suggestedWorkoutTemplate.lastExecutionDate | timeAgo }}</div>
+        </div>
       </div>
       <div class="workout-card-footer">
         <app-medium-button [classes]="['white-background', 'black-color']"
-                           [textClasses]="['primary-background', 'primary-background-text']" name="View details"></app-medium-button>
+                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           name="View details"></app-medium-button>
         <app-medium-button [classes]="['white-background', 'black-color']"
-                           [textClasses]="['primary-background', 'primary-background-text']" name="Start"></app-medium-button>
+                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           name="Start"></app-medium-button>
       </div>
     </div>
-  </div>
+    </div>
+
+
+    <div class="workout-container">
+      <div class="workout-container-header m-text semi-bold">
+        <div>Templates</div>
+        <mat-icon svgIcon="add" class="black-color add-template-icon"></mat-icon>
+      </div>
+      <div class="workout-card blue-shadow primary-background-reversed" *ngFor="let template of workoutTemplates">
+        <div class="workout-card-header">
+          <div class="m-text semi-bold white-color">{{ template.name }}</div>
+          <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
+        </div>
+        <div class="workout-card-body s-text white-color">
+          <div>
+          <span>{{ template.exercises.length }} exercises | {{ template.totalSets }}
+            sets | {{ template.estimatedDuration }}</span>
+          </div>
+          <div class="last-workout-time">
+            <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
+            <div>{{ template.lastExecutionDate | timeAgo }}</div>
+          </div>
+        </div>
+        <div class="workout-card-footer">
+          <app-medium-button [classes]="['white-background', 'black-color']"
+                             [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                             name="View details"></app-medium-button>
+          <app-medium-button [classes]="['white-background', 'black-color']"
+                             [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                             name="Start"></app-medium-button>
+        </div>
+      </div>
+    </div>
 </div>

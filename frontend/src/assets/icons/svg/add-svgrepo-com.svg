@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 12H20M12 4V20" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M14 8.45825C14.4833 8.45825 14.875 8.85 14.875 9.33325V13.1249H18.6667C19.1499 13.1249 19.5417 13.5167 19.5417 13.9999C19.5417 14.4832 19.1499 14.8749 18.6667 14.8749H14.875V18.6666C14.875 19.1498 14.4833 19.5416 14 19.5416C13.5168 19.5416 13.125 19.1498 13.125 18.6666V14.8749H9.33334C8.85009 14.8749 8.45834 14.4832 8.45834 13.9999C8.45834 13.5167 8.85009 13.1249 9.33334 13.1249H13.125V9.33325C13.125 8.85 13.5168 8.45825 14 8.45825Z"
+        fill="currentColor"/>
 </svg>

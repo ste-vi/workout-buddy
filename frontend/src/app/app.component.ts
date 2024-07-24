@@ -27,6 +27,7 @@ export class AppComponent {
 
   private initSvgIcons() {
     this.matIconRegistry
+      .addSvgIcon('clock', this.setIconPath(`${this.iconsPath}/clock.svg`),)
       .addSvgIcon('left-arrow', this.setIconPath(`${this.iconsPath}/left-arrow.svg`),)
       .addSvgIcon('right-arrow', this.setIconPath(`${this.iconsPath}/right-arrow.svg`),)
       .addSvgIcon('list', this.setIconPath(`${this.iconsPath}/list.svg`),)

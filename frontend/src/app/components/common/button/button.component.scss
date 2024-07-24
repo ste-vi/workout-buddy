@@ -2,11 +2,19 @@
   width: 100%;
   padding: 18px 26px;
   cursor: pointer;
-
   border-radius: 99px;
-
   display: flex;
   gap: 4px;
   justify-content: center;
   align-items: center;
+
+  box-shadow: 0 10px 22px rgba(149, 173, 254, 0.30);
+
+  &:hover {
+    scale: 1.03;
+  }
+
+  &:active {
+    scale: 0.97;
+  }
 }
