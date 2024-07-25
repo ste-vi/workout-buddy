@@ -29,6 +29,7 @@
                            (click)="openWorkoutTemplateDetails(suggestedWorkoutTemplate)"></app-medium-button>
         <app-medium-button [classes]="['white-background', 'black-color']"
                            [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           (click)="startWorkout(suggestedWorkoutTemplate)"
                            name="Start"></app-medium-button>
       </div>
     </div>
@@ -61,10 +62,12 @@
                            (click)="openWorkoutTemplateDetails(template)"></app-medium-button>
         <app-medium-button [classes]="['white-background', 'black-color']"
                            [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           (click)="startWorkout(template)"
                            name="Start"></app-medium-button>
       </div>
     </div>
   </div>
 
   <app-workout-template-details></app-workout-template-details>
+  <app-ongoing-workout></app-ongoing-workout>
 </div>

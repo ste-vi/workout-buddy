@@ -1,3 +1,4 @@
+<div class="page-mask" *ngIf="isOpen"></div>
 <div class="workout-template-details-container right-modal black-color" *ngIf="isOpen"
      (swiperight)="onSwipeRight()">
   <div class="workout-template-details-container-header">
@@ -51,22 +52,25 @@
         <div class="exercise-body">
           <div class="upper-section">
             <div class="m-text semi-bold">{{ exercise.name }}</div>
-            <div class="gray-1-color s-text">{{ exercise.sets.length }} {{ exercise.sets.length > 1 ? 'sets' : 'set'}}</div>
+            <div
+              class="gray-1-color s-text">{{ exercise.sets.length }} {{ exercise.sets.length > 1 ? 'sets' : 'set' }}
+            </div>
           </div>
           <div class="lower-section gray-1-color s-text">
             <div>{{ exercise.bodyPart }}</div>
             <div class="pr-set">
               <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
               <div>
-                {{ exercise.prSet.reps }} * {{ exercise.prSet.weight }} kg
+                {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 
-  <app-button name="Start Workout" [textClasses]="['white-color', 'semi-bold']"></app-button>
+  <app-button name="Start Workout" [textClasses]="['white-color', 'semi-bold']" (click)="startWorkout()"></app-button>
+
+  <app-ongoing-workout></app-ongoing-workout>
 </div>

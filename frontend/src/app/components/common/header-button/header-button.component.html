@@ -1,3 +1,4 @@
-<div class="header-button-container">
-  <mat-icon [svgIcon]="icon" class="xs-svg-icon button-icon"></mat-icon>
+<div class="header-button-container" [class.text-button-paddings] = "text !== ''">
+  <mat-icon *ngIf="icon" [svgIcon]="icon" class="xs-svg-icon button-icon"></mat-icon>
+  <div *ngIf="text" class="s-text semi-bold black-color">Finish</div>
 </div>

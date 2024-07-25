@@ -60,6 +60,7 @@
 
   .exercises-list-container {
     padding-top: 1.875rem;
+    padding-bottom: 6.59rem;
 
     .exercise {
       display: flex;
@@ -116,7 +117,7 @@
     max-width: 1024px;
     position: fixed;
     bottom: 1.875rem;
-    left: 0;
+    right: 0;
     padding-left: 1.875rem;
     padding-right: 1.875rem;
   }

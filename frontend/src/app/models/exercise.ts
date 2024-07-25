@@ -3,11 +3,14 @@ export interface Exercise {
   name: string;
   sets: Set[];
   prSet: Set;
-  bodyPart: string
+  bodyPart: string;
+  category: string;
 }
 
 export interface Set {
   id: number;
   reps: number;
   weight: number;
+  previousReps: number;
+  previousWeight: number;
 }
