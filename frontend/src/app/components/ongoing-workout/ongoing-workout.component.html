@@ -9,7 +9,7 @@
   <div class="ongoing-workout-container-body section-margin-top">
     <div class="ongoing-workout-header">
       <div class="l-text semi-bold">Back + Biceps</div>
-      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon"></mat-icon>
+      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openWorkoutMenu($event)"></mat-icon>
     </div>
 
     <div class="ongoing-workout-info">
@@ -18,7 +18,6 @@
         <div class="tag">+</div>
       </div>
     </div>
-
 
     <div class="section-margin-top exercises"
          cdkDropList cdkDropListAutoScroll
@@ -37,9 +36,10 @@
           <div class="exercise-body">
             <div class="upper-section">
               <div class="m-text semi-bold">{{ exercise.name }}</div>
-              <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"></mat-icon>
+              <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"
+                        (click)="openExerciseMenu($event, exercise)"></mat-icon>
             </div>
-            <div class="lower-section gray-1-color s-text">
+            <div class=" lower-section gray-1-color s-text">
               <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
               <div class="pr-set">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
@@ -85,4 +85,7 @@
       <div class="add-new-exercise m-text semi-bold primary-background">Add exercise</div>
     </div>
   </div>
+
+  <app-context-menu #workoutMenu [menuItems]="workoutMenuItems"></app-context-menu>
+  <app-context-menu #exerciseMenu [menuItems]="exerciseMenuItems"></app-context-menu>
 </div>

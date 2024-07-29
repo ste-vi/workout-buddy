@@ -1,5 +1,6 @@
-<div class="context-menu card-shadow" #contextMenu
-     [ngStyle]="{'top.px': y, 'left.px': x}"
+<div class="context-menu card-shadow s-text"
+     #contextMenu
+     [ngStyle]="{'top.px': y, 'left.px': x, 'opacity': opacity}"
      *ngIf="isVisible">
   <ul>
     <li *ngFor="let item of menuItems" (click)="onMenuItemClick(item)">

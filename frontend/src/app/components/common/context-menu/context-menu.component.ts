@@ -1,4 +1,10 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import { NgForOf, NgIf, NgStyle } from '@angular/common';
 
 export interface MenuItem {
@@ -9,6 +15,8 @@ export interface MenuItem {
 export interface MenuPosition {
   x: number;
   y: number;
+  xOffset: number;
+  yOffset: number;
 }
 
 @Component({
@@ -20,47 +28,49 @@ export interface MenuPosition {
 })
 export class ContextMenuComponent {
   @Input() menuItems: MenuItem[] = [];
-  @Input() position: MenuPosition | undefined = undefined;
-
   @ViewChild('contextMenu') contextMenu!: ElementRef;
-
   x: number = 0;
   y: number = 0;
   isVisible = false;
+  opacity: number = 1.0;
 
   show(position: MenuPosition) {
     this.x = position.x;
     this.y = position.y - 40;
+    this.isVisible = true;
+    this.opacity = 0.0;
 
     setTimeout(() => {
-
-
-      const menuWidth = this.contextMenu.nativeElement.offsetWidth;
-      const menuHeight = this.contextMenu.nativeElement.offsetHeight;
-
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-
-      if ( (windowWidth - this.x) < menuWidth ) {
-        console.log('Right');
-        this.x = windowWidth - menuWidth - 100;
+      if (this.contextMenu && this.contextMenu.nativeElement) {
+        this.x = position.x - this.contextMenu.nativeElement.offsetWidth - position.xOffset;
+        this.y = position.y - 30;
       }
-
-      if ( (windowHeight - this.y) < menuHeight ) {
-        console.log('Top');
-        this.y = windowHeight - menuHeight ;
-      }
+      this.opacity = 1.0;
     }, 0);
-
-    this.isVisible = true;
   }
 
   hide() {
-    this.isVisible = false;
+    setTimeout(() => {
+      this.isVisible = false;
+    }, 100);
   }
 
   onMenuItemClick(item: MenuItem) {
     item.action();
     this.hide();
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event) {
+    try {
+      if (
+        this.isVisible &&
+        !this.contextMenu.nativeElement.contains(event.target)
+      ) {
+        this.hide();
+      }
+    } catch (ex) {
+      // Do nothing. Means first time click event is fired view not ready
+    }
   }
 }
