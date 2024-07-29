@@ -9,8 +9,9 @@
   <div class="ongoing-workout-container-body section-margin-top">
     <div class="ongoing-workout-header">
       <div class="l-text semi-bold">Back + Biceps</div>
-      <mat-icon svgIcon="two-dots" class="xs-svg-icon"></mat-icon>
+      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon"></mat-icon>
     </div>
+
     <div class="ongoing-workout-info">
       <div class="tags s-text card-padding-top">
         <div class="tag">Beginner</div>
@@ -18,64 +19,70 @@
       </div>
     </div>
 
-    <div class="section-margin-top exercises">
 
-      <div class="exercises">
-        <div class="exercise" *ngFor="let exercise of workoutTemplate.exercises">
-          <div class="exercise-info">
-            <div class="exercise-header">
-              <div class="exercise-image secondary-background"></div>
-            </div>
-            <div class="exercise-body">
-              <div class="upper-section">
-                <div class="m-text semi-bold">{{ exercise.name }}</div>
-                <mat-icon svgIcon="two-dots" class="xs-svg-icon gray-1-color"></mat-icon>
-              </div>
-              <div class="lower-section gray-1-color s-text">
-                <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
-                <div class="pr-set">
-                  <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
-                  <div>
-                    {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div class="section-margin-top exercises"
+         cdkDropList cdkDropListAutoScroll
+         (cdkDropListDropped)="drop($event)">
+      <div class="exercise"
+           *ngFor="let exercise of workoutTemplate.exercises"
+           (cdkDragEnded)="onDragEnded()"
+           [cdkDragDisabled]="!dragStarted"
+           cdkDrag
+           cdkDragLockAxis="y"
+           cdkDragBoundary=".exercises">
+        <div class="exercise-info" cdkDragHandle>
+          <div class="exercise-header">
+            <div class="exercise-image secondary-background"></div>
           </div>
-
-          <div class="exercise-sets s-text">
-            <div class="table-row semi-bold">
-              <div class="table-cell set">Set</div>
-              <div class="table-cell previous">Previous</div>
-              <div class="table-cell kg">Kg</div>
-              <div class="table-cell reps">Reps</div>
-              <div class="table-cell action">
-                <mat-icon svgIcon="check" class="s-svg-icon"></mat-icon>
-              </div>
+          <div class="exercise-body">
+            <div class="upper-section">
+              <div class="m-text semi-bold">{{ exercise.name }}</div>
+              <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"></mat-icon>
             </div>
-            <div class="table-row" *ngFor="let set of exercise.sets; index as i">
-              <div class="table-cell set">
-                <div class="set-sell">{{ i + 1 }}</div>
-              </div>
-              <div class="table-cell previous">{{ set.previousWeight }} kg * {{ set.previousReps }}</div>
-              <div class="table-cell kg">
-                <input type="number" [placeholder]="set.previousWeight">
-              </div>
-              <div class="table-cell reps">
-                <input type="number" [placeholder]="set.previousReps">
-              </div>
-              <div class="table-cell action">
-                <div class="clickable action-icon-container">
-                  <mat-icon svgIcon="check" class="gray-1-color action-icon"></mat-icon>
+            <div class="lower-section gray-1-color s-text">
+              <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
+              <div class="pr-set">
+                <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
+                <div>
+                  {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}
                 </div>
               </div>
             </div>
-            <div class="add-new-set semi-bold">Add set</div>
           </div>
         </div>
 
-        <div class="add-new-exercise m-text semi-bold primary-background">Add exercise</div>
+        <div class="exercise-sets s-text" *ngIf="!dragStarted">
+          <div class="table-row semi-bold">
+            <div class="table-cell set">Set</div>
+            <div class="table-cell previous">Previous</div>
+            <div class="table-cell kg">Kg</div>
+            <div class="table-cell reps">Reps</div>
+            <div class="table-cell action">
+              <mat-icon svgIcon="check" class="s-svg-icon"></mat-icon>
+            </div>
+          </div>
+          <div class="table-row" *ngFor="let set of exercise.sets; index as i">
+            <div class="table-cell set">
+              <div class="set-sell">{{ i + 1 }}</div>
+            </div>
+            <div class="table-cell previous">{{ set.previousWeight }} kg * {{ set.previousReps }}</div>
+            <div class="table-cell kg">
+              <input type="number" [placeholder]="set.previousWeight">
+            </div>
+            <div class="table-cell reps">
+              <input type="number" [placeholder]="set.previousReps">
+            </div>
+            <div class="table-cell action">
+              <div class="clickable action-icon-container">
+                <mat-icon svgIcon="check" class="gray-1-color action-icon"></mat-icon>
+              </div>
+            </div>
+          </div>
+          <div class="add-new-set semi-bold">Add set</div>
+        </div>
       </div>
+
+      <div class="add-new-exercise m-text semi-bold primary-background">Add exercise</div>
     </div>
   </div>
 </div>

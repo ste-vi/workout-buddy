@@ -14,7 +14,7 @@ export class TimeAgoPipe implements PipeTransform {
       return 'Today';
     } else if (diffInDays === 1) {
       return 'Yesterday';
-    } else if (diffInDays < 10) {
+    } else if (diffInDays < 100) {
       return `${diffInDays} days ago`;
     } else {
       return date.toLocaleDateString();

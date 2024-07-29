@@ -50,5 +50,6 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
 
   startWorkout() {
     this.ongoingWorkoutService.openModal(this.template);
+    this.closeModal();
   }
 }

@@ -6,6 +6,7 @@
   padding-left: 1.875rem;
   padding-right: 1.875rem;
   overflow-y: hidden;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 
@@ -32,61 +33,8 @@
     }
 
     .exercises {
-
-      .exercise {
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 0.938rem;
-        gap: 0.5rem;
-        width: 100%;
-
-        .exercise-info {
-          display: flex;
-          gap: 0.5rem;
-
-          .exercise-header {
-            cursor: pointer;
-
-            .exercise-image {
-              height: 3.75rem;
-              width: 3.75rem;
-              border-radius: 16px;
-            }
-          }
-
-          .exercise-body {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            .upper-section {
-              width: 100%;
-              display: flex;
-              gap: 0.5rem;
-              align-items: center;
-              justify-content: space-between;
-            }
-
-            .lower-section {
-              width: 100%;
-              display: flex;
-              gap: 0.5rem;
-              align-items: center;
-              justify-content: space-between;
-            }
-
-            .pr-set {
-              display: flex;
-              align-items: center;
-
-              .pr-set-icon {
-                scale: 0.56;
-              }
-            }
-          }
-        }
-      }
+      overflow-y: hidden;
+      overflow-x: hidden;
 
       .exercise-sets {
         width: 100%;
@@ -199,3 +147,72 @@
     font-weight: 300;
   }
 }
+
+.exercise {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.938rem;
+  gap: 0.5rem;
+  width: 100%;
+
+  .exercise-info {
+    display: flex;
+    gap: 0.5rem;
+
+    .exercise-header {
+      cursor: pointer;
+
+      .exercise-image {
+        height: 3.75rem;
+        width: 3.75rem;
+        border-radius: 16px;
+      }
+    }
+
+    .exercise-body {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .upper-section {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .lower-section {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .pr-set {
+        display: flex;
+        align-items: center;
+
+        .pr-set-icon {
+          scale: 0.56;
+        }
+      }
+    }
+  }
+}
+
+.cdk-drag-preview {
+  cursor: grab;
+}
+
+.cdk-drag-placeholder {
+  cursor: grab;
+  opacity: 0;
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 0.3s ease;
+}
+

@@ -1,0 +1,9 @@
+<div class="context-menu card-shadow" #contextMenu
+     [ngStyle]="{'top.px': y, 'left.px': x}"
+     *ngIf="isVisible">
+  <ul>
+    <li *ngFor="let item of menuItems" (click)="onMenuItemClick(item)">
+      {{ item.label }}
+    </li>
+  </ul>
+</div>

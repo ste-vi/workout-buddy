@@ -109,6 +109,11 @@ export const workoutTemplates: WorkoutTemplate[] = [
         sets: [
           { id: 1, reps: 8, weight: 135, previousReps: 5, previousWeight: 120 },
           { id: 2, reps: 7, weight: 135, previousReps: 5, previousWeight: 120 },
+          { id: 2, reps: 7, weight: 135, previousReps: 5, previousWeight: 120 },
+          { id: 2, reps: 7, weight: 135, previousReps: 5, previousWeight: 120 },
+          { id: 2, reps: 7, weight: 135, previousReps: 5, previousWeight: 120 },
+          { id: 2, reps: 7, weight: 135, previousReps: 5, previousWeight: 120 },
+          { id: 2, reps: 7, weight: 135, previousReps: 5, previousWeight: 120 }
         ],
         prSet: {
           id: 1,
