@@ -1,12 +1,14 @@
 <div class="page-mask" *ngIf="isOpen"></div>
 <div class="ongoing-workout-container right-modal black-color" *ngIf="isOpen">
+
   <div class="ongoing-workout-container-header">
     <app-header-button icon="close" (click)="stopWorkout()"></app-header-button>
     <div class="timer l-text gray-1-color">00:00</div>
-    <app-header-button icon="finish"></app-header-button>
+    <app-header-button icon="finish" [active]=isComplete (click)="finishWorkout()"></app-header-button>
   </div>
+  <app-progress-bar [progress]=progress class="card-padding-top"></app-progress-bar>
 
-  <div class="ongoing-workout-container-body section-margin-top">
+  <div class="ongoing-workout-container-body section-padding-top">
     <div class="ongoing-workout-header">
       <div class="l-text semi-bold">Back + Biceps</div>
       <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openWorkoutMenu($event)"></mat-icon>
@@ -29,7 +31,7 @@
            cdkDrag
            cdkDragLockAxis="y"
            cdkDragBoundary=".exercises">
-        <div class="exercise-info" cdkDragHandle>
+        <div class="exercise-info" cdkDragHandle [class.exercise-info-draggable]="dragStarted">
           <div class="exercise-header">
             <div class="exercise-image secondary-background"></div>
           </div>
@@ -51,7 +53,7 @@
           </div>
         </div>
 
-        <div class="exercise-sets s-text" *ngIf="!dragStarted">
+        <div class="exercise-sets s-text" *ngIf="!dragStarted" [@fadeInOut]>
           <div class="table-row semi-bold">
             <div class="table-cell set">Set</div>
             <div class="table-cell previous">Previous</div>

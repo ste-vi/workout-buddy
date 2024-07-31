@@ -33,7 +33,7 @@
     .active-nav-icon {
       margin-top: 8px;
       color: var(--secondary-3);
-      transition: color 0.3s ease-in-out;
+      transition: color var(--animation-duration) ease-in-out;
     }
 
     .active-dot {

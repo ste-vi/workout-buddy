@@ -27,6 +27,10 @@ export class AppComponent {
 
   private initSvgIcons() {
     this.matIconRegistry
+      .addSvgIcon('swap', this.setIconPath(`${this.iconsPath}/swap.svg`),)
+      .addSvgIcon('stopwatch', this.setIconPath(`${this.iconsPath}/stopwatch.svg`),)
+      .addSvgIcon('transfer', this.setIconPath(`${this.iconsPath}/transfer.svg`),)
+      .addSvgIcon('delete', this.setIconPath(`${this.iconsPath}/delete.svg`),)
       .addSvgIcon('check', this.setIconPath(`${this.iconsPath}/check.svg`),)
       .addSvgIcon('finish', this.setIconPath(`${this.iconsPath}/finish.svg`),)
       .addSvgIcon('close', this.setIconPath(`${this.iconsPath}/close.svg`),)

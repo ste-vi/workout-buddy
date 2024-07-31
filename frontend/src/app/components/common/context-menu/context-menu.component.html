@@ -1,10 +1,11 @@
-<div class="context-menu card-shadow s-text"
+<div class="context-menu card-shadow s-text gray-1-color"
      #contextMenu
      [ngStyle]="{'top.px': y, 'left.px': x, 'opacity': opacity}"
      *ngIf="isVisible">
-  <ul>
-    <li *ngFor="let item of menuItems" (click)="onMenuItemClick(item)">
-      {{ item.label }}
-    </li>
-  </ul>
+  <div class="item"
+       *ngFor="let item of menuItems"
+       (click)="onMenuItemClick(item)">
+    <mat-icon *ngIf="item.icon" [svgIcon]="item.icon" class="m-svg-icon primary"></mat-icon>
+    <div>{{ item.label }}</div>
+  </div>
 </div>

@@ -6,9 +6,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NgForOf, NgIf, NgStyle } from '@angular/common';
+import {MatIcon} from "@angular/material/icon";
 
 export interface MenuItem {
   label: string;
+  icon?: string;
   action: () => void;
 }
 
@@ -24,7 +26,7 @@ export interface MenuPosition {
   templateUrl: './context-menu.component.html',
   standalone: true,
   styleUrls: ['./context-menu.component.scss'],
-  imports: [NgStyle, NgForOf, NgIf],
+  imports: [NgStyle, NgForOf, NgIf, MatIcon],
 })
 export class ContextMenuComponent {
   @Input() menuItems: MenuItem[] = [];
@@ -42,7 +44,10 @@ export class ContextMenuComponent {
 
     setTimeout(() => {
       if (this.contextMenu && this.contextMenu.nativeElement) {
-        this.x = position.x - this.contextMenu.nativeElement.offsetWidth - position.xOffset;
+        this.x =
+          position.x -
+          this.contextMenu.nativeElement.offsetWidth -
+          position.xOffset;
         this.y = position.y - 30;
       }
       this.opacity = 1.0;

@@ -23,9 +23,11 @@
   --danger: #FF0000;
 
   // scales
-
   --hover-scale: 1.03;
   --active-scale: 0.97;
+
+  // animations
+  --animation-duration: 0.25s
 }
 
 html, body {
@@ -174,6 +176,10 @@ h4 {
   margin-top: 1.875rem !important;
 }
 
+.section-padding-top {
+  padding-top: 1.875rem;
+}
+
 .card-padding-top {
   padding-top: 0.938rem;
 }
@@ -260,14 +266,14 @@ input[type=number] {
   bottom: 0;
   right: 0;
   background-color: white;
-  animation: rise-from-right 0.1s ease-in-out;
+  animation: rise-from-right var(--animation-duration) ease-in-out;
   z-index: 1;
 }
 
 .page-mask {
   background: rgba(50, 50, 50, 0.6);
   backdrop-filter: blur(3px);
-  transition: background-color 0.1s ease-in-out;
+  transition: background-color var(--animation-duration) ease-in-out;
   position: fixed;
   top: 0;
   bottom: 0;

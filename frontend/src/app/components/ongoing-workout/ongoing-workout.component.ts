@@ -1,13 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf, NgStyle } from '@angular/common';
 import { workoutTemplates } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
 import { MatIcon } from '@angular/material/icon';
 import {
@@ -22,8 +16,20 @@ import {
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
-import {ContextMenuComponent, MenuItem} from '../common/context-menu/context-menu.component';
-import {Exercise} from "../../models/exercise";
+import {
+  ContextMenuComponent,
+  MenuItem,
+} from '../common/context-menu/context-menu.component';
+import { Exercise } from '../../models/exercise';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { ProgressBarComponent } from '../common/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -46,6 +52,21 @@ import {Exercise} from "../../models/exercise";
     CdkMenuItem,
     CdkMenu,
     ContextMenuComponent,
+    MatProgressBar,
+    NgStyle,
+    ProgressBarComponent,
+  ],
+  animations: [
+    trigger('fadeInOut', [
+      state(
+        'void',
+        style({
+          height: 0,
+          opacity: 0,
+        }),
+      ),
+      transition(':leave', [animate('250ms ease')]),
+    ]),
   ],
   templateUrl: './ongoing-workout.component.html',
   styleUrl: './ongoing-workout.component.scss',
@@ -55,6 +76,8 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   protected isTemplateUpdated: boolean = true;
   protected workoutTemplate = workoutTemplates[1];
   protected dragStarted: boolean = false;
+  protected progress: number = 0.3;
+  protected isComplete: boolean = this.progress == 1.0;
 
   @ViewChild('workoutMenu') workoutMenu!: ContextMenuComponent;
   @ViewChild('exerciseMenu') exerciseMenu!: ContextMenuComponent;
@@ -66,10 +89,6 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
       this.isOpen = true;
       this.workoutTemplate = wt;
     });
-  }
-
-  stopWorkout() {
-    this.isOpen = false;
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -89,12 +108,22 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   workoutMenuItems = [
     {
       label: 'Reorder exercises',
+      icon: 'swap',
       action: () => this.prepareExercisesViewForDrag(),
     },
-    { label: 'Add new exercise', action: () => this.addExercise() },
+    {
+      label: 'Add exercise',
+      icon: 'add-circle',
+      action: () => this.addExercise(),
+    },
+    {
+      label: 'Reset timer',
+      icon: 'stopwatch',
+      action: () => this.addExercise(),
+    },
   ];
 
-  exerciseMenuItems : MenuItem[] = [];
+  exerciseMenuItems: MenuItem[] = [];
 
   openWorkoutMenu($event: MouseEvent) {
     this.workoutMenu.show({
@@ -109,9 +138,14 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     this.exerciseMenuItems = [
       {
         label: 'Replace exercise',
+        icon: 'transfer',
         action: () => this.replaceExercise(exercise),
       },
-      { label: 'Remove exercise', action: () => this.removeExercise(exercise) }
+      {
+        label: 'Remove exercise',
+        icon: 'delete',
+        action: () => this.removeExercise(exercise),
+      },
     ];
 
     this.exerciseMenu.show({
@@ -130,7 +164,15 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   private replaceExercise(exercise: Exercise) {}
 
-  private removeExercise(exercise: Exercise) {
+  private removeExercise(exercise: Exercise) {}
 
+  stopWorkout() {
+    this.isOpen = false;
+    this.dragStarted = false;
+    this.isTemplateUpdated = false;
+  }
+
+  finishWorkout() {
+    this.progress = this.progress + 0.1 // temp
   }
 }

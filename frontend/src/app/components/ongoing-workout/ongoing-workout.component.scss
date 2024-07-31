@@ -45,8 +45,8 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          padding-top: 0.28rem;
+          padding-bottom: 0.28rem;
 
           .set {
             flex: 1 1 0;
@@ -137,8 +137,8 @@
     border: none;
     background-color: var(--border);
     outline: none;
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
+    padding-top: 0.34rem;
+    padding-bottom: 0.34rem;
     font-size: 12px;
     font-weight: 550;
   }
@@ -201,6 +201,10 @@
       }
     }
   }
+
+  .exercise-info-draggable {
+    cursor: grab;
+  }
 }
 
 .cdk-drag-preview {
@@ -213,6 +217,6 @@
 }
 
 .cdk-drop-list-dragging .cdk-drag {
-  transition: transform 0.3s ease;
+  transition: transform var(--animation-duration) ease;
 }
 
