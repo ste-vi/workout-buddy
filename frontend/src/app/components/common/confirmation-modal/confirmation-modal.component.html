@@ -1,0 +1,17 @@
+<div class="modal-overlay" (click)="cancel()" *ngIf="isOpen"></div>
+<div class="modal black-color" *ngIf="isOpen">
+  <div class="modal-header l-text semi-bold">
+    {{ header }}
+  </div>
+  <div class="modal-body m-text">{{ message }}</div>
+  <div class="modal-footer">
+    <app-medium-button name="Confirm"
+                       [classes]="['primary-background', 'black-color']"
+                       [textClasses]="['white-color', 'semi-bold']"
+                       (click)="confirm()"></app-medium-button>
+    <app-medium-button name="Cancel"
+                       [classes]="['white-background', 'black-color']"
+                       [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                       (click)="cancel()"></app-medium-button>
+  </div>
+</div>

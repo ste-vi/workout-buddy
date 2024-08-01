@@ -73,6 +73,17 @@
               border-radius: 6px;
               background-color: var(--border);
             }
+
+            .delete-icon {
+              padding: 0.3rem;
+              color: var(--danger);
+            }
+
+            .complete-set-action-icon {
+              background-color: var(--primary-1);
+              color: white;
+              animation: completed var(--animation-duration) ease;
+            }
           }
 
           .kg {
@@ -95,6 +106,12 @@
         .table-cell {
           flex: 1;
           text-align: left;
+        }
+
+        .completed-table-cell {
+          color: var(--primary-1);
+          font-weight: 550;
+          animation: completed var(--animation-duration) ease;
         }
 
         .add-new-set {
@@ -145,6 +162,16 @@
 
   input::placeholder {
     font-weight: 300;
+  }
+
+  .complete-set-input {
+    background-color: var(--primary-1);
+    color: white;
+    animation: completed var(--animation-duration) ease;
+  }
+
+  .complete-set-input::placeholder {
+    color: white;
   }
 }
 

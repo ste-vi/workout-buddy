@@ -1,0 +1,40 @@
+.modal-overlay {
+  background: rgba(50, 50, 50, 0.6);
+  backdrop-filter: blur(3px);
+  transition: background-color var(--animation-duration) ease-in-out;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 18rem;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  gap: 0.938rem;
+  padding: 0.938rem 1.875rem;
+  // todo: add animations
+}
+
+.modal-body {
+
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.938rem;
+}

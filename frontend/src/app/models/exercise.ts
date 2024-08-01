@@ -8,9 +8,10 @@ export interface Exercise {
 }
 
 export interface Set {
-  id: number;
+  id?: number;
   reps: number;
   weight: number;
-  previousReps: number;
-  previousWeight: number;
+  previousReps?: number;
+  previousWeight?: number;
+  completed: boolean;
 }

@@ -4,7 +4,7 @@
   <div class="ongoing-workout-container-header">
     <app-header-button icon="close" (click)="stopWorkout()"></app-header-button>
     <div class="timer l-text gray-1-color">00:00</div>
-    <app-header-button icon="finish" [active]=isComplete (click)="finishWorkout()"></app-header-button>
+    <app-header-button icon="finish" [active]="progress == 1" (click)="finishWorkout()"></app-header-button>
   </div>
   <app-progress-bar [progress]=progress class="card-padding-top"></app-progress-bar>
 
@@ -38,8 +38,12 @@
           <div class="exercise-body">
             <div class="upper-section">
               <div class="m-text semi-bold">{{ exercise.name }}</div>
-              <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"
+              <mat-icon *ngIf="deleteSetModeForExercise !== exercise"
+                        svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"
                         (click)="openExerciseMenu($event, exercise)"></mat-icon>
+              <mat-icon *ngIf="deleteSetModeForExercise === exercise"
+                        svgIcon="undo" class="m-svg-icon clickable-m-icon primary"
+                        (click)="resetDelete()"></mat-icon>
             </div>
             <div class=" lower-section gray-1-color s-text">
               <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
@@ -60,27 +64,39 @@
             <div class="table-cell kg">Kg</div>
             <div class="table-cell reps">Reps</div>
             <div class="table-cell action">
-              <mat-icon svgIcon="check" class="s-svg-icon"></mat-icon>
+              <mat-icon *ngIf="deleteSetModeForExercise !== exercise" svgIcon="check" class="s-svg-icon"></mat-icon>
             </div>
+
           </div>
           <div class="table-row" *ngFor="let set of exercise.sets; index as i">
-            <div class="table-cell set">
+            <div class="table-cell set" [class.completed-table-cell]="set.completed">
               <div class="set-sell">{{ i + 1 }}</div>
             </div>
-            <div class="table-cell previous">{{ set.previousWeight }} kg * {{ set.previousReps }}</div>
+            <div class="table-cell previous" [class.completed-table-cell]="set.completed">
+              <span *ngIf="set.previousReps">{{ set.previousWeight ? set.previousWeight : '0' }}
+                kg * {{ set.previousReps }}</span>
+              <span *ngIf="!set.previousReps">-</span>
+            </div>
             <div class="table-cell kg">
-              <input type="number" [placeholder]="set.previousWeight">
+              <input type="number" [class.complete-set-input]="set.completed"
+                     [placeholder]="set.previousWeight ? set.previousWeight : 0">
             </div>
             <div class="table-cell reps">
-              <input type="number" [placeholder]="set.previousReps">
+              <input type="number" [class.complete-set-input]="set.completed"
+                     [placeholder]="set.previousReps ? set.previousReps : 0">
             </div>
             <div class="table-cell action">
-              <div class="clickable action-icon-container">
-                <mat-icon svgIcon="check" class="gray-1-color action-icon"></mat-icon>
+              <div *ngIf="deleteSetModeForExercise !== exercise" class="clickable action-icon-container">
+                <mat-icon svgIcon="check" class="gray-1-color action-icon"
+                          [class.complete-set-action-icon]="set.completed" (click)="completeSet(set)"></mat-icon>
+              </div>
+              <div *ngIf="deleteSetModeForExercise === exercise" class="clickable action-icon-container">
+                <mat-icon svgIcon="delete-2" class="gray-1-color action-icon delete-icon"
+                          (click)="deleteSet(set, exercise)"></mat-icon>
               </div>
             </div>
           </div>
-          <div class="add-new-set semi-bold">Add set</div>
+          <div class="add-new-set semi-bold" (click)="addSet(exercise)">Add set</div>
         </div>
       </div>
 
@@ -90,4 +106,11 @@
 
   <app-context-menu #workoutMenu [menuItems]="workoutMenuItems"></app-context-menu>
   <app-context-menu #exerciseMenu [menuItems]="exerciseMenuItems"></app-context-menu>
+
+  <app-confirmation-modal
+    #deleteConfirmationModal
+    [header]="'Delete set'"
+    [message]="'Are you sure?'"
+    (confirmed)="onDeleteSetConfirmed($event)"
+  ></app-confirmation-modal>
 </div>
