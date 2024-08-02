@@ -1,5 +1,5 @@
-<div class="modal-overlay" (click)="cancel()" *ngIf="isOpen"></div>
-<div class="modal black-color" *ngIf="isOpen">
+<div class="modal-overlay" (click)="cancel()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="modal black-color" *ngIf="isOpen" [@openClose]>
   <div class="modal-header l-text semi-bold">
     {{ header }}
   </div>

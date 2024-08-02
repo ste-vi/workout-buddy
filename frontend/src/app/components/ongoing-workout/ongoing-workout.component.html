@@ -57,7 +57,7 @@
           </div>
         </div>
 
-        <div class="exercise-sets s-text" *ngIf="!dragStarted" [@fadeInOut]>
+        <div class="exercise-sets s-text" *ngIf="!dragStarted" [@collapse] [@.disabled]="!setsAnimationEnabled">
           <div class="table-row semi-bold">
             <div class="table-cell set">Set</div>
             <div class="table-cell previous">Previous</div>
@@ -92,7 +92,7 @@
               </div>
               <div *ngIf="deleteSetModeForExercise === exercise" class="clickable action-icon-container">
                 <mat-icon svgIcon="delete-2" class="gray-1-color action-icon delete-icon"
-                          (click)="deleteSet(set, exercise)"></mat-icon>
+                          (click)="deleteSet(set, i, exercise)"></mat-icon>
               </div>
             </div>
           </div>
@@ -109,7 +109,6 @@
 
   <app-confirmation-modal
     #deleteConfirmationModal
-    [header]="'Delete set'"
     [message]="'Are you sure?'"
     (confirmed)="onDeleteSetConfirmed($event)"
   ></app-confirmation-modal>

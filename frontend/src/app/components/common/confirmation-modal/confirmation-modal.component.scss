@@ -1,7 +1,7 @@
 .modal-overlay {
   background: rgba(50, 50, 50, 0.6);
   backdrop-filter: blur(3px);
-  transition: background-color var(--animation-duration) ease-in-out;
+  transition: background-color var(--animation-duration) ease;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -25,7 +25,6 @@
   z-index: 100;
   gap: 0.938rem;
   padding: 0.938rem 1.875rem;
-  // todo: add animations
 }
 
 .modal-body {
@@ -37,4 +36,5 @@
   justify-content: center;
   align-items: center;
   gap: 0.938rem;
+  padding-top: 0.3rem
 }

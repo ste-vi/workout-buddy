@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { NgForOf, NgIf, NgStyle } from '@angular/common';
@@ -27,16 +21,10 @@ import {
   MenuItem,
 } from '../common/context-menu/context-menu.component';
 import { Exercise } from '../../models/exercise';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { ProgressBarComponent } from '../common/progress-bar/progress-bar.component';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
+import { collapse } from '../../animations/collapse';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -64,19 +52,7 @@ import { ConfirmationModalComponent } from '../common/confirmation-modal/confirm
     ProgressBarComponent,
     ConfirmationModalComponent,
   ],
-  animations: [
-    trigger('fadeInOut', [
-      state(
-        'void',
-        style({
-          height: 0,
-          opacity: 0,
-        }),
-      ),
-      transition(':enter', [animate('250ms ease')]),
-      transition(':leave', [animate('250ms ease')]),
-    ]),
-  ],
+  animations: [collapse],
   templateUrl: './ongoing-workout.component.html',
   styleUrl: './ongoing-workout.component.scss',
 })
@@ -85,6 +61,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   protected isTemplateUpdated: boolean = true;
   protected workoutTemplate = workoutTemplates[1];
   protected dragStarted: boolean = false;
+  protected setsAnimationEnabled: boolean = false;
   protected progress: number = 0.3;
   protected deleteSetModeForExercise: Exercise | undefined = undefined;
   private setToDelete: any;
@@ -174,7 +151,10 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   }
 
   prepareExercisesViewForDrag() {
-    this.dragStarted = true;
+    this.setsAnimationEnabled = true;
+    setTimeout(() => {
+      this.dragStarted = true;
+    }, 0);
   }
 
   addExercise() {}
@@ -209,7 +189,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     this.deleteSetModeForExercise = exercise;
   }
 
-  deleteSet(set: any, exercise: Exercise) {
+  deleteSet(set: any, index: number, exercise: Exercise) {
     this.deleteSetModeForExercise = exercise;
     this.setToDelete = set;
     if (
@@ -220,7 +200,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     ) {
       this.onDeleteSetConfirmed(true);
     } else {
-      this.deleteConfirmationModal.show();
+      this.deleteConfirmationModal.show(`Delete set ${index}?`);
     }
   }
 

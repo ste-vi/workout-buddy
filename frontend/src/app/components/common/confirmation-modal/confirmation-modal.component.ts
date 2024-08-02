@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MediumButtonComponent } from '../medium-button/medium-button.component';
 import { NgIf } from '@angular/common';
+import { openClose } from '../../../animations/open-close';
+import { fadeInOut } from '../../../animations/fade-in-out';
 
 @Component({
   selector: 'app-confirmation-modal',
@@ -8,6 +10,7 @@ import { NgIf } from '@angular/common';
   imports: [MediumButtonComponent, NgIf],
   templateUrl: './confirmation-modal.component.html',
   styleUrl: './confirmation-modal.component.scss',
+  animations: [openClose, fadeInOut],
 })
 export class ConfirmationModalComponent {
   @Input() header = 'Confirmation';
@@ -16,7 +19,10 @@ export class ConfirmationModalComponent {
 
   protected isOpen: boolean = false;
 
-  show() {
+  show(overrideHeader?: string) {
+    if (overrideHeader) {
+      this.header = overrideHeader;
+    }
     this.isOpen = true;
   }
 
