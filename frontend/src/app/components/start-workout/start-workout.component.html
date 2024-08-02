@@ -9,7 +9,7 @@
     <div class="m-text semi-bold">Suggested workout</div>
     <div class="workout-card blue-shadow primary-background-reversed">
       <div class="workout-card-header">
-        <div class="m-text semi-bold white-color">{{ suggestedWorkoutTemplate.name }}</div>
+        <div class="m-text semi-bold white-color">{{ suggestedWorkoutTemplate.title }}</div>
         <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
       </div>
       <div class="workout-card-body s-text white-color">
@@ -42,7 +42,7 @@
     </div>
     <div class="workout-card blue-shadow primary-background-reversed" *ngFor="let template of workoutTemplates">
       <div class="workout-card-header">
-        <div class="m-text semi-bold white-color">{{ template.name }}</div>
+        <div class="m-text semi-bold white-color">{{ template.title }}</div>
         <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
       </div>
       <div class="workout-card-body s-text white-color">

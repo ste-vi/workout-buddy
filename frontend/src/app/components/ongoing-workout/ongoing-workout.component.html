@@ -10,10 +10,11 @@
 
   <div class="ongoing-workout-container-body section-padding-top">
     <div class="ongoing-workout-header">
-      <div class="l-text semi-bold">Back + Biceps</div>
+      <div class="l-text semi-bold">{{ ongoingWorkout?.title }}</div>
       <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openWorkoutMenu($event)"></mat-icon>
     </div>
 
+    <!--todo-->
     <div class="ongoing-workout-info">
       <div class="tags s-text card-padding-top">
         <div class="tag">Beginner</div>
@@ -25,7 +26,7 @@
          cdkDropList cdkDropListAutoScroll
          (cdkDropListDropped)="drop($event)">
       <div class="exercise"
-           *ngFor="let exercise of workoutTemplate.exercises"
+           *ngFor="let exercise of ongoingWorkout?.exercises"
            (cdkDragEnded)="onDragEnded()"
            [cdkDragDisabled]="!dragStarted"
            cdkDrag
@@ -43,7 +44,7 @@
                         (click)="openExerciseMenu($event, exercise)"></mat-icon>
               <mat-icon *ngIf="deleteSetModeForExercise === exercise"
                         svgIcon="undo" class="m-svg-icon clickable-m-icon primary"
-                        (click)="resetDelete()"></mat-icon>
+                        (click)="resetSetDelete()"></mat-icon>
             </div>
             <div class=" lower-section gray-1-color s-text">
               <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
@@ -108,8 +109,14 @@
   <app-context-menu #exerciseMenu [menuItems]="exerciseMenuItems"></app-context-menu>
 
   <app-confirmation-modal
-    #deleteConfirmationModal
-    [message]="'Are you sure?'"
+    #deleteSetConfirmationModal
+    [header]="'Delete set'"
     (confirmed)="onDeleteSetConfirmed($event)"
+  ></app-confirmation-modal>
+
+  <app-confirmation-modal
+    #deleteExerciseConfirmationModal
+    [header]="'Delete set?'"
+    (confirmed)="onDeleteExerciseConfirmed($event)"
   ></app-confirmation-modal>
 </div>

@@ -11,7 +11,7 @@ export const tags: Tag[] = [
 
 export const suggestedWorkoutTemplate: WorkoutTemplate = {
   id: 1,
-  name: 'High-Intensity Interval Training',
+  title: 'High-Intensity Interval Training',
   description:
     'A high-intensity interval training (HIIT) workout is a cardiovascular exercise technique that combines high-intensity aerobic activities with short bursts of low-intensity activities called intervals.',
   exercises: [
@@ -138,7 +138,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
   suggestedWorkoutTemplate,
   {
     id: 1,
-    name: 'Back + Biceps',
+    title: 'Back + Biceps',
     description:
       'Back and biceps workouts involve exercises that target the back muscles and biceps muscles.',
     exercises: [

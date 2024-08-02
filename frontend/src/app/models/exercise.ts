@@ -1,17 +1,10 @@
+import { Sets } from './set';
+
 export interface Exercise {
   id: number;
   name: string;
-  sets: Set[];
-  prSet: Set;
+  sets: Sets[];
+  prSet: Sets;
   bodyPart: string;
   category: string;
-}
-
-export interface Set {
-  id?: number;
-  reps: number;
-  weight: number;
-  previousReps?: number;
-  previousWeight?: number;
-  completed: boolean;
 }

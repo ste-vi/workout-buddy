@@ -4,7 +4,7 @@ import {Workout} from "./workout";
 
 export interface WorkoutTemplate {
   id: number;
-  name: string;
+  title: string;
   description: string;
   exercises: Exercise[];
   estimatedDuration: string;

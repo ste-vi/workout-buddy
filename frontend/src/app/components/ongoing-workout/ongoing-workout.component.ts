@@ -25,6 +25,9 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { ProgressBarComponent } from '../common/progress-bar/progress-bar.component';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { collapse } from '../../animations/collapse';
+import { WorkoutService } from '../../services/api/workout.service';
+import { Workout } from '../../models/workout';
+import { WorkoutTemplate } from '../../models/workout-template';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -58,31 +61,53 @@ import { collapse } from '../../animations/collapse';
 })
 export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   protected isOpen: boolean = true;
-  protected isTemplateUpdated: boolean = true;
-  protected workoutTemplate = workoutTemplates[1];
+
+  protected isTemplateUpdated: boolean = false;
+  protected ongoingWorkout: Workout | undefined = undefined;
+
+  protected progress: number = 0.0;
+
   protected dragStarted: boolean = false;
   protected setsAnimationEnabled: boolean = false;
-  protected progress: number = 0.3;
+
   protected deleteSetModeForExercise: Exercise | undefined = undefined;
   private setToDelete: any;
+  private exerciseToDelete: any;
 
-  @ViewChild('deleteConfirmationModal')
-  deleteConfirmationModal!: ConfirmationModalComponent;
+  @ViewChild('deleteSetConfirmationModal')
+  deleteSetConfirmationModal!: ConfirmationModalComponent;
+  @ViewChild('deleteExerciseConfirmationModal')
+  deleteExerciseConfirmationModal!: ConfirmationModalComponent;
   @ViewChild('workoutMenu') workoutMenu!: ContextMenuComponent;
   @ViewChild('exerciseMenu') exerciseMenu!: ContextMenuComponent;
 
-  constructor(private ongoingWorkoutService: OngoingWorkoutService) {}
+  constructor(
+    private ongoingWorkoutService: OngoingWorkoutService,
+    private workoutService: WorkoutService,
+  ) {}
 
   ngOnInit(): void {
     this.ongoingWorkoutService.modalOpened$.subscribe((wt) => {
-      this.isOpen = true;
-      this.workoutTemplate = wt;
+      this.startNewWorkout(wt);
+      this.isOpen = true; // open only after workout creation is submitted from BE?
+    });
+
+    // temp
+    this.startNewWorkout(workoutTemplates[1]);
+  }
+
+  private startNewWorkout(wt: WorkoutTemplate) {
+    this.workoutService.startWorkout(wt).subscribe((workout) => {
+      this.ongoingWorkout = workout;
+      this.progress = 0.0;
     });
   }
 
+  ngAfterViewInit(): void {}
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(
-      this.workoutTemplate.exercises,
+      this.ongoingWorkout?.exercises!,
       event.previousIndex,
       event.currentIndex,
     );
@@ -91,8 +116,6 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   onDragEnded() {
     this.dragStarted = false;
   }
-
-  ngAfterViewInit(): void {}
 
   workoutMenuItems = [
     {
@@ -161,8 +184,6 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   private replaceExercise(exercise: Exercise) {}
 
-  private removeExercise(exercise: Exercise) {}
-
   stopWorkout() {
     this.isOpen = false;
     this.dragStarted = false;
@@ -170,15 +191,23 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     this.deleteSetModeForExercise = undefined;
   }
 
-  finishWorkout() {
-    this.progress = this.progress + 0.1; // temp
-    if (this.progress >= 1) {
-      this.progress = 1.0;
-    }
-  }
+  finishWorkout() {}
 
   completeSet(set: any) {
     set.completed = !set.completed;
+    this.recalculateProgress();
+  }
+
+  private recalculateProgress() {
+    let totalSets = 0;
+    let completedSets = 0;
+
+    this.ongoingWorkout?.exercises?.forEach((exercise) => {
+      totalSets += exercise.sets.length;
+      completedSets += exercise.sets.filter((s) => s.completed).length;
+    });
+
+    this.progress = totalSets > 0 ? completedSets / totalSets : 0;
   }
 
   addSet(exercise: Exercise) {
@@ -200,7 +229,9 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     ) {
       this.onDeleteSetConfirmed(true);
     } else {
-      this.deleteConfirmationModal.show(`Delete set ${index}?`);
+      this.deleteSetConfirmationModal.show(
+        `Are you sure to delete set #${index + 1}?`,
+      );
     }
   }
 
@@ -217,7 +248,26 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     this.setToDelete = undefined;
   }
 
-  resetDelete() {
+  resetSetDelete() {
     this.deleteSetModeForExercise = undefined;
+  }
+
+  private removeExercise(exercise: Exercise) {
+    this.exerciseToDelete = exercise;
+    this.deleteExerciseConfirmationModal.show(
+      'Are you sure? Current progress on exercise will be lost',
+    );
+  }
+
+  onDeleteExerciseConfirmed(confirmed: boolean) {
+    if (confirmed && this.exerciseToDelete) {
+      const index = this.ongoingWorkout!.exercises!.indexOf(
+        this.exerciseToDelete,
+      );
+      if (index > -1) {
+        this.ongoingWorkout!.exercises!.splice(index, 1);
+      }
+    }
+    this.exerciseToDelete = undefined;
   }
 }

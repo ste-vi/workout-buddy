@@ -19,9 +19,9 @@ export class ConfirmationModalComponent {
 
   protected isOpen: boolean = false;
 
-  show(overrideHeader?: string) {
-    if (overrideHeader) {
-      this.header = overrideHeader;
+  show(overrideMessage?: string) {
+    if (overrideMessage) {
+      this.message = overrideMessage;
     }
     this.isOpen = true;
   }
