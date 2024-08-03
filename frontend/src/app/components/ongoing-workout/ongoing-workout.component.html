@@ -14,12 +14,16 @@
       <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openWorkoutMenu($event)"></mat-icon>
     </div>
 
-    <!--todo-->
     <div class="ongoing-workout-info">
       <div class="tags s-text card-padding-top">
-        <div class="tag">Beginner</div>
-        <div class="tag">+</div>
+        <div class="tag" *ngFor="let tag of ongoingWorkout?.tags"
+        (click)="openTagsModal()">{{ tag.name }}</div>
       </div>
+
+      <app-tags-modal
+        #editWorkoutTagsModal
+        [workoutTags]="ongoingWorkout?.tags">
+      </app-tags-modal>
     </div>
 
     <div class="section-margin-top exercises"

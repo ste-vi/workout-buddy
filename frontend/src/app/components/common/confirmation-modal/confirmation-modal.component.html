@@ -1,4 +1,4 @@
-<div class="modal-overlay" (click)="cancel()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
 <div class="modal black-color" *ngIf="isOpen" [@openClose]>
   <div class="modal-header l-text semi-bold">
     {{ header }}
@@ -12,6 +12,6 @@
     <app-medium-button name="Cancel"
                        [classes]="['white-background', 'black-color']"
                        [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                       (click)="cancel()"></app-medium-button>
+                       (click)="close()"></app-medium-button>
   </div>
 </div>

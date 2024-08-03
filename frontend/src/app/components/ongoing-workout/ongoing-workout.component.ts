@@ -28,6 +28,7 @@ import { collapse } from '../../animations/collapse';
 import { WorkoutService } from '../../services/api/workout.service';
 import { Workout } from '../../models/workout';
 import { WorkoutTemplate } from '../../models/workout-template';
+import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -54,6 +55,7 @@ import { WorkoutTemplate } from '../../models/workout-template';
     NgStyle,
     ProgressBarComponent,
     ConfirmationModalComponent,
+    TagsModalComponent,
   ],
   animations: [collapse],
   templateUrl: './ongoing-workout.component.html',
@@ -78,6 +80,8 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   deleteSetConfirmationModal!: ConfirmationModalComponent;
   @ViewChild('deleteExerciseConfirmationModal')
   deleteExerciseConfirmationModal!: ConfirmationModalComponent;
+  @ViewChild('editWorkoutTagsModal')
+  editWorkoutTagsModal!: TagsModalComponent;
   @ViewChild('workoutMenu') workoutMenu!: ContextMenuComponent;
   @ViewChild('exerciseMenu') exerciseMenu!: ContextMenuComponent;
 
@@ -222,8 +226,6 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     this.deleteSetModeForExercise = exercise;
     this.setToDelete = set;
     if (
-      (set.previousReps === 0 || set.previousReps === undefined) &&
-      (set.previousWeight === 0 || set.previousWeight === undefined) &&
       (set.weight === 0 || set.weight === undefined) &&
       (set.reps === 0 || set.reps === undefined)
     ) {
@@ -269,5 +271,9 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
       }
     }
     this.exerciseToDelete = undefined;
+  }
+
+  openTagsModal() {
+    this.editWorkoutTagsModal.show();
   }
 }

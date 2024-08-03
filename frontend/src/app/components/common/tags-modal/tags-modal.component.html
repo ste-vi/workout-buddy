@@ -1,0 +1,44 @@
+<div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="tags-modal black-color" *ngIf="isOpen" [@openClose]>
+  <div class="tags-modal-header l-text semi-bold">
+    <mat-icon svgIcon="close" class="xs-svg-icon gray-1-color clickable-xs-icon" (click)="close()"></mat-icon>
+    <div>Workout tags</div>
+    <mat-icon svgIcon="close" class="not-visible"></mat-icon>
+  </div>
+  <div class="tags-modal-body s-text">
+    <div class="tags">
+      <div class="tag" *ngFor="let tag of workoutTags" [@fadeInOut]>
+        <div class="tag-text">
+          {{ tag.name }}
+        </div>
+        <mat-icon svgIcon="close" class="xs-svg-icon" (click)="removeTag(tag)"></mat-icon>
+      </div>
+    </div>
+  </div>
+  <div class="tags-modal-footer s-text gray-1-color">
+    <div class="add-section-header">
+      <div class="add-existing-tag-container" [class.active-section-header]='isAddExistingTagsSectionOpen'
+           (click)="openAddExistingTagsSection()">
+        Add existing
+      </div>
+      <div class="add-new-tag-container" [class.active-section-header]='isAddNewTagSectionOpen'
+           (click)="openAddNewTagSection()">
+        Add new
+      </div>
+    </div>
+
+    <div class="add-section-body add-existing-tag-section" *ngIf='isAddExistingTagsSectionOpen' [@collapse]>
+      <div class="tags" *ngIf="existingTags.length > 0">
+        <div class="tag" *ngFor="let tag of existingTags" [@fadeInOut] (click)="addExistingTag(tag)">
+          {{ tag.name }}
+        </div>
+      </div>
+      <div class="s-text gray-1-color centered-text" *ngIf="existingTags.length === 0">No other tags found
+      </div>
+    </div>
+    <div class="add-section-body add-new-tag-section" *ngIf='isAddNewTagSectionOpen' [@collapse]>
+      <input [(ngModel)]="newTagValue">
+      <div class="tag m-text" (click)="addNewTag()">+</div>
+    </div>
+  </div>
+</div>

@@ -35,7 +35,7 @@ export class ConfirmationModalComponent {
     this.hide();
   }
 
-  cancel() {
+  close() {
     this.confirmed.emit(false);
     this.hide();
   }
