@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MediumButtonComponent } from '../medium-button/medium-button.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { Tag } from '../../../models/tag';
-import { openClose } from '../../../animations/open-close';
+import { dialogOpenClose } from '../../../animations/dialog-open-close';
 import { fadeInOut } from '../../../animations/fade-in-out';
 import { collapse } from '../../../animations/collapse';
 import { TagService } from '../../../services/api/tag.service';
@@ -16,10 +16,11 @@ import { deleteFromArray } from '../../../utils/array-utils';
   imports: [MediumButtonComponent, NgIf, MatIcon, NgForOf, FormsModule],
   templateUrl: './tags-modal.component.html',
   styleUrl: './tags-modal.component.scss',
-  animations: [openClose, fadeInOut, collapse],
+  animations: [dialogOpenClose, fadeInOut, collapse],
 })
 export class TagsModalComponent {
   @Input() workoutTags: Tag[] | undefined = [];
+  @Output() closeModal = new EventEmitter<void>();
 
   protected isOpen: boolean = false;
 
@@ -35,9 +36,10 @@ export class TagsModalComponent {
   }
 
   close() {
+    this.closeModal.next();
+    this.isAddNewTagSectionOpen = false;
     this.isOpen = false;
     this.isAddExistingTagsSectionOpen = false;
-    this.isAddNewTagSectionOpen = false;
   }
 
   removeTag(tag: Tag) {

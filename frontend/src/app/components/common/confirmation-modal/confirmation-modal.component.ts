@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MediumButtonComponent } from '../medium-button/medium-button.component';
 import { NgIf } from '@angular/common';
-import { openClose } from '../../../animations/open-close';
+import { dialogOpenClose } from '../../../animations/dialog-open-close';
 import { fadeInOut } from '../../../animations/fade-in-out';
 
 @Component({
@@ -10,7 +10,7 @@ import { fadeInOut } from '../../../animations/fade-in-out';
   imports: [MediumButtonComponent, NgIf],
   templateUrl: './confirmation-modal.component.html',
   styleUrl: './confirmation-modal.component.scss',
-  animations: [openClose, fadeInOut],
+  animations: [dialogOpenClose, fadeInOut],
 })
 export class ConfirmationModalComponent {
   @Input() header = 'Confirmation';

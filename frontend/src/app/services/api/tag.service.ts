@@ -19,4 +19,8 @@ export class TagService {
       { id: 9, name: 'Gym' },
     ]);
   }
+
+  updateTags(tags: Tag[], exerciseId: number): Observable<Tag[]> {
+    return of(tags)
+  }
 }

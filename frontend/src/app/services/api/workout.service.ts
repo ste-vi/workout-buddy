@@ -10,7 +10,6 @@ export class WorkoutService {
   constructor() {}
 
   startWorkout(template: WorkoutTemplate): Observable<Workout> {
-    // Simulate workout start by creating a new workout instance based on the provided template
     const newWorkout: Workout = {
       id: Math.floor(Math.random() * 100000),
       title: template.title,
@@ -21,5 +20,13 @@ export class WorkoutService {
       workoutTemplate: template,
     };
     return of(newWorkout);
+  }
+
+  removeExercise(exerciseId: number, workoutId: number) {
+
+  }
+
+  updateExercisesPositionForWorkout(workoutId: number, exerciseIds: number[]) {
+    // on BE just update order field in workout_exercises table based in the ids positions in list
   }
 }

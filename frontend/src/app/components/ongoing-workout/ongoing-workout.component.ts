@@ -29,6 +29,11 @@ import { WorkoutService } from '../../services/api/workout.service';
 import { Workout } from '../../models/workout';
 import { WorkoutTemplate } from '../../models/workout-template';
 import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
+import { Sets } from '../../models/set';
+import { SetService } from '../../services/api/set-service';
+import { TagService } from '../../services/api/tag.service';
+import {sideModalOpenClose} from "../../animations/side-modal-open-close";
+import {fadeInOut} from "../../animations/fade-in-out";
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -57,12 +62,12 @@ import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
     ConfirmationModalComponent,
     TagsModalComponent,
   ],
-  animations: [collapse],
+  animations: [collapse, sideModalOpenClose, fadeInOut],
   templateUrl: './ongoing-workout.component.html',
   styleUrl: './ongoing-workout.component.scss',
 })
 export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
-  protected isOpen: boolean = true;
+  protected isOpen: boolean = false;
 
   protected isTemplateUpdated: boolean = false;
   protected ongoingWorkout: Workout | undefined = undefined;
@@ -88,6 +93,8 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   constructor(
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
+    private setService: SetService,
+    private tagService: TagService,
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +107,8 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     this.startNewWorkout(workoutTemplates[1]);
   }
 
+  ngAfterViewInit(): void {}
+
   private startNewWorkout(wt: WorkoutTemplate) {
     this.workoutService.startWorkout(wt).subscribe((workout) => {
       this.ongoingWorkout = workout;
@@ -107,13 +116,13 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {}
-
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(
-      this.ongoingWorkout?.exercises!,
-      event.previousIndex,
-      event.currentIndex,
+    let exercises = this.ongoingWorkout?.exercises!;
+    moveItemInArray(exercises, event.previousIndex, event.currentIndex);
+
+    this.workoutService.updateExercisesPositionForWorkout(
+      this.ongoingWorkout?.id!,
+      exercises.map((e) => e.id!),
     );
   }
 
@@ -199,7 +208,24 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   completeSet(set: any) {
     set.completed = !set.completed;
+    this.setService.completeSet(set.id);
     this.recalculateProgress();
+  }
+
+  updateSetWeight(set: Sets, $event: any) {
+    const weight = parseInt($event.target.value);
+    if (!isNaN(weight)) {
+      set.weight = weight;
+      this.setService.updateSetWeight(set.id!, weight);
+    }
+  }
+
+  updateSetReps(set: Sets, $event: any) {
+    const reps = parseInt($event.target.value);
+    if (!isNaN(reps)) {
+      set.weight = reps;
+      this.setService.updateSetReps(set.id!, reps);
+    }
   }
 
   private recalculateProgress() {
@@ -215,7 +241,10 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   }
 
   addSet(exercise: Exercise) {
-    exercise.sets.push({ reps: 0, weight: 0, completed: false });
+    let newSet: Sets = { reps: 0, weight: 0, completed: false };
+    this.setService.create(newSet, exercise.id).subscribe((set) => {
+      exercise.sets.push(set);
+    });
   }
 
   openDeleteSetsMode(exercise: Exercise) {
@@ -239,11 +268,12 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   onDeleteSetConfirmed(confirmed: boolean) {
     if (confirmed && this.deleteSetModeForExercise && this.setToDelete) {
-      const index = this.deleteSetModeForExercise.sets.indexOf(
+      this.setService.deleteSet(this.setToDelete.id);
+      const index = this.deleteSetModeForExercise!.sets.indexOf(
         this.setToDelete,
       );
       if (index > -1) {
-        this.deleteSetModeForExercise.sets.splice(index, 1);
+        this.deleteSetModeForExercise!.sets.splice(index, 1);
       }
       this.deleteSetModeForExercise = undefined;
     }
@@ -269,11 +299,23 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
       if (index > -1) {
         this.ongoingWorkout!.exercises!.splice(index, 1);
       }
+      this.workoutService.removeExercise(
+        this.exerciseToDelete.id!,
+        this.ongoingWorkout!.id!,
+      );
     }
     this.exerciseToDelete = undefined;
   }
 
   openTagsModal() {
     this.editWorkoutTagsModal.show();
+  }
+
+  onTagsModalClosed() {
+    this.tagService
+      .updateTags(this.ongoingWorkout!.tags!, this.ongoingWorkout!.id!)
+      .subscribe((tags) => {
+        this.ongoingWorkout!.tags = tags;
+      });
   }
 }

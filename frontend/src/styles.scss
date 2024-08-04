@@ -286,7 +286,6 @@ input:focus::placeholder {
   bottom: 0;
   right: 0;
   background-color: white;
-  animation: rise-from-right var(--animation-duration) ease-in-out;
   z-index: 1;
 }
 
@@ -299,7 +298,6 @@ input:focus::placeholder {
   right: 0;
   left: 0;
   z-index: 1;
-  transition: background-color var(--animation-duration) ease;
 
   @media (min-width: 1025px) {
     display: block;
@@ -323,26 +321,6 @@ input:focus::placeholder {
 }
 
 // animations
-
-@keyframes rise-from-bottom {
-  from {
-    transform: translateY(100%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes rise-from-right {
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
 
 @keyframes completed {
   from {

@@ -8,6 +8,9 @@ import { ButtonComponent } from '../common/button/button.component';
 import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
+import {collapse} from "../../animations/collapse";
+import {sideModalOpenClose} from "../../animations/side-modal-open-close";
+import {fadeInOut} from "../../animations/fade-in-out";
 
 @Component({
   selector: 'app-workout-template-details',
@@ -23,6 +26,7 @@ import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.comp
   ],
   templateUrl: './workout-template-details.component.html',
   styleUrl: './workout-template-details.component.scss',
+  animations: [sideModalOpenClose, fadeInOut],
 })
 export class WorkoutTemplateDetailsComponent implements OnInit {
   protected isOpen: boolean = false;
