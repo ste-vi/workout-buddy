@@ -6,19 +6,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NgForOf, NgIf, NgStyle } from '@angular/common';
-import {MatIcon} from "@angular/material/icon";
+import { MatIcon } from '@angular/material/icon';
+import { MenuPosition } from '../../../models/menu-position';
 
 export interface MenuItem {
   label: string;
   icon?: string;
   action: () => void;
-}
-
-export interface MenuPosition {
-  x: number;
-  y: number;
-  xOffset: number;
-  yOffset: number;
 }
 
 @Component({

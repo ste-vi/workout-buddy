@@ -8,19 +8,19 @@
   }
 
   .profile-info-container {
-    padding-top: 1.875rem;
+    padding-top: var(--l-size);
 
     .profile-info {
       display: flex;
       flex-direction: row;
-      gap: 0.938rem;
+      gap: var(--m-size);
       justify-content: space-between;
       align-items: center;
 
       .profile-info-header {
         display: flex;
         flex-direction: row;
-        gap: 0.938rem;
+        gap: var(--m-size);
         align-items: center;
 
         .profile-image {
@@ -43,8 +43,8 @@
     .user-metrics-container {
       display: flex;
       flex-direction: row;
-      padding-top: 0.938rem;
-      gap: 0.938rem;
+      padding-top: var(--m-size);
+      gap: var(--m-size);
       align-items: center;
       justify-content: center;
 
@@ -70,14 +70,14 @@
     .profile-card-container {
       display: flex;
       flex-direction: column;
-      margin-top: 0.938rem;
-      padding: 0.938rem;
+      margin-top: var(--m-size);
+      padding: var(--m-size);
       border-radius: 16px;
 
       .card-items {
         display: flex;
         flex-direction: column;
-        padding-top: 0.938rem;
+        padding-top: var(--m-size);
         gap: 0.55rem;
 
         .card-item {

@@ -29,4 +29,8 @@ export class WorkoutService {
   updateExercisesPositionForWorkout(workoutId: number, exerciseIds: number[]) {
     // on BE just update order field in workout_exercises table based in the ids positions in list
   }
+
+  addExerciseToWorkout(workoutId: number, exerciseIds: number[]) {
+
+  }
 }

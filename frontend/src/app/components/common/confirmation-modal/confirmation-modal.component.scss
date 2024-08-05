@@ -11,14 +11,14 @@
   justify-content: center;
   align-items: center;
   z-index: 100;
-  gap: 0.938rem;
-  padding: 0.938rem 1.875rem;
+  gap: var(--m-size);
+  padding: var(--m-size) var(--l-size);
 
   .modal-footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.938rem;
+    gap: var(--m-size);
     padding-top: 0.3rem
   }
 }

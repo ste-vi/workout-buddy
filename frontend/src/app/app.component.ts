@@ -27,6 +27,8 @@ export class AppComponent {
 
   private initSvgIcons() {
     this.matIconRegistry
+      .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`),)
+      .addSvgIcon('search', this.setIconPath(`${this.iconsPath}/search.svg`),)
       .addSvgIcon('undo', this.setIconPath(`${this.iconsPath}/undo.svg`),)
       .addSvgIcon('swap', this.setIconPath(`${this.iconsPath}/swap.svg`),)
       .addSvgIcon('stopwatch', this.setIconPath(`${this.iconsPath}/stopwatch.svg`),)

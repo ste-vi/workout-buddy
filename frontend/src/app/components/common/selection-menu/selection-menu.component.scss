@@ -1,4 +1,4 @@
-.context-menu {
+.selection-menu {
   position: absolute;
   background-color: white;
   border-radius: 12px;
@@ -9,6 +9,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-width: 7rem;
 
   .item {
     padding: 0.419rem var(--m-size);

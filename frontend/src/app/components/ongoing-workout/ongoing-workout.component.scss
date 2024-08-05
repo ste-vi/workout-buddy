@@ -2,9 +2,9 @@
   height: 100vh;
   width: 100%;
   max-width: 1024px;
-  padding-top: 1.875rem;
-  padding-left: 1.875rem;
-  padding-right: 1.875rem;
+  padding-top: var(--l-size);
+  padding-left: var(--l-size);
+  padding-right: var(--l-size);
   overflow-y: hidden;
   overflow-x: hidden;
   display: flex;
@@ -17,7 +17,7 @@
   }
 
   .ongoing-workout-container-body {
-    padding-bottom: 1.875rem;
+    padding-bottom: var(--l-size);
     overflow-y: scroll;
     overflow-x: hidden;
 
@@ -119,8 +119,8 @@
           background-color: var(--border);
           border-radius: 8px;
           text-align: center;
-          padding-top: 0.25rem;
-          padding-bottom: 0.25rem;
+          padding-top: 0.34rem;
+          padding-bottom: 0.34rem;
           margin-top: 0.5rem;
           cursor: pointer;
 
@@ -136,8 +136,8 @@
       color: white;
       border-radius: 8px;
       text-align: center;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+      padding-top: 0.34rem;
+      padding-bottom: 0.34rem;
       margin-top: 0.438rem;
       cursor: pointer;
 
@@ -178,7 +178,7 @@
 .exercise {
   display: flex;
   flex-direction: column;
-  padding-bottom: 0.938rem;
+  padding-bottom: var(--m-size);
   gap: 0.5rem;
   width: 100%;
 

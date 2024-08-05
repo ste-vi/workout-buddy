@@ -1,16 +1,14 @@
-.workout-template-details-container {
+.exercises-container {
   height: 100vh;
   width: 100%;
   max-width: 1024px;
   padding-top: var(--l-size);
   padding-left: var(--l-size);
   padding-right: var(--l-size);
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
-
-  &::-webkit-scrollbar {
-    width: 0;
-  }
+  display: flex;
+  flex-direction: column;
 
   &-header {
     display: flex;
@@ -18,49 +16,59 @@
     justify-content: space-between;
   }
 
-  .workout-template-details {
-    padding-top: var(--l-size);
+  .exercises-search-section {
 
-    .info-cards {
+    .search {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      gap: 0.6rem;
+      border-radius: 16px;
+      padding: var(--s-size) var(--m-size);
+      margin-bottom: var(--m-size);
+
+      input {
+        width: 100%;
+        border: none;
+        border-right: 1px solid var(--gray-3);
+        outline: none;
+
+        font-size: 12px;
+        font-family: 'Poppins', sans-serif;
+        color: var(--gray-1);
+      }
+
+      input::placeholder {
+        color: var(--gray-2);
+      }
+    }
+
+    .search-options {
       display: flex;
       flex-direction: row;
-      padding-top: var(--m-size);
-      gap: var(--m-size);
       align-items: center;
       justify-content: center;
-      background-color: white;
+      width: 100%;
+      gap: var(--m-size);
 
-      .info-card {
-        height: 5rem;
-        width: 10rem;
+      .search-option {
+        padding: 0.5rem 1rem;
+        background-color: white;
         border-radius: 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
+        width: 100%;
+        text-align: center;
+      }
 
-        &:hover {
-          scale: var(--hover-scale);
-        }
-
-        &:active {
-          scale: var(--active-scale);
-        }
-
-        .trend-value {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-        }
+      .search-option-active {
+        color: var(--primary-1);
+        font-weight: 550;
       }
     }
   }
 
-  .exercises-list-container {
-    padding-top: var(--l-size);
-    padding-bottom: 6.59rem;
+  .exercises-container-body {
+    margin-top: var(--m-size);
 
     .exercise {
       display: flex;
@@ -112,17 +120,8 @@
     }
   }
 
-  app-button {
-    width: 100%;
-    max-width: 1024px;
-    position: fixed;
-    bottom: var(--l-size);
-    right: 0;
-    padding-left: var(--l-size);
-    padding-right: var(--l-size);
+  .body-top-padding-when-search-open {
+    margin-top: var(--s-size);
   }
-}
 
-.overflowing {
-  padding-bottom: 7rem;
 }

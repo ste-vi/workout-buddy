@@ -54,7 +54,7 @@
             </div>
             <div class=" lower-section gray-1-color s-text">
               <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
-              <div class="pr-set">
+              <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
                 <div>
                   {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}
@@ -109,7 +109,7 @@
         </div>
       </div>
 
-      <div class="add-new-exercise m-text semi-bold primary-background">Add exercise</div>
+      <div class="add-new-exercise m-text semi-bold primary-background" (click)="addExercise()">Add exercise</div>
     </div>
   </div>
 
@@ -127,4 +127,10 @@
     [header]="'Delete set?'"
     (confirmed)="onDeleteExerciseConfirmed($event)"
   ></app-confirmation-modal>
+
+  <app-exercises
+    #addExercisesModal
+    [isAddModal] = 'true'
+    (exercisesSelected)="onAddExercisesSelected($event)">
+  </app-exercises>
 </div>

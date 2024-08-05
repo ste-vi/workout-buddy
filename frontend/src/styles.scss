@@ -27,7 +27,12 @@
   --active-scale: 0.97;
 
   // animations
-  --animation-duration: 0.25s
+  --animation-duration: 0.25s;
+
+  // sizes
+  --s-size: 0.469rem;
+  --m-size: 0.938rem;
+  --l-size: 1.875rem;
 }
 
 html, body {
@@ -64,6 +69,10 @@ html, body {
 
 .gray-1-color {
   color: var(--gray-1);
+}
+
+.gray-2-color {
+  color: var(--gray-2);
 }
 
 .black-color {
@@ -185,19 +194,19 @@ h4 {
 // margins and paddings
 
 .section-margin-top {
-  margin-top: 1.875rem !important;
+  margin-top: var(--l-size) !important;
 }
 
 .section-padding-top {
-  padding-top: 1.875rem;
+  padding-top: var(--l-size);
 }
 
 .card-padding-top {
-  padding-top: 0.938rem;
+  padding-top: var(--m-size);
 }
 
 .card-padding-bottom {
-  padding-bottom: 0.938rem;
+  padding-bottom: var(--m-size);
 }
 
 // shadows
@@ -266,9 +275,9 @@ input:focus::placeholder {
 
 .container {
   height: 91.44vh;
-  padding-top: 1.875rem;
-  padding-left: 1.875rem;
-  padding-right: 1.875rem;
+  padding-top: var(--l-size);
+  padding-left: var(--l-size);
+  padding-right: var(--l-size);
   background-color: white;
   overflow-y: scroll;
   overflow-x: hidden;

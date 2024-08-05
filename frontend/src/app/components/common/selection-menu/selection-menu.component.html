@@ -1,0 +1,10 @@
+<div class="selection-menu card-shadow s-text gray-1-color"
+     #selectionMenu
+     [ngStyle]="{'top.px': y, 'left.px': x, 'opacity': opacity}"
+     *ngIf="isVisible">
+  <div class="item"
+       *ngFor="let item of selectionItems"
+       (click)="select(item)">
+    {{ item.label }}
+  </div>
+</div>
