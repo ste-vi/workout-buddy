@@ -21,7 +21,6 @@ export class NavbarComponent implements OnInit {
         const currentUrl = this.router.url;
         const path = currentUrl.split('/').pop();
         if (path) {
-          console.log(path);
           this.currentPage = path;
         }
       }

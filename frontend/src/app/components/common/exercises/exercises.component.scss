@@ -69,11 +69,18 @@
 
   .exercises-container-body {
     margin-top: var(--m-size);
+    padding-bottom: var(--l-size);
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
 
     .exercise {
       display: flex;
       gap: 0.5rem;
-      padding-top: var(--m-size);
+      padding-bottom: var(--m-size);
       width: 100%;
       cursor: pointer;
 
@@ -91,6 +98,8 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
+        gap: 0.2rem;
 
         .upper-section {
           width: 100%;
@@ -124,4 +133,21 @@
     margin-top: var(--s-size);
   }
 
+  .add-icon-container {
+
+    .add-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.3rem;
+      border-radius: 6px;
+      background-color: var(--border);
+    }
+
+    .active-add-icon {
+      background-color: var(--primary-1);
+      color: white;
+      animation: completed var(--animation-duration) ease;
+    }
+  }
 }

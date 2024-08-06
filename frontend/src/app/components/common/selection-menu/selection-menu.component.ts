@@ -13,7 +13,7 @@ import { MenuPosition } from '../../../models/menu-position';
 
 export interface SelectionItem<T> {
   label: string;
-  value: T;
+  value: T | null;
 }
 
 @Component({
@@ -47,8 +47,6 @@ export class SelectionMenuComponent {
     if (overriddenSelectionItems) {
       this.selectionItems = overriddenSelectionItems;
     }
-    console.log(position);
-    // todo: fix position
 
     setTimeout(() => {
       if (this.selectionMenu && this.selectionMenu.nativeElement) {

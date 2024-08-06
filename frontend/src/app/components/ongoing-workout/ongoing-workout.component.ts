@@ -35,6 +35,7 @@ import { TagService } from '../../services/api/tag.service';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { ExercisesComponent } from '../common/exercises/exercises.component';
+import { deleteFromArray, replaceItemInArray } from '../../utils/array-utils';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -82,6 +83,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   protected deleteSetModeForExercise: Exercise | undefined = undefined;
   private setToDelete: any;
   private exerciseToDelete: any;
+  private exerciseToReplace: any;
 
   @ViewChild('deleteSetConfirmationModal')
   deleteSetConfirmationModal!: ConfirmationModalComponent;
@@ -89,11 +91,14 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   @ViewChild('deleteExerciseConfirmationModal')
   deleteExerciseConfirmationModal!: ConfirmationModalComponent;
 
+  @ViewChild('replaceExerciseConfirmationModal')
+  replaceExerciseConfirmationModal!: ConfirmationModalComponent;
+
   @ViewChild('editWorkoutTagsModal')
   editWorkoutTagsModal!: TagsModalComponent;
 
-  @ViewChild('addExercisesModal')
-  addExercisesModal!: ExercisesComponent;
+  @ViewChild('exercisesModal')
+  exercisesModal!: ExercisesComponent;
 
   @ViewChild('workoutMenu') workoutMenu!: ContextMenuComponent;
 
@@ -212,8 +217,9 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   }
 
   addExercise() {
-    this.addExercisesModal.show(
+    this.exercisesModal.show(
       this.ongoingWorkout?.exercises?.map((e) => e.id),
+      true,
     );
   }
 
@@ -229,7 +235,34 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   }
 
   private replaceExercise(exercise: Exercise) {
-    this.recalculateProgress();
+    this.exerciseToReplace = exercise;
+    this.replaceExerciseConfirmationModal.show(
+      'Current progress on exercise will be lost',
+    );
+  }
+
+  onReplaceExerciseConfirmed(confirmed: boolean) {
+    if (confirmed && this.exerciseToReplace)
+      this.exercisesModal.show(
+        this.ongoingWorkout?.exercises?.map((e) => e.id),
+        false,
+        true,
+      );
+    this.exerciseToReplace = undefined;
+  }
+
+  onReplaceExerciseSelected(exercise: Exercise) {
+    this.workoutService.replaceExercise(
+      this.ongoingWorkout?.id!,
+      this.exerciseToReplace.id!,
+      exercise.id,
+    );
+    replaceItemInArray(
+      this.ongoingWorkout?.exercises!,
+      exercise,
+      (e) => e.id === this.exerciseToReplace.id,
+    );
+    this.exerciseToReplace = undefined;
   }
 
   completeSet(set: any) {
@@ -288,7 +321,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
       this.onDeleteSetConfirmed(true);
     } else {
       this.deleteSetConfirmationModal.show(
-        `Are you sure to delete set #${index + 1}?`,
+        `Set #${index + 1} will be deleted`,
       );
     }
   }
@@ -314,7 +347,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   private removeExercise(exercise: Exercise) {
     this.exerciseToDelete = exercise;
     this.deleteExerciseConfirmationModal.show(
-      'Are you sure? Current progress on exercise will be lost',
+      'Current progress on exercise will be lost',
     );
   }
 

@@ -4,15 +4,19 @@
 
   <div class="exercises-container-header">
     <app-header-button icon="left-arrow" (click)="close()"></app-header-button>
-    <app-header-button *ngIf="!isAddModal" icon="two-dots"></app-header-button>
-    <app-header-button *ngIf="isAddModal" [text]="'Add'" class="s-text semi-bold black-color"
+    <app-header-button *ngIf="!isAddModal && !isReplaceModal" icon="two-dots"></app-header-button>
+    <app-header-button *ngIf="isAddModal" [text]="'Add'" class="s-text gray-1-color"
+                       [ngClass]="{'primary' : selectedExercises.size > 0, 'semi-bold': selectedExercises.size > 0}"
                        (click)="addExercises()"></app-header-button>
+    <app-header-button *ngIf="isReplaceModal" [text]="'Replace'" class="s-text gray-1-color"
+                       [ngClass]="{'primary' : selectedExercises.size == 1, 'semi-bold': selectedExercises.size == 1}"
+                       (click)="replaceExercises()"></app-header-button>
   </div>
 
   <div class="exercises-search-section card-padding-top">
     <div class="search card-shadow m-text">
       <mat-icon svgIcon="search" class="gray-2-color clickable-m-icon m-svg-icon" (click)="search()"></mat-icon>
-      <input placeholder="Search exercises">
+      <input placeholder="Search exercises" [(ngModel)]="searchQuery" (keyup)="search()">
       <mat-icon svgIcon="options" class="clickable-m-icon m-svg-icon" (click)="openSearchOptions()"></mat-icon>
     </div>
 
@@ -27,15 +31,26 @@
 
   </div>
 
-  <div class="exercises-container-body" >
+  <div class="exercises-container-body" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
+       [scrollWindow]="false" (scrolled)="loadMore()">
 
-    <div class="exercise" *ngFor="let exercise of exercises">
+    <div class="exercise" *ngFor="let exercise of exercises" [@collapseEnter]>
       <div class="exercise-header">
         <div class="exercise-image secondary-background"></div>
       </div>
       <div class="exercise-body">
         <div class="upper-section">
           <div class="m-text semi-bold">{{ exercise.name }}</div>
+          <div *ngIf="isAddModal" class="clickable add-icon-container">
+            <mat-icon svgIcon="check" class="gray-1-color add-icon"
+                      [class.active-add-icon]="selectedExercises.has(exercise)"
+                      (click)="addExercise(exercise)"></mat-icon>
+          </div>
+          <div *ngIf="isReplaceModal" class="clickable add-icon-container">
+            <mat-icon svgIcon="check" class="gray-1-color add-icon"
+                      [class.active-add-icon]="selectedExercises.has(exercise)"
+                      (click)="replaceExercise(exercise)"></mat-icon>
+          </div>
         </div>
         <div class="lower-section gray-1-color s-text">
           <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>

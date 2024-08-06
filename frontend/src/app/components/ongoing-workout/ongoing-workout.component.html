@@ -124,13 +124,19 @@
 
   <app-confirmation-modal
     #deleteExerciseConfirmationModal
-    [header]="'Delete set?'"
+    [header]="'Delete exercise?'"
     (confirmed)="onDeleteExerciseConfirmed($event)"
   ></app-confirmation-modal>
 
+  <app-confirmation-modal
+    #replaceExerciseConfirmationModal
+    [header]="'Replace exercise?'"
+    (confirmed)="onReplaceExerciseConfirmed($event)"
+  ></app-confirmation-modal>
+
   <app-exercises
-    #addExercisesModal
-    [isAddModal] = 'true'
-    (exercisesSelected)="onAddExercisesSelected($event)">
+    #exercisesModal
+    (exercisesSelected)="onAddExercisesSelected($event)"
+    (exerciseReplaceSelected)="onReplaceExerciseSelected($event)">
   </app-exercises>
 </div>

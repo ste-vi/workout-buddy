@@ -3,7 +3,11 @@ import { Observable, of } from 'rxjs';
 import { Sets } from '../../models/set';
 import { PageResponse } from '../../models/page-response';
 import { Exercise } from '../../models/exercise';
-import {BodyPart, Category, exercises} from './dummy-data/exercises-dummy-data';
+import {
+  BodyPart,
+  Category,
+  exercises,
+} from './dummy-data/exercises-dummy-data';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +25,34 @@ export class ExerciseService {
   ): Observable<PageResponse<Exercise>> {
     const start = page * size;
     const end = start + size;
-    const filteredExercises = exercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(query.toLowerCase()),
-    );
+
+    let filteredExercises = exercises;
+
+    if (query && query.trim() !== '') {
+      console.log("aa")
+      filteredExercises = exercises.filter((exercise) =>
+        exercise.name.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
+
+    if (bodyPart) {
+      filteredExercises = filteredExercises.filter(
+        (exercise) => exercise.bodyPart === bodyPart,
+      );
+    }
+
+    if (category) {
+      filteredExercises = filteredExercises.filter(
+        (exercise) => exercise.category === category,
+      );
+    }
+
+    if (excludeExercisesIds && excludeExercisesIds.length > 0) {
+      filteredExercises = filteredExercises.filter(
+        (exercise) => !excludeExercisesIds.includes(exercise.id),
+      );
+    }
+
     const paginatedExercises = filteredExercises.slice(start, end);
 
     return of({

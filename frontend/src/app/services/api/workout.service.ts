@@ -26,6 +26,10 @@ export class WorkoutService {
 
   }
 
+  replaceExercise(workoutId: number, exerciseId: number, newExerciseId: number) {
+
+  }
+
   updateExercisesPositionForWorkout(workoutId: number, exerciseIds: number[]) {
     // on BE just update order field in workout_exercises table based in the ids positions in list
   }
