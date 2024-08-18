@@ -3,7 +3,7 @@
      (swiperight)="onSwipeRight()">
   <div class="workout-template-details-container-header">
     <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
-    <app-header-button icon="two-dots"></app-header-button>
+    <app-header-button icon="two-dots" (click)="openTemplateMenu($event)"></app-header-button>
   </div>
 
   <div class="workout-template-details">
@@ -73,4 +73,9 @@
   <app-button name="Start Workout" [textClasses]="['white-color', 'semi-bold']" (click)="startWorkout()"></app-button>
 
   <app-ongoing-workout></app-ongoing-workout>
+
+  <app-workout-template-edit #workoutTemplateEditComponent
+                             (updatedTemplate)="onTemplateUpdated($event)"></app-workout-template-edit>
+
+  <app-context-menu #templateMenu [menuItems]="templateMenuItems"></app-context-menu>
 </div>

@@ -1,4 +1,8 @@
 <div class="header-button-container" [class.text-button-paddings] = "text !== ''" [class.active-button] = "active">
-  <mat-icon *ngIf="icon" [svgIcon]="icon" class="xs-svg-icon button-icon"  [class.active-button-icon] = "active"></mat-icon>
+  <mat-icon *ngIf="icon"
+            [svgIcon]="icon"
+            class="xs-svg-icon button-icon"
+            [ngClass]="iconClasses"
+            [class.active-button-icon] = "active"></mat-icon>
   <div *ngIf="text" class="s-text">{{ text }}</div>
 </div>

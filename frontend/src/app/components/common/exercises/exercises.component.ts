@@ -86,7 +86,13 @@ export class ExercisesComponent implements OnInit {
     this.excludeExercisesIds = excludeExercisesIds;
     this.isAddModal = isAddModal ?? false;
     this.isReplaceModal = isReplaceModal ?? false;
+
+    this.searchQuery = '';
+    this.currentPage = 0;
+    this.exercises = [];
+
     this.loadExercises();
+
     this.isOpen = true;
   }
 

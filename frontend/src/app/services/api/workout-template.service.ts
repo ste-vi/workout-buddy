@@ -19,4 +19,16 @@ export class WorkoutTemplateService {
   getWorkoutTemplates(): Observable<WorkoutTemplate[]> {
     return of(workoutTemplates);
   }
+
+  createWorkoutTemplate(
+    workoutTemplate: WorkoutTemplate,
+  ): Observable<WorkoutTemplate> {
+    return of(workoutTemplate);
+  }
+
+  updateWorkoutTemplate(
+    workoutTemplate: WorkoutTemplate,
+  ): Observable<WorkoutTemplate> {
+    return of(workoutTemplate);
+  }
 }

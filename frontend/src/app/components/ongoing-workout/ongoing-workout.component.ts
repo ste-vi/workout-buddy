@@ -70,7 +70,7 @@ import { deleteFromArray, replaceItemInArray } from '../../utils/array-utils';
   styleUrl: './ongoing-workout.component.scss',
 })
 export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
-  protected isOpen: boolean = true;
+  protected isOpen: boolean = false;
 
   protected isTemplateUpdated: boolean = false;
   protected ongoingWorkout: Workout | undefined = undefined;
@@ -116,9 +116,6 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
       this.startNewWorkout(wt);
       this.isOpen = true; // open only after workout creation is submitted from BE?
     });
-
-    // temp
-    this.startNewWorkout(workoutTemplates[1]);
   }
 
   ngAfterViewInit(): void {}
@@ -248,7 +245,6 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
         false,
         true,
       );
-    this.exerciseToReplace = undefined;
   }
 
   onReplaceExerciseSelected(exercise: Exercise) {

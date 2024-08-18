@@ -1,29 +1,30 @@
 <div class="page-mask" *ngIf="isOpen" [@fadeInOut]></div>
-<div class="ongoing-workout-container right-modal black-color" *ngIf="isOpen" [@sideModalOpenClose]>
+<div class="edit-template-container right-modal black-color" *ngIf="isOpen" [@sideModalOpenClose]>
 
-  <div class="ongoing-workout-container-header">
-    <app-header-button icon="close" (click)="stopWorkout()"></app-header-button>
-    <div class="timer l-text gray-1-color">00:00</div>
-    <app-header-button icon="finish" [active]="progress == 1" (click)="finishWorkout()"></app-header-button>
+  <div class="edit-template-container-header">
+    <app-header-button icon="close" (click)="close()"></app-header-button>
+    <div class="timer m-text gray-1-color">{{ isEdit ? 'Edit template' : 'New template' }}</div>
+    <app-header-button icon="check" [iconClasses]="['s-svg-icon-important']" [active]="template?.exercises?.length! > 0"
+                       (click)="save()"></app-header-button>
   </div>
-  <app-progress-bar [progress]=progress class="card-padding-top"></app-progress-bar>
 
-  <div class="ongoing-workout-container-body section-padding-top">
-    <div class="ongoing-workout-header">
-      <div class="l-text semi-bold">{{ ongoingWorkout?.title }}</div>
-      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openWorkoutMenu($event)"></mat-icon>
+  <div class="edit-template-container-body">
+    <div class="template-header">
+      <div class="l-text semi-bold">{{ template?.title }}</div>
+      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openTemplateMenu($event)"></mat-icon>
     </div>
 
-    <div class="ongoing-workout-info">
+    <div class="template-info">
       <div class="tags s-text card-padding-top">
-        <div class="tag" *ngFor="let tag of ongoingWorkout?.tags"
+        <div class="tag" *ngFor="let tag of template?.tags"
              (click)="openTagsModal()">{{ tag.name }}
         </div>
+        <div *ngIf="!template?.tags" class="tag" (click)="openTagsModal()">Add tags</div>
       </div>
 
       <app-tags-modal
-        #editWorkoutTagsModal
-        [workoutTags]="ongoingWorkout?.tags"
+        #editTemplateTagsModal
+        [workoutTags]="template?.tags"
         (closeModal)="onTagsModalClosed()">
       </app-tags-modal>
     </div>
@@ -32,7 +33,7 @@
          cdkDropList cdkDropListAutoScroll
          (cdkDropListDropped)="drop($event)">
       <div class="exercise"
-           *ngFor="let exercise of ongoingWorkout?.exercises"
+           *ngFor="let exercise of template?.exercises"
            (cdkDragEnded)="onDragEnded()"
            [cdkDragDisabled]="!dragStarted"
            cdkDrag
@@ -45,14 +46,10 @@
           <div class="exercise-body">
             <div class="upper-section">
               <div class="m-text semi-bold">{{ exercise.name }}</div>
-              <mat-icon *ngIf="deleteSetModeForExercise !== exercise"
-                        svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"
+              <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"
                         (click)="openExerciseMenu($event, exercise)"></mat-icon>
-              <mat-icon *ngIf="deleteSetModeForExercise === exercise"
-                        svgIcon="undo" class="m-svg-icon clickable-m-icon primary"
-                        (click)="resetSetDelete()"></mat-icon>
             </div>
-            <div class=" lower-section gray-1-color s-text">
+            <div class="lower-section gray-1-color s-text">
               <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
               <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
@@ -67,39 +64,22 @@
         <div class="exercise-sets s-text" *ngIf="!dragStarted" [@collapse] [@.disabled]="!setsAnimationEnabled">
           <div class="table-row semi-bold">
             <div class="table-cell set">Set</div>
-            <div class="table-cell previous">Previous</div>
-            <div class="table-cell kg">Kg</div>
-            <div class="table-cell reps">Reps</div>
-            <div class="table-cell action">
-              <mat-icon *ngIf="deleteSetModeForExercise !== exercise" svgIcon="check" class="s-svg-icon"></mat-icon>
-            </div>
-
+            <div class="table-cell previous">Previous weight</div>
+            <div class="table-cell previous">Previous reps</div>
+            <div class="table-cell action"></div>
           </div>
           <div class="table-row" *ngFor="let set of exercise.sets; index as i">
             <div class="table-cell set" [class.completed-table-cell]="set.completed">
               <div class="set-sell">{{ i + 1 }}</div>
             </div>
-            <div class="table-cell previous" [class.completed-table-cell]="set.completed">
-              <span *ngIf="set.previousReps">{{ set.previousWeight ? set.previousWeight : '0' }}
-                kg * {{ set.previousReps }}</span>
-              <span *ngIf="!set.previousReps">-</span>
+            <div class="table-cell previous">
+              <span>{{ set.previousWeight ? set.previousWeight + ' kg' : '-' }}</span>
             </div>
-            <div class="table-cell kg">
-              <input type="number" [class.complete-set-input]="set.completed"
-                     [placeholder]="set.previousWeight ? set.previousWeight : 0"
-                     (blur)="updateSetWeight(set, $event)">
-            </div>
-            <div class="table-cell reps">
-              <input type="number" [class.complete-set-input]="set.completed"
-                     [placeholder]="set.previousReps ? set.previousReps : 0"
-                     (blur)="updateSetReps(set, $event)">
+            <div class="table-cell previous">
+              <span>{{ set.previousReps ? set.previousReps : '-' }}</span>
             </div>
             <div class="table-cell action">
-              <div *ngIf="deleteSetModeForExercise !== exercise" class="clickable action-icon-container">
-                <mat-icon svgIcon="check" class="gray-1-color action-icon"
-                          [class.complete-set-action-icon]="set.completed" (click)="completeSet(set)"></mat-icon>
-              </div>
-              <div *ngIf="deleteSetModeForExercise === exercise" class="clickable action-icon-container">
+              <div class="clickable action-icon-container">
                 <mat-icon svgIcon="delete-2" class="gray-1-color action-icon delete-icon"
                           (click)="deleteSet(set, i, exercise)"></mat-icon>
               </div>
@@ -113,8 +93,8 @@
     </div>
   </div>
 
-  <app-context-menu #workoutMenu [menuItems]="workoutMenuItems"></app-context-menu>
   <app-context-menu #exerciseMenu [menuItems]="exerciseMenuItems"></app-context-menu>
+  <app-context-menu #templateMenu [menuItems]="templateMenuItems"></app-context-menu>
 
   <app-confirmation-modal
     #deleteSetConfirmationModal

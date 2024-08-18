@@ -38,12 +38,13 @@
   <div class="workout-container">
     <div class="workout-container-header m-text semi-bold">
       <div>Templates</div>
-      <mat-icon svgIcon="add" class="primary add-template-icon"></mat-icon>
+      <mat-icon svgIcon="add" class="primary add-template-icon" (click)="createTemplate()"></mat-icon>
     </div>
     <div class="workout-card blue-shadow primary-background-reversed" *ngFor="let template of workoutTemplates">
       <div class="workout-card-header">
         <div class="m-text semi-bold white-color">{{ template.title }}</div>
-        <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
+        <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color clickable-xs-icon"
+                  (click)="openTemplateMenu(template, $event)"></mat-icon>
       </div>
       <div class="workout-card-body s-text white-color">
         <div>
@@ -69,5 +70,12 @@
   </div>
 
   <app-workout-template-details></app-workout-template-details>
+
   <app-ongoing-workout></app-ongoing-workout>
+
+  <app-workout-template-edit #workoutTemplateEditComponent
+                             (updatedTemplate)="onTemplateUpdated($event)"
+                             (createdTemplate)="onTemplateCreated($event)"></app-workout-template-edit>
+
+  <app-context-menu #templateMenu [menuItems]="templateMenuItems"></app-context-menu>
 </div>

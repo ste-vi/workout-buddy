@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { ButtonComponent } from '../common/button/button.component';
 import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
@@ -10,7 +10,9 @@ import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import { WorkoutTemplateDetailsService } from '../../services/communication/workout-template-details.service';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
-import {WorkoutTemplateDetailsComponent} from "../workout-template-details/workout-template-details.component";
+import { WorkoutTemplateDetailsComponent } from '../workout-template-details/workout-template-details.component';
+import { WorkoutTemplateEditComponent } from '../workout-template-edit/workout-template-edit.component';
+import { ContextMenuComponent } from '../common/context-menu/context-menu.component';
 
 @Component({
   selector: 'app-start-workout',
@@ -25,6 +27,8 @@ import {WorkoutTemplateDetailsComponent} from "../workout-template-details/worko
     NgForOf,
     OngoingWorkoutComponent,
     WorkoutTemplateDetailsComponent,
+    WorkoutTemplateEditComponent,
+    ContextMenuComponent,
   ],
   templateUrl: './start-workout.component.html',
   styleUrl: './start-workout.component.scss',
@@ -32,6 +36,11 @@ import {WorkoutTemplateDetailsComponent} from "../workout-template-details/worko
 export class StartWorkoutComponent implements OnInit {
   protected suggestedWorkoutTemplate: WorkoutTemplate | any = undefined;
   protected workoutTemplates: WorkoutTemplate[] = [];
+
+  @ViewChild('workoutTemplateEditComponent')
+  workoutTemplateEditComponent!: WorkoutTemplateEditComponent;
+
+  @ViewChild('templateMenu') templateMenu!: ContextMenuComponent;
 
   constructor(
     private workoutTemplateService: WorkoutTemplateService,
@@ -55,5 +64,43 @@ export class StartWorkoutComponent implements OnInit {
 
   startWorkout(template: WorkoutTemplate) {
     this.ongoingWorkoutService.openModal(template);
+  }
+
+  createTemplate() {
+    this.workoutTemplateEditComponent.show();
+  }
+
+  onTemplateUpdated(updatedTemplate: WorkoutTemplate) {}
+
+  onTemplateCreated(createdTemplate: WorkoutTemplate) {
+    this.workoutTemplates.push(createdTemplate);
+  }
+
+  templateMenuItems: any = [];
+
+  openTemplateMenu(template: WorkoutTemplate, $event: MouseEvent): void {
+    this.templateMenuItems = [
+      {
+        label: 'Edit template',
+        icon: 'settings-2',
+        action: () => this.openEdit(template),
+      },
+      {
+        label: 'Delete template',
+        icon: 'delete',
+        action: () => this.openEdit(template),
+      },
+    ];
+
+    this.templateMenu.show({
+      x: $event.clientX,
+      y: $event.clientY,
+      xOffset: 70,
+      yOffset: 0,
+    });
+  }
+
+  openEdit(template: WorkoutTemplate) {
+    this.workoutTemplateEditComponent.show(template);
   }
 }

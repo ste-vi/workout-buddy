@@ -42,7 +42,7 @@ export class ContextMenuComponent {
           position.x -
           this.contextMenu.nativeElement.offsetWidth -
           position.xOffset;
-        this.y = position.y - 30;
+        this.y = position.y - 30 - position.yOffset;
       }
       this.opacity = 1.0;
     }, 0);

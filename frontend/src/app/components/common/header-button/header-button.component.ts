@@ -11,6 +11,7 @@ import {NgClass, NgIf} from "@angular/common";
 })
 export class HeaderButtonComponent {
   @Input() icon: string = '';
+  @Input() iconClasses: string[] = []
   @Input() text: string = '';
   @Input() active: boolean = false;
 }
