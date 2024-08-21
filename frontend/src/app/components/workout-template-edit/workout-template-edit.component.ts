@@ -34,6 +34,7 @@ import {
 } from '../common/context-menu/context-menu.component';
 import { replaceItemInArray } from '../../utils/array-utils';
 import { ExercisesComponent } from '../common/exercises/exercises.component';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-workout-template-edit',
@@ -51,13 +52,14 @@ import { ExercisesComponent } from '../common/exercises/exercises.component';
     ConfirmationModalComponent,
     ContextMenuComponent,
     ExercisesComponent,
+    FormsModule,
   ],
   templateUrl: './workout-template-edit.component.html',
   styleUrl: './workout-template-edit.component.scss',
   animations: [fadeInOut, sideModalOpenClose, collapse],
 })
 export class WorkoutTemplateEditComponent implements OnInit {
-  protected isOpen: boolean = true;
+  protected isOpen: boolean = false;
   protected isEdit: boolean = false;
 
   protected template: WorkoutTemplate | undefined = suggestedWorkoutTemplate;
@@ -72,6 +74,9 @@ export class WorkoutTemplateEditComponent implements OnInit {
   private setToDelete: any;
   private exerciseToDelete: any;
   private exerciseToReplace: any;
+
+  protected templateTitle: string = '';
+  protected isTitleEditable: boolean = false;
 
   @ViewChild('editTemplateTagsModal')
   editTemplateTagsModal!: TagsModalComponent;
@@ -100,15 +105,33 @@ export class WorkoutTemplateEditComponent implements OnInit {
     if (template) {
       this.isEdit = true;
       this.template = template;
+      this.templateTitle = template.title;
+      this.isTitleEditable = false;
     } else {
       this.isEdit = false;
-      this.template = undefined;
+      this.template = this.initNewTemplate();
+      this.templateTitle = '';
+      this.isTitleEditable = true;
     }
     this.isOpen = true;
   }
 
   close() {
     this.isOpen = false;
+  }
+
+  private initNewTemplate(): WorkoutTemplate {
+    return {
+      id: undefined,
+      title: '',
+      description: '',
+      exercises: [],
+      estimatedDuration: undefined,
+      totalSets: 0,
+      lastPerformedWorkout: undefined,
+      tags: [],
+      volumeTrend: undefined,
+    };
   }
 
   save() {
@@ -257,7 +280,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
     {
       label: 'Rename template',
       icon: 'text',
-      action: () => this.addExercise(),
+      action: () => this.makeTitleEditable(),
     },
     {
       label: 'Add exercise',
@@ -280,5 +303,20 @@ export class WorkoutTemplateEditComponent implements OnInit {
     setTimeout(() => {
       this.dragStarted = true;
     }, 0);
+  }
+
+  onSwipeRight() {
+    this.close();
+  }
+
+  makeTitleEditable() {
+    this.isTitleEditable = true;
+  }
+
+  makeTitleNonEditable() {
+    this.isTitleEditable = false;
+    if (this.template) {
+      this.template.title = this.templateTitle;
+    }
   }
 }

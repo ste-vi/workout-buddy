@@ -58,7 +58,7 @@
           </div>
           <div class="lower-section gray-1-color s-text">
             <div>{{ exercise.bodyPart }}</div>
-            <div class="pr-set">
+            <div class="pr-set" *ngIf="exercise.prSet">
               <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
               <div>
                 {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}

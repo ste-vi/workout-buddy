@@ -32,6 +32,22 @@
       align-items: center;
       justify-content: space-between;
       gap: 0.5rem;
+
+      .template-title-input {
+        width: 100%;
+        border-radius: 8px;
+        border: none;
+        background-color: var(--border);
+        outline: none;
+        padding: 0.34rem var(--m-size);
+        font-weight: 550;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      input::placeholder {
+        color: var(--gray-2);
+        font-weight: 400;
+      }
     }
 
     .exercises {

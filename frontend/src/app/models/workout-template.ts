@@ -3,15 +3,15 @@ import {Tag} from "./tag";
 import {Workout} from "./workout";
 
 export interface WorkoutTemplate {
-  id: number;
+  id?: number;
   title: string;
   description: string;
   exercises: Exercise[];
-  estimatedDuration: string;
+  estimatedDuration?: string;
   totalSets: number;
-  lastPerformedWorkout: Workout
+  lastPerformedWorkout?: Workout
   tags: Tag[];
-  volumeTrend: Trend
+  volumeTrend?: Trend
 }
 
 export interface Trend {

@@ -1,17 +1,27 @@
 <div class="page-mask" *ngIf="isOpen" [@fadeInOut]></div>
-<div class="edit-template-container right-modal black-color" *ngIf="isOpen" [@sideModalOpenClose]>
+<div class="edit-template-container right-modal black-color" *ngIf="isOpen" [@sideModalOpenClose]
+     (swiperight)="onSwipeRight()">
 
   <div class="edit-template-container-header">
     <app-header-button icon="close" (click)="close()"></app-header-button>
-    <div class="timer m-text gray-1-color">{{ isEdit ? 'Edit template' : 'New template' }}</div>
+    <div class="timer m-text semi-bold">{{ isEdit ? 'Edit template' : 'New template' }}</div>
     <app-header-button icon="check" [iconClasses]="['s-svg-icon-important']" [active]="template?.exercises?.length! > 0"
                        (click)="save()"></app-header-button>
   </div>
 
   <div class="edit-template-container-body">
     <div class="template-header">
-      <div class="l-text semi-bold">{{ template?.title }}</div>
-      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openTemplateMenu($event)"></mat-icon>
+      <div class="l-text semi-bold" *ngIf="!isTitleEditable">{{ template?.title }}</div>
+      <input type="text" class="template-title-input black-color m-text"
+             *ngIf="isTitleEditable"
+             [(ngModel)]="templateTitle"
+             (blur)="makeTitleNonEditable()"
+             placeholder="Enter template title">
+
+      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" *ngIf="!isTitleEditable"
+                (click)="openTemplateMenu($event)"></mat-icon>
+      <mat-icon svgIcon="check" class="m-svg-icon clickable-m-icon primary" *ngIf="isTitleEditable"
+                (click)="makeTitleNonEditable()"></mat-icon>
     </div>
 
     <div class="template-info">
@@ -19,7 +29,7 @@
         <div class="tag" *ngFor="let tag of template?.tags"
              (click)="openTagsModal()">{{ tag.name }}
         </div>
-        <div *ngIf="!template?.tags" class="tag" (click)="openTagsModal()">Add tags</div>
+        <div *ngIf="!template?.tags || template!.tags.length === 0" class="add-tag" (click)="openTagsModal()">Add tags</div>
       </div>
 
       <app-tags-modal
@@ -30,8 +40,10 @@
     </div>
 
     <div class="section-margin-top exercises"
-         cdkDropList cdkDropListAutoScroll
-         (cdkDropListDropped)="drop($event)">
+         cdkDropList cdkDropListAutoScroll (cdkDropListDropped)="drop($event)">
+
+      <div class="m-text centered-text gray-1-color" *ngIf="template?.exercises!.length === 0">No exercises</div>
+
       <div class="exercise"
            *ngFor="let exercise of template?.exercises"
            (cdkDragEnded)="onDragEnded()"
