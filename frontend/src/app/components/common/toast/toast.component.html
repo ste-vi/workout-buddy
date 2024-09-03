@@ -1,0 +1,14 @@
+<div class="toast" *ngIf="isOpen" [@toast]>
+  <div class="toast-icon-container" *ngIf="icon">
+    <mat-icon [svgIcon]="icon" class="toast-icon"></mat-icon>
+  </div>
+  <div class="toast-header-container">
+    <div class="toast-header">
+      <div class="m-text danger">{{ header }}</div>
+      <mat-icon svgIcon="close" class="xs-svg-icon gray-1-color clickable-xs-icon" (click)="close()"></mat-icon>
+    </div>
+    <div class="toast-body s-text">
+      <div class="toast-item" *ngFor="let item of items">{{ item }}</div>
+    </div>
+  </div>
+</div>

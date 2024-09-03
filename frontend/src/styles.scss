@@ -21,6 +21,7 @@
   --success: #42D742;
   --warning: #FFD600;
   --danger: #FF0000;
+  --danger-backgroung: #FCEDED;
 
   // scales
   --hover-scale: 1.03;
@@ -60,6 +61,11 @@ html, body {
 .primary-background-text {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.error-text {
+  color: var(--danger)!important;
+  //font-weight: bold;
 }
 
 .white-background {

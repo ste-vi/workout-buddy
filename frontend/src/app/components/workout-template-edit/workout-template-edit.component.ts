@@ -6,22 +6,20 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { WorkoutTemplate } from '../../models/workout-template';
 import { Exercise } from '../../models/exercise';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
-import {
-  suggestedWorkoutTemplate,
-  workoutTemplates,
-} from '../../services/api/dummy-data/workflow-templates-dummy-daya';
+import { suggestedWorkoutTemplate } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
 import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
 import {
   CdkDrag,
   CdkDragDrop,
   CdkDragHandle,
-  CdkDropList, moveItemInArray,
+  CdkDropList,
+  moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { MatIcon } from '@angular/material/icon';
 import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
@@ -34,7 +32,8 @@ import {
 } from '../common/context-menu/context-menu.component';
 import { replaceItemInArray } from '../../utils/array-utils';
 import { ExercisesComponent } from '../common/exercises/exercises.component';
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from '@angular/forms';
+import { ToastComponent } from '../common/toast/toast.component';
 
 @Component({
   selector: 'app-workout-template-edit',
@@ -53,6 +52,8 @@ import {FormsModule} from "@angular/forms";
     ContextMenuComponent,
     ExercisesComponent,
     FormsModule,
+    NgClass,
+    ToastComponent,
   ],
   templateUrl: './workout-template-edit.component.html',
   styleUrl: './workout-template-edit.component.scss',
@@ -78,6 +79,8 @@ export class WorkoutTemplateEditComponent implements OnInit {
   protected templateTitle: string = '';
   protected isTitleEditable: boolean = false;
 
+  protected isInvalidated: boolean = false;
+
   @ViewChild('editTemplateTagsModal')
   editTemplateTagsModal!: TagsModalComponent;
 
@@ -97,6 +100,9 @@ export class WorkoutTemplateEditComponent implements OnInit {
   @ViewChild('exercisesModal')
   exercisesModal!: ExercisesComponent;
 
+  @ViewChild('errorToast')
+  errorToast!: ToastComponent;
+
   constructor(private workoutTemplateService: WorkoutTemplateService) {}
 
   ngOnInit(): void {}
@@ -104,8 +110,8 @@ export class WorkoutTemplateEditComponent implements OnInit {
   show(template?: WorkoutTemplate) {
     if (template) {
       this.isEdit = true;
-      this.template = template;
-      this.templateTitle = template.title;
+      this.template = { ...template };
+      this.templateTitle = this.template.title;
       this.isTitleEditable = false;
     } else {
       this.isEdit = false;
@@ -113,6 +119,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
       this.templateTitle = '';
       this.isTitleEditable = true;
     }
+    this.isInvalidated = false;
     this.isOpen = true;
   }
 
@@ -135,6 +142,16 @@ export class WorkoutTemplateEditComponent implements OnInit {
   }
 
   save() {
+    let errorMessages: string[] = this.validateInput();
+
+    let isValid = errorMessages.length === 0;
+
+    this.isInvalidated = !isValid;
+    if (!isValid) {
+      this.errorToast.open('Error', errorMessages, 'danger');
+      return;
+    }
+
     if (this.isEdit) {
       this.workoutTemplateService
         .updateWorkoutTemplate(this.template!)
@@ -150,6 +167,28 @@ export class WorkoutTemplateEditComponent implements OnInit {
           this.close();
         });
     }
+  }
+
+  private validateInput() {
+    let errorMessages: string[] = [];
+
+    if (this.template?.title?.trim() === '') {
+      errorMessages.push('Template title must not be empty');
+    }
+
+    if (this.template?.exercises.length === 0) {
+      errorMessages.push('Template must have at least one exercise');
+    }
+
+    for (const exercise of this.template?.exercises || []) {
+      if (exercise.sets.length === 0) {
+        errorMessages.push(
+          `Exercise "${exercise.name}" does not have any sets`,
+        );
+      }
+    }
+
+    return errorMessages;
   }
 
   openTagsModal() {
@@ -170,12 +209,20 @@ export class WorkoutTemplateEditComponent implements OnInit {
   addSet(exercise: Exercise) {
     let newSet: Sets = { reps: 0, weight: 0, completed: false };
     exercise.sets.push(newSet);
+
+    if (this.template) {
+      this.template.totalSets = this.template.totalSets + 1;
+    }
   }
 
   deleteSet(set: Sets, index: number, exercise: Exercise) {
     this.setToDelete = set;
     this.deleteSetModeForExercise = exercise;
     this.deleteSetConfirmationModal.show(`Set #${index + 1} will be deleted`);
+
+    if (this.template && this.template.totalSets > 0) {
+      this.template.totalSets = this.template.totalSets - 1;
+    }
   }
 
   onDeleteSetConfirmed(confirmed: boolean) {
@@ -314,9 +361,11 @@ export class WorkoutTemplateEditComponent implements OnInit {
   }
 
   makeTitleNonEditable() {
-    this.isTitleEditable = false;
-    if (this.template) {
-      this.template.title = this.templateTitle;
+    if (this.templateTitle.length > 0) {
+      this.isTitleEditable = false;
+      if (this.template) {
+        this.template.title = this.templateTitle;
+      }
     }
   }
 }

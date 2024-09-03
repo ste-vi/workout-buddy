@@ -1,0 +1,33 @@
+.toast {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 20px;
+  gap: var(--m-size);
+  padding: var(--m-size);
+  padding-left: 1.4rem;
+  margin-bottom: var(--l-size);
+  background-color: var(--danger-backgroung);
+  width: 100%;
+
+  .toast-icon-container {
+    color: var(--danger);
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+    .toast-icon {
+      scale: 1.1;
+    }
+  }
+
+  .toast-header-container {
+    width: 100%;
+
+    .toast-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}

@@ -28,6 +28,7 @@ export class AppComponent {
   private initSvgIcons() {
     this.matIconRegistry
       .addSvgIcon('text', this.setIconPath(`${this.iconsPath}/text.svg`))
+      .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`))
       .addSvgIcon('search', this.setIconPath(`${this.iconsPath}/search.svg`))
       .addSvgIcon('undo', this.setIconPath(`${this.iconsPath}/undo.svg`))
