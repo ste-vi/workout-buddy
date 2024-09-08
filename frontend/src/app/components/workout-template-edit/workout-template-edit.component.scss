@@ -15,7 +15,10 @@
     align-items: center;
     justify-content: space-between;
     padding-bottom: var(--l-size);
+  }
 
+  app-toast {
+    margin-bottom: var(--l-size);
   }
 
   &-body {

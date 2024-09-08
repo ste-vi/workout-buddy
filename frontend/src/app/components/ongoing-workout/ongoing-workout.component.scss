@@ -16,7 +16,11 @@
     justify-content: space-between;
   }
 
-  .ongoing-workout-container-body {
+  app-toast {
+    margin-top: var(--m-size);
+  }
+
+  &-body {
     padding-bottom: var(--l-size);
     overflow-y: scroll;
     overflow-x: hidden;
@@ -158,10 +162,12 @@
     padding-bottom: 0.34rem;
     font-size: 12px;
     font-weight: 550;
+    font-family: 'Poppins', sans-serif;
   }
 
   input::placeholder {
     font-weight: 300;
+    font-family: 'Poppins', sans-serif;
   }
 
   .complete-set-input {

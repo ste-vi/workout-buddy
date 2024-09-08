@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
-import { NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
 import { workoutTemplates } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
 import { MatIcon } from '@angular/material/icon';
 import {
@@ -36,6 +36,7 @@ import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { ExercisesComponent } from '../common/exercises/exercises.component';
 import { deleteFromArray, replaceItemInArray } from '../../utils/array-utils';
+import { ToastComponent } from '../common/toast/toast.component';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -64,6 +65,8 @@ import { deleteFromArray, replaceItemInArray } from '../../utils/array-utils';
     ConfirmationModalComponent,
     TagsModalComponent,
     ExercisesComponent,
+    ToastComponent,
+    NgClass,
   ],
   animations: [collapse, sideModalOpenClose, fadeInOut],
   templateUrl: './ongoing-workout.component.html',
@@ -79,6 +82,8 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   protected dragStarted: boolean = false;
   protected setsAnimationEnabled: boolean = false;
+
+  protected isInvalidated: boolean = false;
 
   protected deleteSetModeForExercise: Exercise | undefined = undefined;
   private setToDelete: any;
@@ -104,6 +109,9 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   @ViewChild('exerciseMenu') exerciseMenu!: ContextMenuComponent;
 
+  @ViewChild('errorToast')
+  errorToast!: ToastComponent;
+
   constructor(
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
@@ -113,6 +121,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.ongoingWorkoutService.modalOpened$.subscribe((wt) => {
+      this.isInvalidated = false;
       this.startNewWorkout(wt);
       this.isOpen = true; // open only after workout creation is submitted from BE?
     });
@@ -132,9 +141,41 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     this.dragStarted = false;
     this.isTemplateUpdated = false;
     this.deleteSetModeForExercise = undefined;
+    this.isInvalidated = false;
   }
 
-  finishWorkout() {}
+  finishWorkout() {
+    let errorMessages: string[] = this.validateInput();
+
+    let isValid = errorMessages.length === 0;
+
+    this.isInvalidated = !isValid;
+    if (!isValid) {
+      this.errorToast.open('Error', errorMessages, 'danger');
+      return;
+    }
+  }
+
+  private validateInput() {
+    let errorMessages: string[] = [];
+
+    if (
+      this.ongoingWorkout?.exercises === undefined ||
+      this.ongoingWorkout?.exercises?.length === 0
+    ) {
+      errorMessages.push('Template must have at least one exercise');
+    }
+
+    for (const exercise of this.ongoingWorkout?.exercises || []) {
+      if (exercise.sets.length === 0) {
+        errorMessages.push(
+          `Exercise "${exercise.name}" does not have any sets`,
+        );
+      }
+    }
+
+    return errorMessages;
+  }
 
   drop(event: CdkDragDrop<string[]>) {
     let exercises = this.ongoingWorkout?.exercises!;
@@ -316,9 +357,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     ) {
       this.onDeleteSetConfirmed(true);
     } else {
-      this.deleteSetConfirmationModal.show(
-        `Set #${index + 1} will be deleted`,
-      );
+      this.deleteSetConfirmationModal.show(`Set #${index + 1} will be deleted`);
     }
   }
 

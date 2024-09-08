@@ -8,6 +8,8 @@
   </div>
   <app-progress-bar [progress]=progress class="card-padding-top"></app-progress-bar>
 
+  <app-toast #errorToast></app-toast>
+
   <div class="ongoing-workout-container-body section-padding-top">
     <div class="ongoing-workout-header">
       <div class="l-text semi-bold">{{ ongoingWorkout?.title }}</div>
@@ -65,7 +67,7 @@
         </div>
 
         <div class="exercise-sets s-text" *ngIf="!dragStarted" [@collapse] [@.disabled]="!setsAnimationEnabled">
-          <div class="table-row semi-bold">
+          <div class="table-row semi-bold" [ngClass]="{'error-text': isInvalidated && exercise.sets.length === 0}">
             <div class="table-cell set">Set</div>
             <div class="table-cell previous">Previous</div>
             <div class="table-cell kg">Kg</div>

@@ -172,7 +172,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
   private validateInput() {
     let errorMessages: string[] = [];
 
-    if (this.template?.title?.trim() === '') {
+    if (this.template?.title === undefined || this.template?.title?.trim() === '') {
       errorMessages.push('Template title must not be empty');
     }
 

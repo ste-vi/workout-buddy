@@ -1,3 +1,102 @@
 .dashboard-container {
 
+  &-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .welcome-box {
+      .welcome-back {
+        padding-bottom: 2px;
+      }
+    }
+
+    .notifications {
+      .notification-icon-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        height: 2.4rem;
+        width: 2.4rem;
+        background-color: var(--border);
+        border-radius: 10px;
+      }
+
+      .notification-count {
+        position: absolute;
+        top: 11px;
+        right: 12px;
+        width: 5px;
+        height: 5px;
+        background-color: red;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &-body {
+    width: 100%;
+
+    .last-workout-container {
+
+      .last-workout-container-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .workout-card {
+        display: flex;
+        flex-direction: column;
+        margin-top: var(--m-size);
+        padding: var(--m-size);
+        border-radius: 20px;
+
+        .workout-card-header {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.5rem;
+        }
+
+        .workout-card-body {
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          justify-content: center;
+
+          .last-workout-time {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: start;
+            margin-left: -5px;
+
+            .last-workout-time-icon {
+              scale: 0.59;
+            }
+          }
+        }
+
+        .workout-card-footer {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: end;
+          gap: var(--m-size);
+          padding-top: var(--m-size);
+
+          app-medium-button {
+            width: 7.2rem;
+          }
+        }
+      }
+    }
+  }
+
 }
