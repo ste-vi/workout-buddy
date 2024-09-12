@@ -1,0 +1,42 @@
+<div class="workout-history-container container black-color">
+
+  <div class="workout-history-container-header">
+    <app-header-button icon="left-arrow" class="not-visible"></app-header-button>
+    <b class="l-text">Workout History</b>
+    <app-header-button icon="two-dots" (click)="switchView()"></app-header-button>
+  </div>
+
+  <div class="workout-history-container-body">
+
+    <div class="carrousel-view" *ngIf="!isListView">
+
+      <div class="month-navigation gray-1-color">
+        <mat-icon svgIcon="left-arrow-2" class="s-svg-icon clickable-m-icon" (click)="prevMonth()"></mat-icon>
+        <span class="m-text">{{ currentMonth | date:'MMMM yyyy' }}</span>
+        <mat-icon svgIcon="right-arrow" class="s-svg-icon clickable-m-icon" (click)="nextMonth()"></mat-icon>
+      </div>
+
+      <div class="date-carousel-container">
+        <div #dateCarousel class="date-carousel" (scroll)="onScroll($event)">
+          <div *ngFor="let date of dates; let i = index"
+               class="date-item gray-1-color"
+               [class.active]="i === currentIndex"
+               (click)="selectDate(i)">
+            <div class="day s-text">{{ date | date:'EEE' }}</div>
+            <div class="date s-text semi-bold">{{ date | date:'d' }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-padding-top">
+        <div *ngFor="let history of currentDayWorkoutHistory">
+          <app-latest-workout-widget [workoutHistory]="history"></app-latest-workout-widget>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="list-view" *ngIf="isListView">
+
+
+  </div>
+</div>

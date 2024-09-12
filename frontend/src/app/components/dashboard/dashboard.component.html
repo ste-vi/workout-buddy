@@ -2,7 +2,7 @@
 
   <div class="dashboard-container-header">
     <div class="welcome-box">
-      <div class="gray-1-color s-text welcome-back">Welcome Back,</div>
+      <div class="gray-1-color s-text welcome-back">Welcome back</div>
       <h2 class="semi-bold l-text">Vitalii Stefanchak</h2>
     </div>
     <div class="notifications">
@@ -13,81 +13,34 @@
     </div>
   </div>
 
-  <div class="dashboard-container-body card-padding-top">
+  <div class="dashboard-container-body section-padding-top">
 
     <div class="last-workout-container">
       <div class="last-workout-container-header">
         <div class="m-text semi-bold">Suggested Workout</div>
-        <div class="gray-1-color s-text clickable">See more</div>
+        <div class="gray-1-color s-text clickable" (click)="openWorkoutTemplatesPage()">See more</div>
       </div>
 
       <div class="last-workout-container-body">
-
-        <div class="workout-card blue-shadow primary-background-reversed">
-          <div class="workout-card-header">
-            <div class="m-text semi-bold white-color">{{ suggestedWorkoutTemplate.title }}</div>
-          </div>
-          <div class="workout-card-body s-text white-color">
-            <div>
-          <span>{{ suggestedWorkoutTemplate.exercises.length }} exercises | {{ suggestedWorkoutTemplate.totalSets }}
-            sets | {{ suggestedWorkoutTemplate.estimatedDuration }}</span>
-            </div>
-            <div class="last-workout-time">
-              <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
-              <div>{{ suggestedWorkoutTemplate.lastPerformedWorkout!.date | timeAgo }}</div>
-            </div>
-          </div>
-          <div class="workout-card-footer">
-            <app-medium-button [classes]="['white-background', 'black-color']"
-                               [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                               name="View details"
-                               (click)="openWorkoutDetails(suggestedWorkoutTemplate)"></app-medium-button>
-            <app-medium-button [classes]="['white-background', 'black-color']"
-                               [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                               name="Start"
-                               (click)="openWorkoutDetails(suggestedWorkoutTemplate)"></app-medium-button>
-          </div>
-        </div>
+        <app-workout-template-widget [workoutTemplate]="suggestedWorkoutTemplate"></app-workout-template-widget>
       </div>
-
     </div>
 
     <div class="last-workout-container card-padding-top">
       <div class="last-workout-container-header">
         <div class="m-text semi-bold">Latest Workout</div>
-        <div class="gray-1-color s-text clickable">See more</div>
+        <div class="gray-1-color s-text clickable" (click)="openWorkoutHistoryPage()">See more</div>
       </div>
 
       <div class="last-workout-container-body">
-
-        <div class="workout-card blue-shadow primary-background">
-          <div class="workout-card-header">
-            <div class="m-text semi-bold white-color">{{ latestWorkoutHistory.title }}</div>
-          </div>
-          <div class="workout-card-body s-text white-color">
-            <div>
-          <span>{{ latestWorkoutHistory.totalExercises }} exercises | {{ latestWorkoutHistory.totalSets }}
-            sets | {{ latestWorkoutHistory.duration }}</span>
-            </div>
-            <div>
-          <span>{{ latestWorkoutHistory.totalWeight }} kg lifted | {{ latestWorkoutHistory.prReps }} PR reps</span>
-            </div>
-            <div class="last-workout-time">
-              <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
-              <div>{{ latestWorkoutHistory.date | timeAgo }}</div>
-            </div>
-          </div>
-          <div class="workout-card-footer">
-            <app-medium-button [classes]="['white-background', 'black-color']"
-                               [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                               name="View details"
-                               (click)="openWorkoutHistoryDetails(latestWorkoutHistory)"></app-medium-button>
-          </div>
-        </div>
+        <app-latest-workout-widget [workoutHistory]="latestWorkoutHistory"></app-latest-workout-widget>
       </div>
-
     </div>
   </div>
+
+  <app-workout-template-details></app-workout-template-details>
+
+  <app-ongoing-workout></app-ongoing-workout>
 
 </div>
 

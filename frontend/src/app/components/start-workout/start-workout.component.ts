@@ -13,6 +13,9 @@ import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.comp
 import { WorkoutTemplateDetailsComponent } from '../workout-template-details/workout-template-details.component';
 import { WorkoutTemplateEditComponent } from '../workout-template-edit/workout-template-edit.component';
 import { ContextMenuComponent } from '../common/context-menu/context-menu.component';
+import {
+  WorkoutTemplateWidgetComponent
+} from "../common/widgets/workout-template-widget/workout-template-widget.component";
 
 @Component({
   selector: 'app-start-workout',
@@ -29,6 +32,7 @@ import { ContextMenuComponent } from '../common/context-menu/context-menu.compon
     WorkoutTemplateDetailsComponent,
     WorkoutTemplateEditComponent,
     ContextMenuComponent,
+    WorkoutTemplateWidgetComponent,
   ],
   templateUrl: './start-workout.component.html',
   styleUrl: './start-workout.component.scss',

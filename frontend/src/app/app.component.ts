@@ -27,6 +27,7 @@ export class AppComponent {
 
   private initSvgIcons() {
     this.matIconRegistry
+      .addSvgIcon('dumbbell-1', this.setIconPath(`${this.iconsPath}/dumbbell-1.svg`))
       .addSvgIcon('text', this.setIconPath(`${this.iconsPath}/text.svg`))
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`))
@@ -45,6 +46,7 @@ export class AppComponent {
       .addSvgIcon('up-arrow', this.setIconPath(`${this.iconsPath}/up-arrow.svg`))
       .addSvgIcon('down-arrow', this.setIconPath(`${this.iconsPath}/down-arrow.svg`))
       .addSvgIcon('left-arrow', this.setIconPath(`${this.iconsPath}/left-arrow.svg`))
+      .addSvgIcon('left-arrow-2', this.setIconPath(`${this.iconsPath}/left-arrow-2.svg`))
       .addSvgIcon('right-arrow', this.setIconPath(`${this.iconsPath}/right-arrow.svg`))
       .addSvgIcon('list', this.setIconPath(`${this.iconsPath}/list.svg`))
       .addSvgIcon('statistics', this.setIconPath(`${this.iconsPath}/statistics.svg`))

@@ -1,0 +1,29 @@
+<div class="workout-history-widget blue-shadow primary-background">
+  <div class="workout-history-widget-header">
+    <div class="m-text semi-bold white-color">{{ workoutHistory.title }}</div>
+  </div>
+  <div class="workout-history-widget-body s-text white-color">
+    <div class="last-workout-details">
+      <div>{{ workoutHistory.totalExercises }} exercises | {{ workoutHistory.totalSets }}
+        sets | {{ workoutHistory.duration }}
+      </div>
+      <div class="workout-metrics">
+        <mat-icon svgIcon="dumbbell-1" class="xs-svg-icon"></mat-icon>
+        <span>{{ workoutHistory.totalWeight }} kg</span>
+        &nbsp; |
+        <mat-icon svgIcon="cup" class="xs-svg-icon"></mat-icon>
+        <span>{{ workoutHistory.prReps }} PRs </span>
+      </div>
+    </div>
+    <div class="last-workout-time">
+      <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
+      <div>{{ workoutHistory.date | timeAgo }}</div>
+    </div>
+  </div>
+  <div class="workout-history-widget-footer">
+    <app-medium-button [classes]="['white-background', 'black-color']"
+                       [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                       name="View details"
+                       (click)="openWorkoutHistoryDetails(workoutHistory)"></app-medium-button>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="workout-template-widget blue-shadow primary-background-reversed">
+  <div class="workout-template-widget-header">
+    <div class="m-text semi-bold white-color">{{ workoutTemplate.title }}</div>
+  </div>
+  <div class="workout-template-widget-body s-text white-color">
+    <div>
+          <span>{{ workoutTemplate.exercises.length }} exercises | {{ workoutTemplate.totalSets }}
+            sets | {{ workoutTemplate.estimatedDuration }}</span>
+    </div>
+    <div class="last-workout-time">
+      <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
+      <div>{{ workoutTemplate.lastPerformedWorkout!.date | timeAgo }}</div>
+    </div>
+  </div>
+  <div class="workout-template-widget-footer">
+    <app-medium-button [classes]="['white-background', 'black-color']"
+                       [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                       name="View details"
+                       (click)="openWorkoutDetails(workoutTemplate)"></app-medium-button>
+    <app-medium-button [classes]="['white-background', 'black-color']"
+                       [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                       name="Start"
+                       (click)="startWorkout(workoutTemplate)"></app-medium-button>
+  </div>
+</div>

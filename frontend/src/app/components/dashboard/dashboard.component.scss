@@ -32,7 +32,7 @@
         right: 12px;
         width: 5px;
         height: 5px;
-        background-color: red;
+        background-color: var(--danger);
         border-radius: 50%;
       }
     }
@@ -49,53 +49,6 @@
         justify-content: space-between;
       }
 
-      .workout-card {
-        display: flex;
-        flex-direction: column;
-        margin-top: var(--m-size);
-        padding: var(--m-size);
-        border-radius: 20px;
-
-        .workout-card-header {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
-          gap: 0.5rem;
-        }
-
-        .workout-card-body {
-          display: flex;
-          flex-direction: column;
-          align-items: start;
-          justify-content: center;
-
-          .last-workout-time {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: start;
-            margin-left: -5px;
-
-            .last-workout-time-icon {
-              scale: 0.59;
-            }
-          }
-        }
-
-        .workout-card-footer {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: end;
-          gap: var(--m-size);
-          padding-top: var(--m-size);
-
-          app-medium-button {
-            width: 7.2rem;
-          }
-        }
-      }
     }
   }
 

@@ -7,32 +7,7 @@
 
   <div class="workout-container" *ngIf="suggestedWorkoutTemplate">
     <div class="m-text semi-bold">Suggested workout</div>
-    <div class="workout-card blue-shadow primary-background-reversed">
-      <div class="workout-card-header">
-        <div class="m-text semi-bold white-color">{{ suggestedWorkoutTemplate.title }}</div>
-        <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color"></mat-icon>
-      </div>
-      <div class="workout-card-body s-text white-color">
-        <div>
-          <span>{{ suggestedWorkoutTemplate.exercises.length }} exercises | {{ suggestedWorkoutTemplate.totalSets }}
-            sets | {{ suggestedWorkoutTemplate.estimatedDuration }}</span>
-        </div>
-        <div class="last-workout-time">
-          <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
-          <div>{{ suggestedWorkoutTemplate.lastPerformedWorkout.date | timeAgo }}</div>
-        </div>
-      </div>
-      <div class="workout-card-footer">
-        <app-medium-button [classes]="['white-background', 'black-color']"
-                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                           name="View details"
-                           (click)="openWorkoutTemplateDetails(suggestedWorkoutTemplate)"></app-medium-button>
-        <app-medium-button [classes]="['white-background', 'black-color']"
-                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
-                           (click)="startWorkout(suggestedWorkoutTemplate)"
-                           name="Start"></app-medium-button>
-      </div>
-    </div>
+    <app-workout-template-widget [workoutTemplate]="suggestedWorkoutTemplate"></app-workout-template-widget>
   </div>
 
   <div class="workout-container">
