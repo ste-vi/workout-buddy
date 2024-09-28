@@ -22,7 +22,7 @@
     .last-workout-details {
       width: 100%;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: start;
       justify-content: space-between;
 
@@ -31,6 +31,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        margin-left: -5px;
       }
     }
 
@@ -38,7 +39,8 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: start;
+      justify-content: end;
+      width: 100%;
       margin-left: -5px;
 
       .last-workout-time-icon {

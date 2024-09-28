@@ -5,124 +5,132 @@
   padding-top: var(--l-size);
   padding-left: var(--l-size);
   padding-right: var(--l-size);
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
-
-  &::-webkit-scrollbar {
-    width: 0;
-  }
 
   &-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-bottom: var(--m-size);
   }
 
-  .workout-template-details {
-    padding-top: var(--l-size);
+  &-body {
+    height: 100%;
+    padding-bottom: var(--l-size);
+    overflow-y: scroll;
+    overflow-x: hidden;
 
-    .info-cards {
-      display: flex;
-      flex-direction: row;
+    &::-webkit-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      display: none;
+    }
+
+    .workout-template-details {
       padding-top: var(--m-size);
-      gap: var(--m-size);
-      align-items: center;
-      justify-content: center;
-      background-color: white;
 
-      .info-card {
-        height: 5rem;
-        width: 10rem;
-        border-radius: 16px;
+      .info-cards {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        padding-top: var(--m-size);
+        gap: var(--m-size);
         align-items: center;
         justify-content: center;
-        cursor: pointer;
+        background-color: white;
 
-        &:hover {
-          scale: var(--hover-scale);
-        }
-
-        &:active {
-          scale: var(--active-scale);
-        }
-
-        .trend-value {
+        .info-card {
+          height: 5rem;
+          width: 10rem;
+          border-radius: 16px;
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
-        }
-      }
-    }
-  }
+          cursor: pointer;
 
-  .exercises-list-container {
-    padding-top: var(--l-size);
-    padding-bottom: 6.59rem;
+          &:hover {
+            scale: var(--hover-scale);
+          }
 
-    .exercise {
-      display: flex;
-      gap: 0.5rem;
-      padding-top: var(--m-size);
-      width: 100%;
-      cursor: pointer;
+          &:active {
+            scale: var(--active-scale);
+          }
 
-      .exercise-header {
-
-        .exercise-image {
-          height: 3.75rem;
-          width: 3.75rem;
-          border-radius: 16px;
-        }
-      }
-
-      .exercise-body {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        .upper-section {
-          width: 100%;
-          display: flex;
-          gap: 0.5rem;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .lower-section {
-          width: 100%;
-          display: flex;
-          gap: 0.5rem;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .pr-set {
-          display: flex;
-          align-items: center;
-
-          .pr-set-icon {
-            scale: 0.56;
+          .trend-value {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
           }
         }
       }
     }
-  }
 
-  app-button {
-    width: 100%;
-    max-width: 1024px;
-    position: fixed;
-    bottom: var(--l-size);
-    right: 0;
-    padding-left: var(--l-size);
-    padding-right: var(--l-size);
+    .exercises-list-container {
+      padding-top: var(--l-size);
+      padding-bottom: 6.59rem;
+
+      .exercise {
+        display: flex;
+        gap: 0.5rem;
+        padding-top: var(--m-size);
+        width: 100%;
+        cursor: pointer;
+
+        .exercise-header {
+
+          .exercise-image {
+            height: 3.75rem;
+            width: 3.75rem;
+            border-radius: 16px;
+          }
+        }
+
+        .exercise-body {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          .upper-section {
+            width: 100%;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: space-between;
+          }
+
+          .lower-section {
+            width: 100%;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: space-between;
+          }
+
+          .pr-set {
+            display: flex;
+            align-items: center;
+
+            .pr-set-icon {
+              scale: 0.56;
+            }
+          }
+        }
+      }
+    }
+
+    app-button {
+      width: 100%;
+      max-width: 1024px;
+      position: fixed;
+      bottom: var(--l-size);
+      right: 0;
+      padding-left: var(--l-size);
+      padding-right: var(--l-size);
+    }
   }
 }
 
-.overflowing {
-  padding-bottom: 7rem;
-}
+

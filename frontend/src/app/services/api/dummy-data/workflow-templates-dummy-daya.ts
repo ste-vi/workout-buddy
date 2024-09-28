@@ -136,6 +136,8 @@ export const suggestedWorkoutTemplate: WorkoutTemplate = {
 
 export const workoutTemplates: WorkoutTemplate[] = [
   suggestedWorkoutTemplate,
+  suggestedWorkoutTemplate,
+  suggestedWorkoutTemplate,
   {
     id: 1,
     title: 'Back + Biceps',

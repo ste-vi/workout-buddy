@@ -73,14 +73,14 @@
         outline: none;
         padding-top: 0.34rem;
         padding-bottom: 0.34rem;
-        font-size: 12px;
+        font-size: var(--input-font-size);
         font-weight: 550;
         font-family: 'Poppins', sans-serif;
         color: var(--gray-1);
       }
 
       .tag {
-        padding: 0.25rem 0.62rem;
+        //padding: 0.25rem 0.62rem;
       }
     }
   }

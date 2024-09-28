@@ -34,6 +34,10 @@
   --s-size: 0.469rem;
   --m-size: 0.938rem;
   --l-size: 1.875rem;
+
+  --container-padding: 1.2rem;
+
+  --input-font-size: 13px;
 }
 
 html, body {
@@ -42,6 +46,10 @@ html, body {
   max-width: 1024px;
   margin: 0 auto;
   background-color: #eaeef8;
+}
+
+body {
+  overflow: hidden;
 }
 
 // colors
@@ -115,31 +123,31 @@ h2 {
 }
 
 h3 {
-  font-size: 22px;
+  font-size: 24px;
 }
 
 h4 {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .subtitle {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .l-text {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .m-text {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .s-text {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .caption {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .l-svg-icon {
@@ -147,7 +155,7 @@ h4 {
 }
 
 .m-svg-icon {
-  scale: (0.9);
+  scale: (0.95);
 }
 
 .s-svg-icon {
@@ -299,16 +307,18 @@ input:focus::placeholder {
 // container
 
 .container {
-  height: 91.44vh;
-  padding-top: var(--l-size);
-  padding-left: var(--l-size);
-  padding-right: var(--l-size);
+  height: 92vh;
+  padding-top: var(--container-padding);
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
   background-color: white;
   overflow-y: scroll;
   overflow-x: hidden;
 
   &::-webkit-scrollbar {
-    width: 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    display: none;
   }
 }
 

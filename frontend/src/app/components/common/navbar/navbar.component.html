@@ -12,7 +12,7 @@
     <div *ngIf="currentPage === 'progress'" class="active-dot"></div>
   </div>
   <div class="main-action-container primary-background"
-       [class.active-main-action-container]="currentPage === '/workout/start'"
+       [class.active-main-action-container]="currentPage === 'start'"
        (click)="navigateTo('/workout/start')">
     <mat-icon svgIcon="add-circle"></mat-icon>
   </div>

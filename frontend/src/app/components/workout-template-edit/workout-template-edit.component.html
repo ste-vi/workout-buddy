@@ -9,7 +9,7 @@
                        (click)="save()"></app-header-button>
   </div>
 
-  <app-toast #errorToast></app-toast>
+  <app-toast *ngIf="isInvalidated" #errorToast></app-toast>
 
   <div class="edit-template-container-body" >
     <div class="template-header">
@@ -22,9 +22,9 @@
              (keyup.enter)="makeTitleNonEditable()"
              [placeholder]='isInvalidated && !templateTitle ? "Please enter template title" : "Enter template title"'>
 
-      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" *ngIf="!isTitleEditable"
+      <mat-icon svgIcon="two-dots" class="s-svg-icon clickable-xs-icon" *ngIf="!isTitleEditable"
                 (click)="openTemplateMenu($event)"></mat-icon>
-      <mat-icon svgIcon="check" class="m-svg-icon clickable-m-icon primary" *ngIf="isTitleEditable"
+      <mat-icon svgIcon="check" class="l-svg-icon clickable-m-icon primary" *ngIf="isTitleEditable"
                 (click)="makeTitleNonEditable()"></mat-icon>
     </div>
 

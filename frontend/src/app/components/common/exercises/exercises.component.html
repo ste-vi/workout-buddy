@@ -15,9 +15,9 @@
 
   <div class="exercises-search-section card-padding-top">
     <div class="search card-shadow m-text">
-      <mat-icon svgIcon="search" class="gray-2-color clickable-m-icon m-svg-icon" (click)="search()"></mat-icon>
+      <mat-icon svgIcon="search" class="gray-2-color clickable-m-icon" (click)="search()"></mat-icon>
       <input placeholder="Search exercises" [(ngModel)]="searchQuery" (keyup)="search()">
-      <mat-icon svgIcon="options" class="clickable-m-icon m-svg-icon" (click)="openSearchOptions()"></mat-icon>
+      <mat-icon svgIcon="options" class="clickable-m-icon" (click)="openSearchOptions()"></mat-icon>
     </div>
 
     <div class="search-options s-text gray-1-color" *ngIf="isSearchOptionsOpen" [@collapse]>

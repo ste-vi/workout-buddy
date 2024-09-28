@@ -17,17 +17,15 @@
     padding-bottom: var(--l-size);
   }
 
-  app-toast {
-    margin-bottom: var(--l-size);
-  }
-
   &-body {
     padding-bottom: var(--l-size);
     overflow-y: scroll;
     overflow-x: hidden;
 
     &::-webkit-scrollbar {
-      width: 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      display: none;
     }
 
     .template-header {
@@ -103,7 +101,9 @@
             }
 
             .delete-icon {
-              padding: 0.3rem;
+              height: 30px;
+              width: 30px;
+              padding: 0.34rem;
               color: var(--danger);
             }
 

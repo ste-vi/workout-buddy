@@ -1,8 +1,8 @@
 .header-button-container {
   border-radius: 8px;
   background-color: var(--border);
-  height: 2rem;
-  width: 2rem;
+  height: 2.1rem;
+  width: 2.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,6 +17,7 @@
   }
 
   .button-icon {
+    scale: 0.6;
     color: var(--black);
   }
 }

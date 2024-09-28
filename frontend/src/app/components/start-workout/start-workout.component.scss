@@ -1,67 +1,90 @@
 .start-workout-container {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  padding-left: 0;
+  padding-right: 0;
 
   .start-workout-container-header {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    padding-bottom: var(--m-size);
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
   }
 
-  .workout-container {
-    margin-top: var(--l-size);
-    margin-bottom: var(--l-size);
+  .start-workout-container-body {
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+    padding-bottom: 8rem;
 
-    .workout-container-header {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
+    &::-webkit-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      display: none;
     }
 
-    .workout-card {
-      display: flex;
-      flex-direction: column;
-      margin-top: var(--m-size);
-      padding: var(--m-size);
-      border-radius: 20px;
+    .workout-container {
+      margin-top: var(---size);
+      margin-bottom: var(--l-size);
 
-      .workout-card-header {
+      .workout-container-header {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        gap: 0.5rem;
       }
 
-      .workout-card-body {
+      .workout-card {
         display: flex;
         flex-direction: column;
-        align-items: start;
-        justify-content: center;
+        margin-top: var(--m-size);
+        padding: var(--m-size);
+        border-radius: 20px;
 
-        .last-workout-time {
+        .workout-card-header {
           display: flex;
           flex-direction: row;
           align-items: center;
-          justify-content: start;
-          margin-left: -5px;
+          justify-content: space-between;
+          gap: 0.5rem;
+        }
 
-          .last-workout-time-icon {
-            scale: 0.59;
+        .workout-card-body {
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          justify-content: center;
+
+          .last-workout-time {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: end;
+            width: 100%;
+            margin-left: -5px;
+
+            .last-workout-time-icon {
+              scale: 0.59;
+            }
           }
         }
-      }
 
-      .workout-card-footer {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: end;
-        gap: var(--m-size);
-        padding-top: var(--m-size);
+        .workout-card-footer {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: end;
+          gap: var(--m-size);
+          padding-top: var(--m-size);
 
-        app-medium-button {
-          width: 7.2rem;
+          app-medium-button {
+            width: 7.2rem;
+          }
         }
       }
     }
@@ -70,7 +93,7 @@
 
 
 .add-template-icon {
-  scale: 1.1;
+  scale: 1.4;
   cursor: pointer;
 
   &:hover {

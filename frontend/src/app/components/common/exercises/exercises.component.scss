@@ -34,7 +34,7 @@
         border-right: 1px solid var(--gray-3);
         outline: none;
 
-        font-size: 12px;
+        font-size: var(--input-font-size);
         font-family: 'Poppins', sans-serif;
         color: var(--gray-1);
       }
@@ -74,7 +74,9 @@
     overflow-x: hidden;
 
     &::-webkit-scrollbar {
-      width: 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      display: none;
     }
 
     .exercise {
@@ -134,6 +136,9 @@
   }
 
   .add-icon-container {
+    height: 28px;
+    width: 28px;
+    scale: 1.24;
 
     .add-icon {
       display: flex;

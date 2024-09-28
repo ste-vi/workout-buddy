@@ -87,12 +87,12 @@
               <span *ngIf="!set.previousReps">-</span>
             </div>
             <div class="table-cell kg">
-              <input type="number" [class.complete-set-input]="set.completed"
+              <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
                      [placeholder]="set.previousWeight ? set.previousWeight : 0"
                      (blur)="updateSetWeight(set, $event)">
             </div>
             <div class="table-cell reps">
-              <input type="number" [class.complete-set-input]="set.completed"
+              <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
                      [placeholder]="set.previousReps ? set.previousReps : 0"
                      (blur)="updateSetReps(set, $event)">
             </div>
