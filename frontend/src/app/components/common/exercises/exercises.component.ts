@@ -62,7 +62,7 @@ export class ExercisesComponent implements OnInit {
 
   protected isSearchOptionsOpen: boolean = false;
   protected currentPage: number = 0;
-  protected itemsPerPage: number = 10; // increase later to 30 once backend added
+  protected itemsPerPage: number = 30;
   protected hasMoreItems: boolean = true;
   protected searchQuery: string = '';
   protected bodyPart: BodyPart | undefined = undefined;

@@ -13,6 +13,7 @@ import { WorkoutTemplateDetailsComponent } from '../workout-template-details/wor
 import { LatestWorkoutWidgetComponent } from '../common/widgets/latest-workout-widget/latest-workout-widget.component';
 import { WorkoutTemplateWidgetComponent } from '../common/widgets/workout-template-widget/workout-template-widget.component';
 import { Router } from '@angular/router';
+import {fadeInOut} from "../../animations/fade-in-out";
 
 @Component({
   selector: 'app-dashboard',
@@ -32,6 +33,7 @@ import { Router } from '@angular/router';
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  animations: [fadeInOut]
 })
 export class DashboardComponent {
   protected readonly suggestedWorkoutTemplate = suggestedWorkoutTemplate;

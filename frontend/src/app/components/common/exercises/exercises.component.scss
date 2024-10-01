@@ -2,9 +2,9 @@
   height: 100%;
   width: 100%;
   max-width: 1024px;
-  padding-top: var(--l-size);
-  padding-left: var(--l-size);
-  padding-right: var(--l-size);
+  padding-top: var(--container-padding);
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
   overflow-y: hidden;
   overflow-x: hidden;
   display: flex;
@@ -23,7 +23,7 @@
       justify-content: center;
       align-items: center;
       width: 100%;
-      gap: 0.6rem;
+      gap: 1rem;
       border-radius: 16px;
       padding: var(--s-size) var(--m-size);
       margin-bottom: var(--m-size);
@@ -32,6 +32,8 @@
         width: 100%;
         border: none;
         border-right: 1px solid var(--gray-3);
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
         outline: none;
 
         font-size: var(--input-font-size);

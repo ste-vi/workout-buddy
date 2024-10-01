@@ -37,7 +37,7 @@
 
   --container-padding: 1.2rem;
 
-  --input-font-size: 13px;
+  --input-font-size: 14px;
 }
 
 html, body {
@@ -98,6 +98,10 @@ body {
 
 .primary {
   color: var(--primary-1);
+}
+
+.primary-important {
+  color: var(--primary-1) !important;
 }
 
 .success {

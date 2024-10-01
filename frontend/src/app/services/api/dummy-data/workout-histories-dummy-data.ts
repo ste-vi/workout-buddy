@@ -4,7 +4,7 @@ export const workoutHistory: WorkoutHistory[] = [
   {
     id: 1,
     title: 'Bodyweight Training',
-    date: new Date('2024-09-09'),
+    date: new Date('2024-09-28'),
     duration: '30 min',
     totalSets: 10,
     prReps: 10,
@@ -14,7 +14,7 @@ export const workoutHistory: WorkoutHistory[] = [
   {
     id: 2,
     title: 'Cardio Workout',
-    date: new Date('2024-09-10'),
+    date: new Date('2024-09-29'),
     duration: '45 min',
     totalSets: 5,
     prReps: 15,
@@ -24,7 +24,7 @@ export const workoutHistory: WorkoutHistory[] = [
   {
     id: 3,
     title: 'Strength Training',
-    date: new Date('2024-09-11'),
+    date: new Date('2024-09-27'),
     duration: '60 min',
     totalSets: 15,
     prReps: 8,
@@ -64,7 +64,7 @@ export const workoutHistory: WorkoutHistory[] = [
   {
     id: 7,
     title: 'Lower Body Workout',
-    date: new Date('2024-09-15'),
+    date: new Date('2024-10-01'),
     duration: '55 min',
     totalSets: 14,
     prReps: 10,
@@ -74,7 +74,7 @@ export const workoutHistory: WorkoutHistory[] = [
   {
     id: 8,
     title: 'Core Strength',
-    date: new Date('2024-09-16'),
+    date: new Date('2024-10-02'),
     duration: '40 min',
     totalSets: 10,
     prReps: 25,
@@ -84,7 +84,7 @@ export const workoutHistory: WorkoutHistory[] = [
   {
     id: 9,
     title: 'Pilates Class',
-    date: new Date('2024-09-17'),
+    date: new Date('2024-10-03'),
     duration: '60 min',
     totalSets: 0,
     prReps: 0,

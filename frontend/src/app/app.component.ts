@@ -27,6 +27,7 @@ export class AppComponent {
 
   private initSvgIcons() {
     this.matIconRegistry
+      .addSvgIcon('slider-vertical', this.setIconPath(`${this.iconsPath}/slider-vertical.svg`))
       .addSvgIcon('dumbbell-1', this.setIconPath(`${this.iconsPath}/dumbbell-1.svg`))
       .addSvgIcon('text', this.setIconPath(`${this.iconsPath}/text.svg`))
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))

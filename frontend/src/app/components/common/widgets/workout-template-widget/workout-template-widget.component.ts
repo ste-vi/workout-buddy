@@ -6,6 +6,7 @@ import {TimeAgoPipe} from "../../../../pipes/time-ago-pipe";
 import {WorkoutTemplate} from "../../../../models/workout-template";
 import {WorkoutTemplateDetailsService} from "../../../../services/communication/workout-template-details.service";
 import {OngoingWorkoutService} from "../../../../services/communication/ongoing-workout.service";
+import {fadeInOut} from "../../../../animations/fade-in-out";
 
 @Component({
   selector: 'app-workout-template-widget',
@@ -13,6 +14,7 @@ import {OngoingWorkoutService} from "../../../../services/communication/ongoing-
   imports: [MatIcon, MediumButtonComponent, TimeAgoPipe],
   templateUrl: './workout-template-widget.component.html',
   styleUrl: './workout-template-widget.component.scss',
+  animations: [fadeInOut]
 })
 export class WorkoutTemplateWidgetComponent {
 

@@ -3,19 +3,17 @@
   <div class="workout-history-container-header">
     <app-header-button icon="left-arrow" class="not-visible"></app-header-button>
     <b class="l-text">Workout History</b>
-    <app-header-button icon="two-dots" (click)="switchView()"></app-header-button>
+    <app-header-button icon="slider-vertical" [iconClasses]="['primary-important', 's-svg-icon-important']" (click)="switchView()"></app-header-button>
   </div>
 
   <div class="workout-history-container-body">
 
-    <div class="carrousel-view" *ngIf="!isListView">
-
+    <div class="carrousel-view card-padding-top" *ngIf="!isListView">
       <div class="month-navigation gray-1-color">
         <mat-icon svgIcon="left-arrow-2" class="s-svg-icon clickable-m-icon" (click)="prevMonth()"></mat-icon>
         <span class="m-text">{{ currentMonth | date:'MMMM yyyy' }}</span>
         <mat-icon svgIcon="right-arrow" class="s-svg-icon clickable-m-icon" (click)="nextMonth()"></mat-icon>
       </div>
-
       <div class="date-carousel-container">
         <div #dateCarousel class="date-carousel" (scroll)="onScroll($event)">
           <div *ngFor="let date of dates; let i = index"
@@ -29,14 +27,34 @@
       </div>
       <div class="card-padding-top">
         <div *ngFor="let history of currentDayWorkoutHistory">
-          <app-latest-workout-widget [workoutHistory]="history"></app-latest-workout-widget>
+          <app-latest-workout-widget [workoutHistory]="history" @fadeInOut></app-latest-workout-widget>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="list-view" *ngIf="isListView">
+    <div class="list-view card-padding-top" *ngIf="isListView">
 
+      <div class="workouts-search-section">
+        <div class="search card-shadow m-text">
+          <mat-icon svgIcon="search" class="gray-2-color clickable-m-icon" (click)="search()"></mat-icon>
+          <input placeholder="Search workouts" [(ngModel)]="searchQuery" (keyup)="search()">
+          <span class="s-text gray-1-color clickable" [ngClass]="{'primary': searchQuery !== ''}" (click)="clearSearch()">Clear</span>
+        </div>
 
+      </div>
+
+      <div class="workout-history-list-body" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
+           [scrollWindow]="false" (scrolled)="loadMore()">
+        <ng-container *ngFor="let monthYear of groupedWorkoutHistory | keyvalue: originalOrder">
+          <div class="month-year-header s-text">
+            {{ monthYear.key }}
+          </div>
+          <div *ngFor="let history of monthYear.value" [@collapseEnter]>
+            <app-latest-workout-widget [workoutHistory]="history" ></app-latest-workout-widget>
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
   </div>
 </div>

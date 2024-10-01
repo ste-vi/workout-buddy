@@ -16,6 +16,7 @@ import { ContextMenuComponent } from '../common/context-menu/context-menu.compon
 import {
   WorkoutTemplateWidgetComponent
 } from "../common/widgets/workout-template-widget/workout-template-widget.component";
+import {fadeInOut} from "../../animations/fade-in-out";
 
 @Component({
   selector: 'app-start-workout',
@@ -36,6 +37,7 @@ import {
   ],
   templateUrl: './start-workout.component.html',
   styleUrl: './start-workout.component.scss',
+  animations: [fadeInOut]
 })
 export class StartWorkoutComponent implements OnInit {
   protected suggestedWorkoutTemplate: WorkoutTemplate | any = undefined;

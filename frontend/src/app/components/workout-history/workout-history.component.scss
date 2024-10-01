@@ -1,23 +1,42 @@
 .workout-history-container {
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  padding-right: 0;
 
   .workout-history-container-header {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
   }
 
   .workout-history-container-body {
-    padding-top: var(--l-size);
-    padding-bottom: var(--l-size);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     .carrousel-view {
+      padding-left: var(--container-padding);
+      padding-right: var(--container-padding);
+
       .month-navigation {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-bottom: 10px;
         gap: 1rem;
+
+        span {
+          width: 8rem;
+          text-align: center;
+        }
       }
 
       .date-carousel-container {
@@ -59,8 +78,91 @@
           }
         }
       }
+    }
 
+    .list-view {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
 
+      .workouts-search-section {
+        padding-left: var(--container-padding);
+        padding-right: var(--container-padding);
+
+        .search {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          gap: 1rem;
+          border-radius: 16px;
+          padding: var(--s-size) var(--m-size);
+          margin-bottom: var(--m-size);
+
+          input {
+            width: 100%;
+            border: none;
+            border-right: 1px solid var(--gray-3);
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+            outline: none;
+
+            font-size: var(--input-font-size);
+            font-family: 'Poppins', sans-serif;
+            color: var(--gray-1);
+          }
+
+          input::placeholder {
+            color: var(--gray-2);
+          }
+        }
+
+        .search-options {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          gap: var(--m-size);
+
+          .search-option {
+            padding: 0.5rem 1rem;
+            background-color: white;
+            border-radius: 16px;
+            width: 100%;
+            text-align: center;
+          }
+
+          .search-option-active {
+            color: var(--primary-1);
+            font-weight: 550;
+          }
+        }
+      }
+
+      .workout-history-list-body {
+        flex: 1;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        padding-left: var(--container-padding);
+        padding-right: var(--container-padding);
+        padding-bottom: 8rem;
+
+        &::-webkit-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          display: none;
+        }
+
+        .month-year-header {
+          color: var(--primary-1);
+
+          &:not(:first-child) {
+            padding-top: var(--m-size);
+          }
+        }
+      }
     }
 
   }

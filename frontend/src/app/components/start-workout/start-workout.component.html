@@ -18,7 +18,7 @@
         <mat-icon svgIcon="add" class="primary add-template-icon" (click)="createTemplate()"></mat-icon>
       </div>
 
-      <div class="workout-card blue-shadow primary-background-reversed" *ngFor="let template of workoutTemplates">
+      <div class="workout-card blue-shadow primary-background-reversed" *ngFor="let template of workoutTemplates" @fadeInOut>
         <div class="workout-card-header">
           <div class="m-text semi-bold white-color">{{ template.title }}</div>
           <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color clickable-xs-icon"

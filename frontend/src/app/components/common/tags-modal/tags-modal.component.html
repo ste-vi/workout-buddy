@@ -1,7 +1,7 @@
 <div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
 <div class="tags-modal black-color" *ngIf="isOpen" [@dialogOpenClose]>
   <div class="tags-modal-header l-text semi-bold">
-    <mat-icon svgIcon="close" class="xs-svg-icon gray-1-color clickable-xs-icon" (click)="close()"></mat-icon>
+    <mat-icon svgIcon="close" class="s-svg-icon gray-1-color clickable-xs-icon" (click)="close()"></mat-icon>
     <div>Workout tags</div>
     <mat-icon svgIcon="close" class="not-visible"></mat-icon>
   </div>
@@ -11,7 +11,7 @@
         <div class="tag-text">
           {{ tag.name }}
         </div>
-        <mat-icon svgIcon="close" class="xs-svg-icon" (click)="removeTag(tag)"></mat-icon>
+        <mat-icon svgIcon="close" class="s-svg-icon" (click)="removeTag(tag)"></mat-icon>
       </div>
     </div>
   </div>
@@ -38,7 +38,7 @@
     </div>
     <div class="add-section-body add-new-tag-section" *ngIf='isAddNewTagSectionOpen' [@collapse]>
       <input [(ngModel)]="newTagValue">
-      <div class="tag m-text" (click)="addNewTag()">+</div>
+      <div class="tag l-text" (click)="addNewTag()">+</div>
     </div>
   </div>
 </div>

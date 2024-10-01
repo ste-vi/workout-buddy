@@ -7,11 +7,24 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import {
+  DatePipe,
+  KeyValue,
+  KeyValuePipe,
+  NgClass,
+  NgForOf,
+  NgIf,
+} from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { WorkoutHistoryService } from '../../services/api/workout-history.service';
 import { LatestWorkoutWidgetComponent } from '../common/widgets/latest-workout-widget/latest-workout-widget.component';
 import { WorkoutHistory } from '../../models/workout-history';
+import { SelectionMenuComponent } from '../common/selection-menu/selection-menu.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { collapse } from '../../animations/collapse';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { fadeInOut } from '../../animations/fade-in-out';
+import { collapseEnter } from '../../animations/collapse-enter';
 
 @Component({
   selector: 'app-workout-history',
@@ -23,19 +36,34 @@ import { WorkoutHistory } from '../../models/workout-history';
     NgForOf,
     MatIcon,
     LatestWorkoutWidgetComponent,
+    SelectionMenuComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    KeyValuePipe,
+    InfiniteScrollDirective,
+    NgClass,
   ],
   templateUrl: './workout-history.component.html',
   styleUrl: './workout-history.component.scss',
+  animations: [collapse, fadeInOut, collapseEnter],
 })
 export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   @ViewChild('dateCarousel') private dateCarousel!: ElementRef<HTMLElement>;
 
   protected isListView = false;
+
   protected dates: Date[] = [];
   protected currentIndex = 0;
   protected currentMonth: Date;
+
   protected workoutHistory: WorkoutHistory[] = [];
+  protected groupedWorkoutHistory: Map<string, WorkoutHistory[]> = new Map();
   protected currentDayWorkoutHistory: WorkoutHistory[] = [];
+
+  protected currentPage: number = 0;
+  protected itemsPerPage: number = 30;
+  protected hasMoreItems: boolean = true;
+  protected searchQuery: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -45,7 +73,12 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.fetchWorkoutHistory();
+    if (this.isListView) {
+      this.searchWorkoutHistory();
+    } else {
+      this.fetchWorkoutHistory();
+    }
+
     this.generateDates();
   }
 
@@ -56,6 +89,31 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     });
   }
 
+  private searchWorkoutHistory(isSearch: boolean = false): void {
+    if (isSearch) {
+      this.workoutHistory = [];
+      this.currentPage = 0;
+    }
+
+    this.workoutHistoryService
+      .searchWorkoutHistory(
+        this.currentPage,
+        this.itemsPerPage,
+        undefined,
+        undefined,
+        this.searchQuery,
+      )
+      .subscribe((pageResponse) => {
+        this.workoutHistory = isSearch
+          ? pageResponse.content
+          : this.workoutHistory.concat(pageResponse.content);
+
+        this.hasMoreItems = !pageResponse.last;
+      });
+
+    this.groupWorkoutHistory();
+  }
+
   private fetchWorkoutHistory() {
     const year = this.currentMonth.getFullYear();
     const month = this.currentMonth.getMonth();
@@ -63,10 +121,51 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     const lastDay = new Date(year, month + 1, 0);
 
     this.workoutHistoryService
-      .getWorkoutHistory(firstDay, lastDay)
-      .subscribe((histories) => {
-        this.workoutHistory = histories;
+      .searchWorkoutHistory(0, 100, firstDay, lastDay, undefined)
+      .subscribe((pageResponse) => {
+        this.workoutHistory = pageResponse.content;
       });
+  }
+
+  private groupWorkoutHistory() {
+    this.groupedWorkoutHistory = new Map();
+
+    this.workoutHistory.forEach((history) => {
+      const date = new Date(history.date);
+      const monthYear = date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+      });
+
+      if (!this.groupedWorkoutHistory.has(monthYear)) {
+        this.groupedWorkoutHistory.set(monthYear, []);
+      }
+
+      this.groupedWorkoutHistory.get(monthYear)?.push(history);
+    });
+
+    this.groupedWorkoutHistory.forEach((histories) => {
+      histories.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      );
+    });
+
+    const sortedEntries = [...this.groupedWorkoutHistory.entries()].sort(
+      (a, b) => {
+        const [monthYearA] = a[0].split(' ');
+        const [monthYearB] = b[0].split(' ');
+        const dateA = new Date(
+          Date.parse(`${monthYearA} 1, ${a[0].split(' ')[1]}`),
+        );
+        const dateB = new Date(
+          Date.parse(`${monthYearB} 1, ${b[0].split(' ')[1]}`),
+        );
+
+        return dateB.getTime() - dateA.getTime();
+      },
+    );
+
+    this.groupedWorkoutHistory = new Map(sortedEntries);
   }
 
   private initCarouselView() {
@@ -130,6 +229,8 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     const scrollPosition = target.scrollLeft;
     const itemWidth = (target.children[0] as HTMLElement).clientWidth;
     this.currentIndex = Math.round(scrollPosition / itemWidth);
+
+    this.initCurrentDayWorkoutHistory();
   }
 
   protected selectDate(index: number): void {
@@ -171,10 +272,38 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
 
   switchView() {
     this.isListView = !this.isListView;
-    if (!this.isListView) {
+    this.workoutHistory = [];
+    if (this.isListView) {
+      this.searchWorkoutHistory();
+    } else {
       setTimeout(() => {
+        this.fetchWorkoutHistory();
         this.initCarouselView();
       });
     }
   }
+
+  search() {
+    this.searchWorkoutHistory(true);
+  }
+
+  loadMore() {
+    if (this.hasMoreItems) {
+      this.currentPage++;
+      this.searchWorkoutHistory();
+    }
+  }
+
+  clearSearch() {
+    this.searchQuery = '';
+    this.currentPage = 0;
+    this.searchWorkoutHistory();
+  }
+
+  originalOrder = (
+    a: KeyValue<string, WorkoutHistory[]>,
+    b: KeyValue<string, WorkoutHistory[]>,
+  ): number => {
+    return 0;
+  };
 }

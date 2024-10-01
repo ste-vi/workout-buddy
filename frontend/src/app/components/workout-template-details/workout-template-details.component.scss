@@ -2,9 +2,9 @@
   height: 100%;
   width: 100%;
   max-width: 1024px;
-  padding-top: var(--l-size);
-  padding-left: var(--l-size);
-  padding-right: var(--l-size);
+  padding-top: var(--container-padding);
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
   overflow-y: hidden;
   overflow-x: hidden;
 
@@ -127,8 +127,8 @@
       position: fixed;
       bottom: var(--l-size);
       right: 0;
-      padding-left: var(--l-size);
-      padding-right: var(--l-size);
+      padding-left: var(--container-padding);
+      padding-right: var(--container-padding);
     }
   }
 }
