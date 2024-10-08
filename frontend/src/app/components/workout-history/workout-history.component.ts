@@ -24,7 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { collapse } from '../../animations/collapse';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { fadeInOut } from '../../animations/fade-in-out';
-import { collapseEnter } from '../../animations/collapse-enter';
+import { staggerFadeIn } from '../../animations/stagger-fade-in';
 
 @Component({
   selector: 'app-workout-history',
@@ -45,7 +45,7 @@ import { collapseEnter } from '../../animations/collapse-enter';
   ],
   templateUrl: './workout-history.component.html',
   styleUrl: './workout-history.component.scss',
-  animations: [collapse, fadeInOut, collapseEnter],
+  animations: [collapse, fadeInOut, staggerFadeIn],
 })
 export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   @ViewChild('dateCarousel') private dateCarousel!: ElementRef<HTMLElement>;

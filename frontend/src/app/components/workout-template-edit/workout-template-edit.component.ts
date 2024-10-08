@@ -31,9 +31,10 @@ import {
   MenuItem,
 } from '../common/context-menu/context-menu.component';
 import { replaceItemInArray } from '../../utils/array-utils';
-import { ExercisesComponent } from '../common/exercises/exercises.component';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../common/toast/toast.component';
+import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
+import {ActionButtonComponent} from "../common/action-button/action-button.component";
 
 @Component({
   selector: 'app-workout-template-edit',
@@ -50,10 +51,11 @@ import { ToastComponent } from '../common/toast/toast.component';
     CdkDropList,
     ConfirmationModalComponent,
     ContextMenuComponent,
-    ExercisesComponent,
+    SearchExercisesComponent,
     FormsModule,
     NgClass,
     ToastComponent,
+    ActionButtonComponent,
   ],
   templateUrl: './workout-template-edit.component.html',
   styleUrl: './workout-template-edit.component.scss',
@@ -98,7 +100,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
   @ViewChild('templateMenu') workoutMenu!: ContextMenuComponent;
 
   @ViewChild('exercisesModal')
-  exercisesModal!: ExercisesComponent;
+  exercisesModal!: SearchExercisesComponent;
 
   @ViewChild('errorToast')
   errorToast!: ToastComponent;
@@ -172,7 +174,10 @@ export class WorkoutTemplateEditComponent implements OnInit {
   private validateInput() {
     let errorMessages: string[] = [];
 
-    if (this.template?.title === undefined || this.template?.title?.trim() === '') {
+    if (
+      this.template?.title === undefined ||
+      this.template?.title?.trim() === ''
+    ) {
       errorMessages.push('Template title must not be empty');
     }
 

@@ -11,7 +11,7 @@
 
   <app-toast *ngIf="isInvalidated" #errorToast></app-toast>
 
-  <div class="edit-template-container-body" >
+  <div class="edit-template-container-body">
     <div class="template-header">
       <div class="l-text semi-bold" *ngIf="!isTitleEditable">{{ template?.title }}</div>
       <input type="text" class="template-title-input black-color m-text"
@@ -22,8 +22,8 @@
              (keyup.enter)="makeTitleNonEditable()"
              [placeholder]='isInvalidated && !templateTitle ? "Please enter template title" : "Enter template title"'>
 
-      <mat-icon svgIcon="two-dots" class="s-svg-icon clickable-xs-icon" *ngIf="!isTitleEditable"
-                (click)="openTemplateMenu($event)"></mat-icon>
+      <app-action-button *ngIf="!isTitleEditable" icon='two-dots' iconClasses="xs-svg-icon primary"
+                         (click)="openTemplateMenu($event)"></app-action-button>
       <mat-icon svgIcon="check" class="l-svg-icon clickable-m-icon primary" *ngIf="isTitleEditable"
                 (click)="makeTitleNonEditable()"></mat-icon>
     </div>
@@ -65,8 +65,9 @@
           <div class="exercise-body">
             <div class="upper-section">
               <div class="m-text semi-bold">{{ exercise.name }}</div>
-              <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"
-                        (click)="openExerciseMenu($event, exercise)"></mat-icon>
+              <app-action-button icon='two-dots'
+                                 iconClasses="xs-svg-icon"
+                                 (click)="openExerciseMenu($event, exercise)"></app-action-button>
             </div>
             <div class="lower-section gray-1-color s-text">
               <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>

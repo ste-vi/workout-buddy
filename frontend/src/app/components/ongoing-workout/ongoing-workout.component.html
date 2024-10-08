@@ -13,7 +13,8 @@
   <div class="ongoing-workout-container-body section-padding-top">
     <div class="ongoing-workout-header">
       <div class="l-text semi-bold">{{ ongoingWorkout?.title }}</div>
-      <mat-icon svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon" (click)="openWorkoutMenu($event)"></mat-icon>
+      <app-action-button icon='two-dots' iconClasses="xs-svg-icon primary"
+                         (click)="openWorkoutMenu($event)"></app-action-button>
     </div>
 
     <div class="ongoing-workout-info">
@@ -47,12 +48,12 @@
           <div class="exercise-body">
             <div class="upper-section">
               <div class="m-text semi-bold">{{ exercise.name }}</div>
-              <mat-icon *ngIf="deleteSetModeForExercise !== exercise"
-                        svgIcon="two-dots" class="xs-svg-icon clickable-xs-icon gray-1-color"
-                        (click)="openExerciseMenu($event, exercise)"></mat-icon>
-              <mat-icon *ngIf="deleteSetModeForExercise === exercise"
-                        svgIcon="undo" class="m-svg-icon clickable-m-icon primary"
-                        (click)="resetSetDelete()"></mat-icon>
+              <app-action-button *ngIf="deleteSetModeForExercise !== exercise" icon='two-dots'
+                                 iconClasses="xs-svg-icon"
+                                 (click)="openExerciseMenu($event, exercise)"></app-action-button>
+              <app-action-button *ngIf="deleteSetModeForExercise === exercise" icon='undo'
+                                 iconClasses="s-svg-icon primary"
+                                 (click)="resetSetDelete()"></app-action-button>
             </div>
             <div class=" lower-section gray-1-color s-text">
               <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
@@ -70,7 +71,7 @@
           <div class="table-row semi-bold" [ngClass]="{'error-text': isInvalidated && exercise.sets.length === 0}">
             <div class="table-cell set">Set</div>
             <div class="table-cell previous">Previous</div>
-            <div class="table-cell kg">Kg</div>
+            <div class="table-cell kg">Weight</div>
             <div class="table-cell reps">Reps</div>
             <div class="table-cell action">
               <mat-icon *ngIf="deleteSetModeForExercise !== exercise" svgIcon="check" class="s-svg-icon"></mat-icon>

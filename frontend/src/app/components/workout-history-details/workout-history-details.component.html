@@ -1,0 +1,112 @@
+<div class="page-mask" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="workout-history-details-container right-modal black-color" *ngIf="isOpen" [@sideModalOpenClose]
+     (swiperight)="onSwipeRight()">
+  <div class="workout-history-details-container-header">
+    <ng-container *ngIf="isEditView">
+      <app-header-button icon="close" (click)="switchView()"></app-header-button>
+      <b class="l-text">Edit workout</b>
+      <app-header-button text="Save" (click)="save()"></app-header-button>
+    </ng-container>
+    <ng-container *ngIf="!isEditView">
+      <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
+      <b class="l-text">View workout</b>
+      <app-header-button icon="two-dots" (click)="openWorkoutMenu($event)"></app-header-button>
+    </ng-container>
+  </div>
+
+  <div class="workout-history-details-container-body">
+    <div class="workout-history-details-container-view" *ngIf="!isEditView">
+
+      <div class="workout-template-details">
+        <div class="subtitle semi-bold">
+          {{ workoutHistory.title }}
+        </div>
+        <div class="s-text gray-1-color">
+          {{ workoutHistory.totalExercises }} exercises | {{ workoutHistory.totalSets }} sets
+        </div>
+        <div class="tags s-text card-padding-top">
+          <div class="tag" *ngFor="let tag of workoutHistory.tags">{{ tag.name }}</div>
+        </div>
+
+        <div class="metrics-container">
+          <div class="metric-card card-shadow">
+            <div class="primary-background m-text primary-background-text"><b>{{ workoutHistory.duration }}</b></div>
+            <div class="gray-1-color s-text">Duration</div>
+          </div>
+          <div class="metric-card card-shadow">
+            <div class="primary-background m-text primary-background-text"><b>{{ workoutHistory.prReps }}</b></div>
+            <div class="gray-1-color s-text">PR</div>
+          </div>
+          <div class="metric-card card-shadow">
+            <div class="primary-background m-text primary-background-text"><b>{{ workoutHistory.totalWeight }} kg</b>
+            </div>
+            <div class="gray-1-color s-text">Volume</div>
+          </div>
+        </div>
+
+        <div class="section-margin-top exercises">
+          <div class="exercise" *ngFor="let exercise of workoutHistory?.exercises">
+            <div class="exercise-info">
+              <div class="exercise-header">
+                <div class="exercise-image secondary-background"></div>
+              </div>
+              <div class="exercise-body">
+                <div class="upper-section">
+                  <div class="m-text semi-bold">{{ exercise.name }}</div>
+                  <app-action-button icon='two-dots' iconClasses="xs-svg-icon" class="not-visible"></app-action-button>
+                </div>
+                <div class="lower-section gray-1-color s-text">
+                  <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
+                  <div class="pr-set" *ngIf="exercise.prSet">
+                    <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
+                    <div>
+                      {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="exercise-sets s-text">
+              <div class="table-row semi-bold">
+                <div class="table-cell set">Set</div>
+                <div class="table-cell previous">Previous</div>
+                <div class="table-cell kg">Weight</div>
+                <div class="table-cell reps">Reps</div>
+                <div class="table-cell action">
+                  <mat-icon svgIcon="medal" class="s-svg-icon"></mat-icon>
+                </div>
+              </div>
+              <div class="table-row" *ngFor="let set of exercise.sets; index as i">
+                <div class="table-cell set" [class.completed-table-cell]="set.completed">
+                  <div class="set-sell">{{ i + 1 }}</div>
+                </div>
+                <div class="table-cell previous" [class.completed-table-cell]="set.completed">
+              <span *ngIf="set.previousReps">{{ set.previousWeight ? set.previousWeight : '0' }}
+                kg * {{ set.previousReps }}</span>
+                  <span *ngIf="!set.previousReps">-</span>
+                </div>
+                <div class="table-cell kg" [class.completed-table-cell]="set.completed">
+                  {{ set.weight }} kg
+                </div>
+                <div class="table-cell reps" [class.completed-table-cell]="set.completed">
+                  {{ set.reps }}
+                </div>
+                <div class="table-cell action">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="workout-history-details-container-edit-view" *ngIf="!isEditView">
+
+      </div>
+
+    </div>
+
+    <app-context-menu #workoutMenu [menuItems]="workoutMenuItems"></app-context-menu>
+
+  </div>
+</div>

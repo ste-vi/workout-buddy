@@ -1,3 +1,6 @@
+import { Tag } from './tag';
+import { Exercise } from './exercise';
+
 export interface WorkoutHistory {
   id: number;
   title: string;
@@ -7,4 +10,6 @@ export interface WorkoutHistory {
   prReps: number;
   totalWeight: number;
   totalExercises: number;
+  tags: Tag[];
+  exercises: Exercise[];
 }

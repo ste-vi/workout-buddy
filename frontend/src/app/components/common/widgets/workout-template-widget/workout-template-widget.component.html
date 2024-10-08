@@ -4,8 +4,9 @@
   </div>
   <div class="workout-template-widget-body s-text white-color">
     <div>
-          <span>{{ workoutTemplate.exercises.length }} exercises | {{ workoutTemplate.totalSets }}
-            sets | {{ workoutTemplate.estimatedDuration }}</span>
+      <span *ngIf="workoutTemplate.exercises.length > 0">{{ workoutTemplate.exercises.length }} exercises | </span>
+      <span *ngIf="workoutTemplate.totalSets > 0">{{ workoutTemplate.totalSets }} sets | </span>
+      <span>{{ workoutTemplate.estimatedDuration }}</span>
     </div>
     <div class="last-workout-time">
       <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>

@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
-import { workoutTemplates } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
 import { MatIcon } from '@angular/material/icon';
 import {
   CdkDrag,
@@ -34,9 +33,10 @@ import { SetService } from '../../services/api/set-service';
 import { TagService } from '../../services/api/tag.service';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
-import { ExercisesComponent } from '../common/exercises/exercises.component';
-import { deleteFromArray, replaceItemInArray } from '../../utils/array-utils';
+import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
+import { replaceItemInArray } from '../../utils/array-utils';
 import { ToastComponent } from '../common/toast/toast.component';
+import { ActionButtonComponent } from '../common/action-button/action-button.component';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -64,9 +64,10 @@ import { ToastComponent } from '../common/toast/toast.component';
     ProgressBarComponent,
     ConfirmationModalComponent,
     TagsModalComponent,
-    ExercisesComponent,
+    SearchExercisesComponent,
     ToastComponent,
     NgClass,
+    ActionButtonComponent,
   ],
   animations: [collapse, sideModalOpenClose, fadeInOut],
   templateUrl: './ongoing-workout.component.html',
@@ -103,7 +104,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   editWorkoutTagsModal!: TagsModalComponent;
 
   @ViewChild('exercisesModal')
-  exercisesModal!: ExercisesComponent;
+  exercisesModal!: SearchExercisesComponent;
 
   @ViewChild('workoutMenu') workoutMenu!: ContextMenuComponent;
 

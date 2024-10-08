@@ -1,12 +1,35 @@
-import { animate, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  style,
+  transition,
+  trigger,
+  state,
+} from '@angular/animations';
 
 export const collapse = trigger('collapse', [
-  transition(':enter', [
-    style({ opacity: 0, height: 0 }),
-    animate('0.25s ease', style({ opacity: 1, height: '*' })),
-  ]),
-  transition(':leave', [
-    style({ opacity: 1, height: '*' }),
-    animate('0.25s ease', style({ opacity: 0, height: 0 })),
-  ]),
+  state(
+    'void',
+    style({
+      height: '0',
+      opacity: '0',
+      transform: 'scaleY(0.8)',
+      marginTop: '0',
+      marginBottom: '0',
+      paddingTop: '0',
+      paddingBottom: '0',
+    }),
+  ),
+  state(
+    '*',
+    style({
+      height: '*',
+      opacity: '1',
+      transform: 'scaleY(1)',
+      marginTop: '*',
+      marginBottom: '*',
+      paddingTop: '*',
+      paddingBottom: '*',
+    }),
+  ),
+  transition('void <=> *', [animate('250ms cubic-bezier(0.35, 0, 0.25, 1)')]),
 ]);

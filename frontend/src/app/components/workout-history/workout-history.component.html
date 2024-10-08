@@ -3,7 +3,8 @@
   <div class="workout-history-container-header">
     <app-header-button icon="left-arrow" class="not-visible"></app-header-button>
     <b class="l-text">Workout History</b>
-    <app-header-button icon="slider-vertical" [iconClasses]="['primary-important', 's-svg-icon-important']" (click)="switchView()"></app-header-button>
+    <app-header-button icon="slider-vertical" [iconClasses]="['primary-important', 's-svg-icon-important']"
+                       (click)="switchView()"></app-header-button>
   </div>
 
   <div class="workout-history-container-body">
@@ -27,7 +28,7 @@
       </div>
       <div class="card-padding-top">
         <div *ngFor="let history of currentDayWorkoutHistory">
-          <app-latest-workout-widget [workoutHistory]="history" @fadeInOut></app-latest-workout-widget>
+          <app-latest-workout-widget [workoutHistory]="history"></app-latest-workout-widget>
         </div>
       </div>
     </div>
@@ -38,7 +39,7 @@
         <div class="search card-shadow m-text">
           <mat-icon svgIcon="search" class="gray-2-color clickable-m-icon" (click)="search()"></mat-icon>
           <input placeholder="Search workouts" [(ngModel)]="searchQuery" (keyup)="search()">
-          <span class="s-text gray-1-color clickable" [ngClass]="{'primary': searchQuery !== ''}" (click)="clearSearch()">Clear</span>
+          <mat-icon svgIcon="clear" class="gray-1-color clickable-m-icon" [ngClass]="{'primary': searchQuery !== ''}" (click)="clearSearch()"></mat-icon>
         </div>
 
       </div>
@@ -49,8 +50,10 @@
           <div class="month-year-header s-text">
             {{ monthYear.key }}
           </div>
-          <div *ngFor="let history of monthYear.value" [@collapseEnter]>
-            <app-latest-workout-widget [workoutHistory]="history" ></app-latest-workout-widget>
+          <div [@staggerFadeIn]="monthYear.value.length">
+            <div *ngFor="let history of monthYear.value">
+              <app-latest-workout-widget [workoutHistory]="history" [disableAnimation]="true"></app-latest-workout-widget>
+            </div>
           </div>
         </ng-container>
       </div>

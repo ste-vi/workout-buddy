@@ -1,23 +1,22 @@
-.edit-template-container {
+.workout-history-details-container {
   height: 100%;
   width: 100%;
   max-width: 1024px;
   padding-top: var(--container-padding);
-  padding-left: var(--container-padding);
-  padding-right: var(--container-padding);
   overflow-y: hidden;
   overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
 
   &-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: var(--l-size);
+    padding-bottom: var(--m-size);
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
   }
 
   &-body {
+    height: 100%;
     padding-bottom: var(--l-size);
     overflow-y: scroll;
     overflow-x: hidden;
@@ -28,33 +27,26 @@
       display: none;
     }
 
-    .template-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
+    .workout-history-details-container-view {
+      padding-bottom: var(--l-size);
 
-      .template-title-input {
-        width: 100%;
-        border-radius: 8px;
-        border: none;
-        background-color: var(--border);
-        outline: none;
-        padding: 0.34rem var(--m-size);
-        font-weight: 550;
-        font-family: 'Poppins', sans-serif;
+      .workout-template-details {
+        padding-top: var(--m-size);
+        padding-left: var(--container-padding);
+        padding-right: var(--container-padding);
 
-        &::placeholder {
-          color: var(--gray-2);
-          font-weight: 400;
+        .metric-card {
+          height: 4.063rem;
+          width: 6.938rem;
         }
       }
 
-      .template-title-input-invalid {
-        &::placeholder {
-          color: var(--danger) !important;
-        }
-      }
+    }
+
+    .workout-history-details-container-edit-view {
+
+
+
     }
 
     .exercises {
@@ -70,14 +62,13 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          justify-content: space-between;
           padding-top: 0.28rem;
           padding-bottom: 0.28rem;
           animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
 
           .set {
             flex: 1 1 0;
-            //text-align: start;
+            text-align: start;
           }
 
           .set-sell {
@@ -86,7 +77,9 @@
 
           .action {
             flex: 1 1 0;
-            text-align: end;
+            display: flex;
+            justify-content: end;
+            align-items: center;
             width: 100%;
 
             .action-icon-container {
@@ -96,7 +89,9 @@
             }
 
             .action-icon {
-              padding: 0.3rem;
+              height: 30px;
+              width: 30px;
+              padding: 0.34rem;
               border-radius: 6px;
               background-color: var(--border);
             }
@@ -106,8 +101,27 @@
               width: 30px;
               padding: 0.34rem;
               color: var(--danger);
+              animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
             }
 
+            .complete-set-action-icon {
+              height: 30px;
+              width: 30px;
+              padding: 0.34rem;
+              background-color: var(--primary-1);
+              color: white;
+              animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
+            }
+          }
+
+          .kg {
+            flex: 2 1 0;
+            text-align: center;
+          }
+
+          .reps {
+            flex: 2 1 0;
+            text-align: center;
           }
 
           .previous {
@@ -119,8 +133,13 @@
 
         .table-cell {
           flex: 1;
-          /*width: 100%;
-          text-align: center;*/
+          text-align: left;
+        }
+
+        .completed-table-cell {
+          color: var(--primary-1);
+          font-weight: 550;
+          animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
         }
 
         .add-new-set {
@@ -154,6 +173,35 @@
         scale: var(--active-scale);
       }
     }
+  }
+
+  input {
+    width: 80%;
+    text-align: center;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--border);
+    outline: none;
+    padding-top: 0.34rem;
+    padding-bottom: 0.34rem;
+    font-size: var(--input-font-size);
+    font-weight: 550;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  input::placeholder {
+    font-weight: 300;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .complete-set-input {
+    background-color: var(--primary-1);
+    color: white;
+    animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
+  }
+
+  .complete-set-input::placeholder {
+    color: white;
   }
 }
 

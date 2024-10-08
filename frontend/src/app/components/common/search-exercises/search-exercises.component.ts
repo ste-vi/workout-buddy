@@ -41,11 +41,11 @@ import { collapseEnter } from '../../../animations/collapse-enter';
     InfiniteScrollDirective,
     FormsModule,
   ],
-  templateUrl: './exercises.component.html',
-  styleUrl: './exercises.component.scss',
+  templateUrl: './search-exercises.component.html',
+  styleUrl: './search-exercises.component.scss',
   animations: [fadeInOut, sideModalOpenClose, collapse, collapseEnter],
 })
-export class ExercisesComponent implements OnInit {
+export class SearchExercisesComponent implements OnInit {
   protected isOpen: boolean = false;
 
   protected isAddModal: boolean = false;

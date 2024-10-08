@@ -1,0 +1,19 @@
+.action-button-container {
+  background-color: var(--border);
+  display: flex;
+  margin-bottom: 6px;
+  padding: 1px 4px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
+
+  &:hover {
+    scale: var(--hover-scale);
+  }
+
+  &:active {
+    scale: var(--active-scale);
+  }
+}

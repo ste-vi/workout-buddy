@@ -1,18 +1,13 @@
-<div class="workout-history-widget blue-shadow primary-background">
+<div class="workout-history-widget blue-shadow primary-background" @fadeInOut [@.disabled]="disableAnimation">
   <div class="workout-history-widget-header">
     <div class="m-text semi-bold white-color">{{ workoutHistory.title }}</div>
   </div>
   <div class="workout-history-widget-body s-text white-color">
     <div class="last-workout-details">
-      <div>{{ workoutHistory.totalExercises }} exercises | {{ workoutHistory.totalSets }}
-        sets | {{ workoutHistory.duration }}
-      </div>
-      <div class="workout-metrics">
-        <mat-icon svgIcon="dumbbell-1" class="xs-svg-icon"></mat-icon>
-        <span>{{ workoutHistory.totalWeight }} kg</span>
-        &nbsp; |
-        <mat-icon svgIcon="cup" class="xs-svg-icon"></mat-icon>
-        <span>{{ workoutHistory.prReps }} PRs </span>
+      <div>
+        <span *ngIf="workoutHistory.prReps > 0">{{ workoutHistory.prReps }} PRs | </span>
+        <span *ngIf="workoutHistory.totalWeight > 0">{{ workoutHistory.totalWeight }} kg | </span>
+        <span>{{ workoutHistory.duration }}</span>
       </div>
     </div>
     <div class="last-workout-time caption">
@@ -26,4 +21,5 @@
                        name="View details"
                        (click)="openWorkoutHistoryDetails(workoutHistory)"></app-medium-button>
   </div>
+
 </div>

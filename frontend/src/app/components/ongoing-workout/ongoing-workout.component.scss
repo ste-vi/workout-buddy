@@ -53,6 +53,7 @@
           align-items: center;
           padding-top: 0.28rem;
           padding-bottom: 0.28rem;
+          animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
 
           .set {
             flex: 1 1 0;
@@ -87,6 +88,7 @@
               width: 30px;
               padding: 0.34rem;
               color: var(--danger);
+              animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
             }
 
             .complete-set-action-icon {
@@ -95,7 +97,7 @@
               padding: 0.34rem;
               background-color: var(--primary-1);
               color: white;
-              animation: completed var(--animation-duration) ease;
+              animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
             }
           }
 
@@ -124,7 +126,7 @@
         .completed-table-cell {
           color: var(--primary-1);
           font-weight: 550;
-          animation: completed var(--animation-duration) ease;
+          animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
         }
 
         .add-new-set {
@@ -132,8 +134,8 @@
           background-color: var(--border);
           border-radius: 8px;
           text-align: center;
-          padding-top: 0.34rem;
-          padding-bottom: 0.34rem;
+          padding-top: 0.4rem;
+          padding-bottom: 0.4rem;
           margin-top: 0.5rem;
           cursor: pointer;
 
@@ -149,8 +151,8 @@
       color: white;
       border-radius: 8px;
       text-align: center;
-      padding-top: 0.34rem;
-      padding-bottom: 0.34rem;
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
       margin-top: 0.438rem;
       cursor: pointer;
 
@@ -182,7 +184,7 @@
   .complete-set-input {
     background-color: var(--primary-1);
     color: white;
-    animation: completed var(--animation-duration) ease;
+    animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
   }
 
   .complete-set-input::placeholder {

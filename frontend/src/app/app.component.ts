@@ -5,11 +5,18 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {NavbarComponent} from "./components/common/navbar/navbar.component";
+import {WorkoutHistoryDetailsComponent} from "./components/workout-history-details/workout-history-details.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ButtonComponent, DashboardComponent, NavbarComponent],
+  imports: [
+    RouterOutlet,
+    ButtonComponent,
+    DashboardComponent,
+    NavbarComponent,
+    WorkoutHistoryDetailsComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -30,6 +37,8 @@ export class AppComponent {
       .addSvgIcon('slider-vertical', this.setIconPath(`${this.iconsPath}/slider-vertical.svg`))
       .addSvgIcon('dumbbell-1', this.setIconPath(`${this.iconsPath}/dumbbell-1.svg`))
       .addSvgIcon('text', this.setIconPath(`${this.iconsPath}/text.svg`))
+      .addSvgIcon('medal', this.setIconPath(`${this.iconsPath}/medal.svg`))
+      .addSvgIcon('clear', this.setIconPath(`${this.iconsPath}/clear.svg`))
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`))
       .addSvgIcon('search', this.setIconPath(`${this.iconsPath}/search.svg`))

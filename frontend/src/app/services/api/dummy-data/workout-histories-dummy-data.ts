@@ -1,15 +1,20 @@
-import { WorkoutHistory } from '../../../models/workout-history';
+import {Exercise} from "../../../models/exercise";
+import {WorkoutHistory} from "../../../models/workout-history";
+import {tags} from "./workflow-templates-dummy-daya";
+import {exercises} from "./exercises-dummy-data";
 
 export const workoutHistory: WorkoutHistory[] = [
   {
     id: 1,
     title: 'Bodyweight Training',
-    date: new Date('2024-09-28'),
+    date: new Date('2024-10-08'),
     duration: '30 min',
     totalSets: 10,
     prReps: 10,
     totalWeight: 100,
     totalExercises: 10,
+    tags: [tags[0], tags[3]],  // Strength Training, Core
+    exercises: [exercises[0], exercises[1], exercises[5]],
   },
   {
     id: 2,
@@ -20,6 +25,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 15,
     totalWeight: 0,
     totalExercises: 3,
+    tags: [tags[1]],  // Cardio
+    exercises: [exercises[1], exercises[4]],
   },
   {
     id: 3,
@@ -30,6 +37,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 8,
     totalWeight: 500,
     totalExercises: 6,
+    tags: [tags[0]],  // Strength Training
+    exercises: [exercises[2], exercises[3], exercises[4]],
   },
   {
     id: 4,
@@ -40,6 +49,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 0,
     totalWeight: 0,
     totalExercises: 12,
+    tags: [tags[2], tags[4]],  // Flexibility, Yoga
+    exercises: [exercises[5]],
   },
   {
     id: 5,
@@ -50,6 +61,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 20,
     totalWeight: 50,
     totalExercises: 8,
+    tags: [tags[1], tags[3]],  // Cardio, Core
+    exercises: [exercises[0], exercises[1], exercises[5]],
   },
   {
     id: 6,
@@ -60,6 +73,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 12,
     totalWeight: 300,
     totalExercises: 5,
+    tags: [tags[0]],  // Strength Training
+    exercises: [exercises[0], exercises[2], exercises[4]],
   },
   {
     id: 7,
@@ -70,6 +85,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 10,
     totalWeight: 450,
     totalExercises: 6,
+    tags: [tags[0]],  // Strength Training
+    exercises: [exercises[1], exercises[3]],
   },
   {
     id: 8,
@@ -80,6 +97,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 25,
     totalWeight: 20,
     totalExercises: 8,
+    tags: [tags[3]],  // Core
+    exercises: [exercises[5]],
   },
   {
     id: 9,
@@ -90,6 +109,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 0,
     totalWeight: 0,
     totalExercises: 15,
+    tags: [tags[2], tags[3]],  // Flexibility, Core
+    exercises: [exercises[5]],
   },
   {
     id: 10,
@@ -100,6 +121,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 30,
     totalWeight: 200,
     totalExercises: 4,
+    tags: [tags[0], tags[1]],  // Strength Training, Cardio
+    exercises: [exercises[0], exercises[1], exercises[2], exercises[3]],
   },
   {
     id: 11,
@@ -110,6 +133,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 0,
     totalWeight: 0,
     totalExercises: 1,
+    tags: [tags[1]],  // Cardio
+    exercises: [],
   },
   {
     id: 12,
@@ -120,6 +145,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 15,
     totalWeight: 600,
     totalExercises: 9,
+    tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
+    exercises: [exercises[0], exercises[1], exercises[2], exercises[3], exercises[4], exercises[5]],
   },
   {
     id: 13,
@@ -130,6 +157,8 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 15,
     totalWeight: 600,
     totalExercises: 9,
+    tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
+    exercises: [exercises[0], exercises[1], exercises[2], exercises[3], exercises[4], exercises[5]],
   },
   {
     id: 14,
@@ -140,5 +169,7 @@ export const workoutHistory: WorkoutHistory[] = [
     prReps: 15,
     totalWeight: 600,
     totalExercises: 9,
+    tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
+    exercises: [exercises[0], exercises[1], exercises[2], exercises[3], exercises[4], exercises[5]],
   },
 ];

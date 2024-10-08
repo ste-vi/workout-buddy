@@ -40,34 +40,6 @@
       }
     }
 
-    .user-metrics-container {
-      display: flex;
-      flex-direction: row;
-      padding-top: var(--m-size);
-      gap: var(--m-size);
-      align-items: center;
-      justify-content: center;
-
-      .metric-card {
-        height: 4.063rem;
-        width: 5.938rem;
-        border-radius: 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-
-        &:hover {
-          scale: var(--hover-scale);
-        }
-
-        &:active {
-          scale: var(--active-scale);
-        }
-      }
-    }
-
     .profile-card-container {
       display: flex;
       flex-direction: column;

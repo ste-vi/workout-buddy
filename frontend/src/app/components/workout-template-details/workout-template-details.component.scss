@@ -3,8 +3,6 @@
   width: 100%;
   max-width: 1024px;
   padding-top: var(--container-padding);
-  padding-left: var(--container-padding);
-  padding-right: var(--container-padding);
   overflow-y: hidden;
   overflow-x: hidden;
 
@@ -13,11 +11,15 @@
     align-items: center;
     justify-content: space-between;
     padding-bottom: var(--m-size);
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
   }
 
   &-body {
     height: 100%;
     padding-bottom: var(--l-size);
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
     overflow-y: scroll;
     overflow-x: hidden;
 

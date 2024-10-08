@@ -7,17 +7,17 @@ import {WorkoutTemplate} from "../../../../models/workout-template";
 import {WorkoutTemplateDetailsService} from "../../../../services/communication/workout-template-details.service";
 import {OngoingWorkoutService} from "../../../../services/communication/ongoing-workout.service";
 import {fadeInOut} from "../../../../animations/fade-in-out";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-workout-template-widget',
   standalone: true,
-  imports: [MatIcon, MediumButtonComponent, TimeAgoPipe],
+  imports: [MatIcon, MediumButtonComponent, TimeAgoPipe, NgIf],
   templateUrl: './workout-template-widget.component.html',
   styleUrl: './workout-template-widget.component.scss',
-  animations: [fadeInOut]
+  animations: [fadeInOut],
 })
 export class WorkoutTemplateWidgetComponent {
-
   @Input() workoutTemplate!: WorkoutTemplate;
 
   constructor(
