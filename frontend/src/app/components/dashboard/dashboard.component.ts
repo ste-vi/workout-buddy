@@ -6,7 +6,7 @@ import { MediumButtonComponent } from '../common/medium-button/medium-button.com
 import { NgIf } from '@angular/common';
 import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import { suggestedWorkoutTemplate } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
-import { workoutHistory } from '../../services/api/dummy-data/workout-histories-dummy-data';
+import { workout } from '../../services/api/dummy-data/workout-histories-dummy-data';
 import { MatTooltip } from '@angular/material/tooltip';
 import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
 import { WorkoutTemplateDetailsComponent } from '../workout-template-details/workout-template-details.component';
@@ -37,7 +37,7 @@ import {fadeInOut} from "../../animations/fade-in-out";
 })
 export class DashboardComponent {
   protected readonly suggestedWorkoutTemplate = suggestedWorkoutTemplate;
-  protected readonly latestWorkoutHistory = workoutHistory[0];
+  protected readonly latestWorkoutHistory = workout[0];
 
   constructor(private router: Router) {}
 

@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {
+  DatePipe,
   NgClass,
   NgForOf,
   NgIf,
@@ -8,7 +9,6 @@ import {
 } from '@angular/common';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { WorkoutHistoryDetailsService } from '../../services/communication/workout-history-details.service';
-import { WorkoutHistory } from '../../models/workout-history';
 import {
   ContextMenuComponent,
   MenuItem,
@@ -34,6 +34,7 @@ import { replaceItemInArray } from '../../utils/array-utils';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
 import { collapse } from '../../animations/collapse';
+import { Workout } from '../../models/workout';
 
 @Component({
   selector: 'app-workout-history-details',
@@ -57,6 +58,7 @@ import { collapse } from '../../animations/collapse';
     ToastComponent,
     ConfirmationModalComponent,
     SearchExercisesComponent,
+    DatePipe,
   ],
   templateUrl: './workout-history-details.component.html',
   styleUrl: './workout-history-details.component.scss',
@@ -64,7 +66,7 @@ import { collapse } from '../../animations/collapse';
 })
 export class WorkoutHistoryDetailsComponent {
   protected isOpen: boolean = false;
-  protected workoutHistory!: WorkoutHistory;
+  protected workout!: Workout;
   protected isEditView: boolean = false;
 
   protected isInvalidated: boolean = false;
@@ -109,10 +111,10 @@ export class WorkoutHistoryDetailsComponent {
     private workoutHistoryDetailsService: WorkoutHistoryDetailsService,
   ) {
     this.workoutHistoryDetailsService.modalOpened$.subscribe((wh) => {
-      this.workoutHistory = wh;
+      this.workout = wh;
       this.isOpen = true;
-      this.isEditView = true;
-      this.workoutTitle = this.workoutHistory.title;
+      this.isEditView = false;
+      this.workoutTitle = this.workout.title;
     });
   }
 
@@ -136,12 +138,12 @@ export class WorkoutHistoryDetailsComponent {
       {
         label: 'Edit workout',
         icon: 'settings-2',
-        action: () => this.openEdit(this.workoutHistory),
+        action: () => this.openEdit(this.workout),
       },
       {
         label: 'Delete workout',
         icon: 'delete',
-        action: () => this.deleteWorkout(this.workoutHistory),
+        action: () => this.deleteWorkout(this.workout),
       },
     ];
 
@@ -153,9 +155,9 @@ export class WorkoutHistoryDetailsComponent {
     });
   }
 
-  private deleteWorkout(workoutHistory: WorkoutHistory) {}
+  private deleteWorkout(workout: Workout) {}
 
-  private openEdit(workoutHistory: WorkoutHistory) {
+  private openEdit(workout: Workout) {
     this.switchView();
   }
 
@@ -185,17 +187,17 @@ export class WorkoutHistoryDetailsComponent {
     let errorMessages: string[] = [];
 
     if (
-      this.workoutHistory?.title === undefined ||
-      this.workoutHistory?.title?.trim() === ''
+      this.workout?.title === undefined ||
+      this.workout?.title?.trim() === ''
     ) {
       errorMessages.push('Workout title must not be empty');
     }
 
-    if (this.workoutHistory?.exercises.length === 0) {
+    if (this.workout?.exercises.length === 0) {
       errorMessages.push('Workout must have at least one exercise');
     }
 
-    for (const exercise of this.workoutHistory?.exercises || []) {
+    for (const exercise of this.workout?.exercises || []) {
       if (exercise.sets.length === 0) {
         errorMessages.push(
           `Exercise "${exercise.name}" does not have any sets`,
@@ -213,11 +215,11 @@ export class WorkoutHistoryDetailsComponent {
   onTagsModalClosed() {}
 
   drop(event: CdkDragDrop<string[]>) {
-    let exercises = this.workoutHistory?.exercises!;
+    let exercises = this.workout?.exercises!;
     moveItemInArray(exercises, event.previousIndex, event.currentIndex);
 
     /*    this.workoutService.updateExercisesPositionForWorkout(
-      this.workoutHistory?.id!,
+      this.workout?.id!,
       exercises.map((e) => e.id!),
     );*/
   }
@@ -242,6 +244,11 @@ export class WorkoutHistoryDetailsComponent {
       icon: 'add-circle',
       action: () => this.addExercise(),
     },
+    {
+      label: 'Adjust start and end time',
+      icon: 'stopwatch',
+      action: () => this.addExercise(),
+    },
   ];
 
   openWorkoutMenu($event: MouseEvent) {
@@ -260,8 +267,8 @@ export class WorkoutHistoryDetailsComponent {
   makeTitleNonEditable() {
     if (this.workoutTitle.length > 0) {
       this.isTitleEditable = false;
-      if (this.workoutHistory) {
-        this.workoutHistory.title = this.workoutTitle;
+      if (this.workout) {
+        this.workout.title = this.workoutTitle;
       }
     }
   }
@@ -304,7 +311,7 @@ export class WorkoutHistoryDetailsComponent {
 
   addExercise() {
     this.exercisesModal.show(
-      this.workoutHistory?.exercises?.map((e) => e.id),
+      this.workout?.exercises?.map((e) => e.id),
       true,
     );
   }
@@ -312,10 +319,10 @@ export class WorkoutHistoryDetailsComponent {
   onAddExercisesSelected(selectedExercises: Exercise[]) {
     if (selectedExercises.length > 0) {
       /* this.workoutService.addExerciseToWorkout(
-        this.workoutHistory?.id!,
+        this.workout?.id!,
         selectedExercises.map((e) => e.id),
       );*/
-      this.workoutHistory?.exercises!.push(...selectedExercises);
+      this.workout?.exercises!.push(...selectedExercises);
       this.recalculateProgress();
     }
   }
@@ -330,7 +337,7 @@ export class WorkoutHistoryDetailsComponent {
   onReplaceExerciseConfirmed(confirmed: boolean) {
     if (confirmed && this.exerciseToReplace)
       this.exercisesModal.show(
-        this.workoutHistory?.exercises?.map((e) => e.id),
+        this.workout?.exercises?.map((e) => e.id),
         false,
         true,
       );
@@ -338,12 +345,12 @@ export class WorkoutHistoryDetailsComponent {
 
   onReplaceExerciseSelected(exercise: Exercise) {
     /*this.workoutService.replaceExercise(
-      this.workoutHistory?.id!,
+      this.workout?.id!,
       this.exerciseToReplace.id!,
       exercise.id,
     );*/
     replaceItemInArray(
-      this.workoutHistory?.exercises!,
+      this.workout?.exercises!,
       exercise,
       (e) => e.id === this.exerciseToReplace.id,
     );
@@ -376,7 +383,7 @@ export class WorkoutHistoryDetailsComponent {
     let totalSets = 0;
     let completedSets = 0;
 
-    this.workoutHistory?.exercises?.forEach((exercise) => {
+    this.workout?.exercises?.forEach((exercise) => {
       totalSets += exercise.sets.length;
       completedSets += exercise.sets.filter((s) => s.completed).length;
     });
@@ -435,15 +442,13 @@ export class WorkoutHistoryDetailsComponent {
 
   onDeleteExerciseConfirmed(confirmed: boolean) {
     if (confirmed && this.exerciseToDelete) {
-      const index = this.workoutHistory!.exercises!.indexOf(
-        this.exerciseToDelete,
-      );
+      const index = this.workout!.exercises!.indexOf(this.exerciseToDelete);
       if (index > -1) {
-        this.workoutHistory!.exercises!.splice(index, 1);
+        this.workout!.exercises!.splice(index, 1);
       }
       /*      this.workoutService.removeExercise(
         this.exerciseToDelete.id!,
-        this.workoutHistory!.id!,
+        this.workout!.id!,
       );*/
     }
     this.exerciseToDelete = undefined;

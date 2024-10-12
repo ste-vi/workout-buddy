@@ -1,7 +1,7 @@
 import { Exercise } from "../../../models/exercise";
-import { WorkoutHistory } from "../../../models/workout-history";
 import { tags } from "./workflow-templates-dummy-daya";
 import { Sets } from "../../../models/set";
+import {Workout} from "../../../models/workout";
 
 function generateExercises(count: number, workoutType: string): Exercise[] {
   const exercisePool = {
@@ -41,173 +41,187 @@ function generateExercises(count: number, workoutType: string): Exercise[] {
   });
 }
 
-export const workoutHistory: WorkoutHistory[] = [
-  {
-    id: 1,
-    title: 'Bodyweight Training',
-    date: new Date('2024-10-08'),
-    duration: '30 min',
-    totalSets: 10,
-    prReps: 10,
-    totalWeight: 100,
-    totalExercises: 10,
-    tags: [tags[0], tags[3]],  // Strength Training, Core
-    exercises: generateExercises(10, 'strength')
-  },
-  {
-    id: 2,
-    title: 'Cardio Workout',
-    date: new Date('2024-09-29'),
-    duration: '45 min',
-    totalSets: 5,
-    prReps: 15,
-    totalWeight: 0,
-    totalExercises: 3,
-    tags: [tags[1]],  // Cardio
-    exercises: generateExercises(3, 'cardio')
-  },
-  {
-    id: 3,
-    title: 'Strength Training',
-    date: new Date('2024-09-27'),
-    duration: '60 min',
-    totalSets: 15,
-    prReps: 8,
-    totalWeight: 500,
-    totalExercises: 6,
-    tags: [tags[0]],  // Strength Training
-    exercises: generateExercises(6, 'strength')
-  },
-  {
-    id: 4,
-    title: 'Yoga Session',
-    date: new Date('2024-09-12'),
-    duration: '75 min',
-    totalSets: 0,
-    prReps: 0,
-    totalWeight: 0,
-    totalExercises: 12,
-    tags: [tags[2], tags[4]],  // Flexibility, Yoga
-    exercises: generateExercises(12, 'yoga')
-  },
-  {
-    id: 5,
-    title: 'HIIT Workout',
-    date: new Date('2024-09-13'),
-    duration: '25 min',
-    totalSets: 8,
-    prReps: 20,
-    totalWeight: 50,
-    totalExercises: 8,
-    tags: [tags[1], tags[3]],  // Cardio, Core
-    exercises: generateExercises(8, 'cardio')
-  },
-  {
-    id: 6,
-    title: 'Upper Body Focus',
-    date: new Date('2024-09-14'),
-    duration: '50 min',
-    totalSets: 12,
-    prReps: 12,
-    totalWeight: 300,
-    totalExercises: 5,
-    tags: [tags[0]],  // Strength Training
-    exercises: generateExercises(5, 'upperBody')
-  },
-  {
-    id: 7,
-    title: 'Lower Body Workout',
-    date: new Date('2024-10-01'),
-    duration: '55 min',
-    totalSets: 14,
-    prReps: 10,
-    totalWeight: 450,
-    totalExercises: 6,
-    tags: [tags[0]],  // Strength Training
-    exercises: generateExercises(6, 'lowerBody')
-  },
-  {
-    id: 8,
-    title: 'Core Strength',
-    date: new Date('2024-10-02'),
-    duration: '40 min',
-    totalSets: 10,
-    prReps: 25,
-    totalWeight: 20,
-    totalExercises: 8,
-    tags: [tags[3]],  // Core
-    exercises: generateExercises(8, 'core')
-  },
-  {
-    id: 9,
-    title: 'Pilates Class',
-    date: new Date('2024-10-03'),
-    duration: '60 min',
-    totalSets: 0,
-    prReps: 0,
-    totalWeight: 0,
-    totalExercises: 15,
-    tags: [tags[2], tags[3]],  // Flexibility, Core
-    exercises: generateExercises(15, 'pilates')
-  },
-  {
-    id: 10,
-    title: 'CrossFit WOD',
-    date: new Date('2024-09-18'),
-    duration: '35 min',
-    totalSets: 5,
-    prReps: 30,
-    totalWeight: 200,
-    totalExercises: 4,
-    tags: [tags[0], tags[1]],  // Strength Training, Cardio
-    exercises: generateExercises(4, 'crossfit')
-  },
-  {
-    id: 11,
-    title: 'Swimming Laps',
-    date: new Date('2024-09-19'),
-    duration: '45 min',
-    totalSets: 0,
-    prReps: 0,
-    totalWeight: 0,
-    totalExercises: 1,
-    tags: [tags[1]],  // Cardio
-    exercises: generateExercises(1, 'swimming')
-  },
-  {
-    id: 12,
-    title: 'Full Body Workout',
-    date: new Date('2024-09-20'),
-    duration: '70 min',
-    totalSets: 18,
-    prReps: 15,
-    totalWeight: 600,
-    totalExercises: 9,
-    tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    exercises: generateExercises(9, 'strength')
-  },
-  {
-    id: 13,
-    title: 'Full Body Workout August',
-    date: new Date('2024-08-12'),
-    duration: '70 min',
-    totalSets: 18,
-    prReps: 15,
-    totalWeight: 600,
-    totalExercises: 9,
-    tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    exercises: generateExercises(9, 'strength')
-  },
-  {
-    id: 14,
-    title: 'Full Body Workout October',
-    date: new Date('2024-10-12'),
-    duration: '70 min',
-    totalSets: 18,
-    prReps: 15,
-    totalWeight: 600,
-    totalExercises: 9,
-    tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    exercises: generateExercises(9, 'strength')
-  },
+export const workout: Workout[] = [
+  new Workout(
+    1,
+    'Bodyweight Training',
+    new Date('2024-10-08'),
+    new Date('2024-10-08T09:00:00'),
+    new Date('2024-10-08T09:30:00'),
+    10,
+    10,
+    100,
+    10,
+    [tags[0], tags[3]],  // Strength Training, Core
+    generateExercises(10, 'strength')
+  ),
+  new Workout(
+    2,
+    'Cardio Workout',
+    new Date('2024-09-29'),
+    new Date('2024-09-29T15:00:00'),
+    new Date('2024-09-29T15:45:00'),
+    5,
+    15,
+    0,
+    3,
+    [tags[1]],  // Cardio
+    generateExercises(3, 'cardio')
+  ),
+  new Workout(
+    3,
+    'Strength Training',
+    new Date('2024-09-27'),
+    new Date('2024-09-27T18:00:00'),
+    new Date('2024-09-27T19:00:00'),
+    15,
+    8,
+    500,
+    6,
+    [tags[0]],  // Strength Training
+    generateExercises(6, 'strength')
+  ),
+  new Workout(
+    4,
+    'Yoga Session',
+    new Date('2024-09-12'),
+    new Date('2024-09-12T07:00:00'),
+    new Date('2024-09-12T08:15:00'),
+    0,
+    0,
+    0,
+    12,
+    [tags[2], tags[4]],  // Flexibility, Yoga
+    generateExercises(12, 'yoga')
+  ),
+  new Workout(
+    5,
+    'HIIT Workout',
+    new Date('2024-09-13'),
+    new Date('2024-09-13T12:00:00'),
+    new Date('2024-09-13T12:25:00'),
+    8,
+    20,
+    50,
+    8,
+    [tags[1], tags[3]],  // Cardio, Core
+    generateExercises(8, 'cardio')
+  ),
+  new Workout(
+    6,
+    'Upper Body Focus',
+    new Date('2024-09-14'),
+    new Date('2024-09-14T16:00:00'),
+    new Date('2024-09-14T16:50:00'),
+    12,
+    12,
+    300,
+    5,
+    [tags[0]],  // Strength Training
+    generateExercises(5, 'upperBody')
+  ),
+  new Workout(
+    7,
+    'Lower Body Workout',
+    new Date('2024-10-01'),
+    new Date('2024-10-01T17:00:00'),
+    new Date('2024-10-01T17:55:00'),
+    14,
+    10,
+    450,
+    6,
+    [tags[0]],  // Strength Training
+    generateExercises(6, 'lowerBody')
+  ),
+  new Workout(
+    8,
+    'Core Strength',
+    new Date('2024-10-02'),
+    new Date('2024-10-02T19:00:00'),
+    new Date('2024-10-02T19:40:00'),
+    10,
+    25,
+    20,
+    8,
+    [tags[3]],  // Core
+    generateExercises(8, 'core')
+  ),
+  new Workout(
+    9,
+    'Pilates Class',
+    new Date('2024-10-03'),
+    new Date('2024-10-03T08:00:00'),
+    new Date('2024-10-03T09:00:00'),
+    0,
+    0,
+    0,
+    15,
+    [tags[2], tags[3]],  // Flexibility, Core
+    generateExercises(15, 'pilates')
+  ),
+  new Workout(
+    10,
+    'CrossFit WOD',
+    new Date('2024-09-18'),
+    new Date('2024-09-18T06:00:00'),
+    new Date('2024-09-18T06:35:00'),
+    5,
+    30,
+    200,
+    4,
+    [tags[0], tags[1]],  // Strength Training, Cardio
+    generateExercises(4, 'crossfit')
+  ),
+  new Workout(
+    11,
+    'Swimming Laps',
+    new Date('2024-09-19'),
+    new Date('2024-09-19T20:00:00'),
+    new Date('2024-09-19T20:45:00'),
+    0,
+    0,
+    0,
+    1,
+    [tags[1]],  // Cardio
+    generateExercises(1, 'swimming')
+  ),
+  new Workout(
+    12,
+    'Full Body Workout',
+    new Date('2024-09-20'),
+    new Date('2024-09-20T17:00:00'),
+    new Date('2024-09-20T18:10:00'),
+    18,
+    15,
+    600,
+    9,
+    [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
+    generateExercises(9, 'strength')
+  ),
+  new Workout(
+    13,
+    'Full Body Workout August',
+    new Date('2024-08-12'),
+    new Date('2024-08-12T18:00:00'),
+    new Date('2024-08-12T19:10:00'),
+    18,
+    15,
+    600,
+    9,
+    [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
+    generateExercises(9, 'strength')
+  ),
+  new Workout(
+    14,
+    'Full Body Workout October',
+    new Date('2024-10-12'),
+    new Date('2024-10-12T16:00:00'),
+    new Date('2024-10-12T17:10:00'),
+    18,
+    15,
+    600,
+    9,
+    [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
+    generateExercises(9, 'strength')
+  ),
 ];

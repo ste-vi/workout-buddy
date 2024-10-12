@@ -1,6 +1,5 @@
 import { Exercise } from './exercise';
-import {Tag} from "./tag";
-import {Workout} from "./workout";
+import { Tag } from './tag';
 
 export interface WorkoutTemplate {
   id?: number;
@@ -9,9 +8,15 @@ export interface WorkoutTemplate {
   exercises: Exercise[];
   estimatedDuration?: string;
   totalSets: number;
-  lastPerformedWorkout?: Workout
+  lastPerformedWorkout?: LastPerformedWorkout;
   tags: Tag[];
-  volumeTrend?: Trend
+  volumeTrend?: Trend;
+}
+
+interface LastPerformedWorkout {
+  id: number;
+  duration: string;
+  date: Date;
 }
 
 export interface Trend {

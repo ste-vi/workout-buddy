@@ -28,7 +28,7 @@
       </div>
       <div class="card-padding-top">
         <div *ngFor="let history of currentDayWorkoutHistory">
-          <app-latest-workout-widget [workoutHistory]="history"></app-latest-workout-widget>
+          <app-latest-workout-widget [workout]="history"></app-latest-workout-widget>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
           </div>
           <div [@staggerFadeIn]="monthYear.value.length">
             <div *ngFor="let history of monthYear.value">
-              <app-latest-workout-widget [workoutHistory]="history" [disableAnimation]="true"></app-latest-workout-widget>
+              <app-latest-workout-widget [workout]="history" [disableAnimation]="true"></app-latest-workout-widget>
             </div>
           </div>
         </ng-container>

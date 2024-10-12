@@ -22,33 +22,36 @@
 
       <div class="workout-workout-details">
         <div class="subtitle semi-bold">
-          {{ workoutHistory.title }}
+          {{ workout.title }}
         </div>
+
         <div class="s-text gray-1-color">
-          {{ workoutHistory.totalExercises }} exercises | {{ workoutHistory.totalSets }} sets
+          {{ workout.date | date:'dd-MM-yyyy' }} | {{ workout.totalExercises }} exercises | {{ workout.totalSets }} sets
         </div>
+
         <div class="tags s-text card-padding-top">
-          <div class="tag" *ngFor="let tag of workoutHistory.tags">{{ tag.name }}</div>
+          <div class="tag" *ngFor="let tag of workout.tags">{{ tag.name }}</div>
         </div>
 
         <div class="metrics-container">
           <div class="metric-card card-shadow">
-            <div class="primary-background m-text primary-background-text"><b>{{ workoutHistory.duration }}</b></div>
+            <div class="primary-background m-text primary-background-text"><b>{{ workout.getDuration() + ' min' }}</b>
+            </div>
             <div class="gray-1-color s-text">Duration</div>
           </div>
           <div class="metric-card card-shadow">
-            <div class="primary-background m-text primary-background-text"><b>{{ workoutHistory.prReps }}</b></div>
+            <div class="primary-background m-text primary-background-text"><b>{{ workout.prReps }}</b></div>
             <div class="gray-1-color s-text">PR</div>
           </div>
           <div class="metric-card card-shadow">
-            <div class="primary-background m-text primary-background-text"><b>{{ workoutHistory.totalWeight }} kg</b>
+            <div class="primary-background m-text primary-background-text"><b>{{ workout.totalWeight }} kg</b>
             </div>
             <div class="gray-1-color s-text">Volume</div>
           </div>
         </div>
 
         <div class="card-padding-top exercises">
-          <div class="exercise" *ngFor="let exercise of workoutHistory?.exercises">
+          <div class="exercise" *ngFor="let exercise of workout?.exercises">
             <div class="exercise-info">
               <div class="exercise-header">
                 <div class="exercise-image secondary-background"></div>
@@ -140,12 +143,16 @@
                     (click)="makeTitleNonEditable()"></mat-icon>
         </div>
 
+        <div class="s-text gray-1-color">
+          {{ workout.date | date:'dd-MM-yyyy' }} | {{ workout.getDuration() + ' min' }}
+        </div>
+
         <div class="workout-info">
           <div class="tags s-text card-padding-top">
-            <div class="tag" *ngFor="let tag of workoutHistory?.tags"
+            <div class="tag" *ngFor="let tag of workout?.tags"
                  (click)="openTagsModal()">{{ tag.name }}
             </div>
-            <div *ngIf="!workoutHistory?.tags || workoutHistory!.tags.length === 0" class="add-tag"
+            <div *ngIf="!workout?.tags || workout!.tags.length === 0" class="add-tag"
                  (click)="openTagsModal()">Add tags
             </div>
           </div>
@@ -154,7 +161,7 @@
              cdkDropList cdkDropListAutoScroll
              (cdkDropListDropped)="drop($event)">
           <div class="exercise"
-               *ngFor="let exercise of workoutHistory?.exercises"
+               *ngFor="let exercise of workout?.exercises"
                (cdkDragEnded)="onDragEnded()"
                [cdkDragDisabled]="!dragStarted"
                cdkDrag
@@ -237,7 +244,7 @@
 
       <app-tags-modal
         #editWorkoutTagsModal
-        [workoutTags]="workoutHistory?.tags"
+        [workoutTags]="workout.tags"
         (closeModal)="onTagsModalClosed()">
       </app-tags-modal>
 

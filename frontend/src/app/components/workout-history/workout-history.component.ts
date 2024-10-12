@@ -16,15 +16,15 @@ import {
   NgIf,
 } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
-import { WorkoutHistoryService } from '../../services/api/workout-history.service';
 import { LatestWorkoutWidgetComponent } from '../common/widgets/latest-workout-widget/latest-workout-widget.component';
-import { WorkoutHistory } from '../../models/workout-history';
 import { SelectionMenuComponent } from '../common/selection-menu/selection-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { collapse } from '../../animations/collapse';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { staggerFadeIn } from '../../animations/stagger-fade-in';
+import { WorkoutService } from '../../services/api/workout.service';
+import {Workout} from "../../models/workout";
 
 @Component({
   selector: 'app-workout-history',
@@ -56,9 +56,9 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   protected currentIndex = 0;
   protected currentMonth: Date;
 
-  protected workoutHistory: WorkoutHistory[] = [];
-  protected groupedWorkoutHistory: Map<string, WorkoutHistory[]> = new Map();
-  protected currentDayWorkoutHistory: WorkoutHistory[] = [];
+  protected workout: Workout[] = [];
+  protected groupedWorkoutHistory: Map<string, Workout[]> = new Map();
+  protected currentDayWorkoutHistory: Workout[] = [];
 
   protected currentPage: number = 0;
   protected itemsPerPage: number = 30;
@@ -67,7 +67,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private workoutHistoryService: WorkoutHistoryService,
+    private workoutService: WorkoutService,
   ) {
     this.currentMonth = new Date();
   }
@@ -91,11 +91,11 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
 
   private searchWorkoutHistory(isSearch: boolean = false): void {
     if (isSearch) {
-      this.workoutHistory = [];
+      this.workout = [];
       this.currentPage = 0;
     }
 
-    this.workoutHistoryService
+    this.workoutService
       .searchWorkoutHistory(
         this.currentPage,
         this.itemsPerPage,
@@ -104,9 +104,9 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
         this.searchQuery,
       )
       .subscribe((pageResponse) => {
-        this.workoutHistory = isSearch
+        this.workout = isSearch
           ? pageResponse.content
-          : this.workoutHistory.concat(pageResponse.content);
+          : this.workout.concat(pageResponse.content);
 
         this.hasMoreItems = !pageResponse.last;
       });
@@ -120,17 +120,17 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
-    this.workoutHistoryService
+    this.workoutService
       .searchWorkoutHistory(0, 100, firstDay, lastDay, undefined)
       .subscribe((pageResponse) => {
-        this.workoutHistory = pageResponse.content;
+        this.workout = pageResponse.content;
       });
   }
 
   private groupWorkoutHistory() {
     this.groupedWorkoutHistory = new Map();
 
-    this.workoutHistory.forEach((history) => {
+    this.workout.forEach((history) => {
       const date = new Date(history.date);
       const monthYear = date.toLocaleString('en-US', {
         year: 'numeric',
@@ -177,7 +177,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   private initCurrentDayWorkoutHistory() {
     let date = this.dates[this.currentIndex].getDate();
 
-    this.currentDayWorkoutHistory = this.workoutHistory.filter(
+    this.currentDayWorkoutHistory = this.workout.filter(
       (history) =>
         history.date.getFullYear() === this.currentMonth.getFullYear() &&
         history.date.getMonth() === this.currentMonth.getMonth() &&
@@ -272,7 +272,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
 
   switchView() {
     this.isListView = !this.isListView;
-    this.workoutHistory = [];
+    this.workout = [];
     if (this.isListView) {
       this.searchWorkoutHistory();
     } else {
@@ -301,8 +301,8 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   }
 
   originalOrder = (
-    a: KeyValue<string, WorkoutHistory[]>,
-    b: KeyValue<string, WorkoutHistory[]>,
+    a: KeyValue<string, Workout[]>,
+    b: KeyValue<string, Workout[]>,
   ): number => {
     return 0;
   };

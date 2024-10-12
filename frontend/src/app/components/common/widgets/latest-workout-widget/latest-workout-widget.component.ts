@@ -2,11 +2,11 @@ import { Component, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MediumButtonComponent } from '../../medium-button/medium-button.component';
 import { TimeAgoPipe } from '../../../../pipes/time-ago-pipe';
-import { WorkoutHistory } from '../../../../models/workout-history';
 import { fadeInOut } from '../../../../animations/fade-in-out';
 import { NgIf } from '@angular/common';
 import { WorkoutHistoryDetailsComponent } from '../../../workout-history-details/workout-history-details.component';
 import { WorkoutHistoryDetailsService } from '../../../../services/communication/workout-history-details.service';
+import {Workout} from "../../../../models/workout";
 
 @Component({
   selector: 'app-latest-workout-widget',
@@ -23,14 +23,14 @@ import { WorkoutHistoryDetailsService } from '../../../../services/communication
   animations: [fadeInOut],
 })
 export class LatestWorkoutWidgetComponent {
-  @Input() workoutHistory!: WorkoutHistory;
+  @Input() workout!: Workout;
   @Input() disableAnimation: boolean = false;
 
   constructor(
     private workoutHistoryDetailsService: WorkoutHistoryDetailsService,
   ) {}
 
-  openWorkoutHistoryDetails(workoutHistory: WorkoutHistory) {
-    this.workoutHistoryDetailsService.openModal(workoutHistory);
+  openWorkoutHistoryDetails(workout: Workout) {
+    this.workoutHistoryDetailsService.openModal(workout);
   }
 }
