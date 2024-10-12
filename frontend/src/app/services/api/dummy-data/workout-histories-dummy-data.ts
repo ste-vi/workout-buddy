@@ -1,7 +1,45 @@
-import {Exercise} from "../../../models/exercise";
-import {WorkoutHistory} from "../../../models/workout-history";
-import {tags} from "./workflow-templates-dummy-daya";
-import {exercises} from "./exercises-dummy-data";
+import { Exercise } from "../../../models/exercise";
+import { WorkoutHistory } from "../../../models/workout-history";
+import { tags } from "./workflow-templates-dummy-daya";
+import { Sets } from "../../../models/set";
+
+function generateExercises(count: number, workoutType: string): Exercise[] {
+  const exercisePool = {
+    strength: ['Squats', 'Deadlifts', 'Bench Press', 'Overhead Press', 'Rows', 'Pull-ups'],
+    cardio: ['Running', 'Cycling', 'Jump Rope', 'Burpees', 'Mountain Climbers'],
+    yoga: ['Downward Dog', 'Warrior Pose', 'Tree Pose', 'Child\'s Pose', 'Sun Salutation'],
+    core: ['Planks', 'Crunches', 'Some Twists', 'Leg Raises', 'Bicycle Crunches'],
+    upperBody: ['Push-ups', 'Dips', 'Shoulder Press', 'Bicep Curls', 'Tricep Extensions'],
+    lowerBody: ['Lunges', 'Leg Press', 'Calf Raises', 'Leg Curls', 'Hip Thrusts'],
+    crossfit: ['Box Jumps', 'Kettlebell Swings', 'Thrusters', 'Wall Balls', 'Double Unders'],
+    swimming: ['Freestyle Laps', 'Breaststroke Laps', 'Backstroke Laps', 'Butterfly Laps'],
+    pilates: ['The Hundred', 'Roll Up', 'Single Leg Circles', 'Spine Stretch', 'Saw']
+  };
+
+  const selectedExercises = exercisePool[workoutType as keyof typeof exercisePool] || exercisePool.strength;
+
+  return Array(count).fill(null).map((_, index) => {
+    const exerciseName = selectedExercises[index % selectedExercises.length];
+    const setCount = Math.floor(Math.random() * 4) + 1; // 1 to 4 sets
+    const sets: Sets[] = Array(setCount).fill(null).map((_, setIndex) => ({
+      id: setIndex + 1,
+      reps: Math.floor(Math.random() * 12) + 5, // 5 to 16 reps
+      weight: workoutType === 'cardio' || workoutType === 'yoga' ? 0 : Math.floor(Math.random() * 100) + 10, // 10 to 109 weight
+      previousReps: Math.floor(Math.random() * 12) + 5,
+      previousWeight: workoutType === 'cardio' || workoutType === 'yoga' ? 0 : Math.floor(Math.random() * 100) + 10,
+      completed: true
+    }));
+
+    return {
+      id: index + 1,
+      name: exerciseName,
+      sets: sets,
+      bodyPart: 'Various',
+      category: workoutType === 'cardio' ? 'Cardio' : 'Strength',
+      prSet: sets[0] // Add the PR set to the exercise
+    };
+  });
+}
 
 export const workoutHistory: WorkoutHistory[] = [
   {
@@ -14,7 +52,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 100,
     totalExercises: 10,
     tags: [tags[0], tags[3]],  // Strength Training, Core
-    exercises: [exercises[0], exercises[1], exercises[5]],
+    exercises: generateExercises(10, 'strength')
   },
   {
     id: 2,
@@ -26,7 +64,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 0,
     totalExercises: 3,
     tags: [tags[1]],  // Cardio
-    exercises: [exercises[1], exercises[4]],
+    exercises: generateExercises(3, 'cardio')
   },
   {
     id: 3,
@@ -38,7 +76,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 500,
     totalExercises: 6,
     tags: [tags[0]],  // Strength Training
-    exercises: [exercises[2], exercises[3], exercises[4]],
+    exercises: generateExercises(6, 'strength')
   },
   {
     id: 4,
@@ -50,7 +88,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 0,
     totalExercises: 12,
     tags: [tags[2], tags[4]],  // Flexibility, Yoga
-    exercises: [exercises[5]],
+    exercises: generateExercises(12, 'yoga')
   },
   {
     id: 5,
@@ -62,7 +100,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 50,
     totalExercises: 8,
     tags: [tags[1], tags[3]],  // Cardio, Core
-    exercises: [exercises[0], exercises[1], exercises[5]],
+    exercises: generateExercises(8, 'cardio')
   },
   {
     id: 6,
@@ -74,7 +112,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 300,
     totalExercises: 5,
     tags: [tags[0]],  // Strength Training
-    exercises: [exercises[0], exercises[2], exercises[4]],
+    exercises: generateExercises(5, 'upperBody')
   },
   {
     id: 7,
@@ -86,7 +124,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 450,
     totalExercises: 6,
     tags: [tags[0]],  // Strength Training
-    exercises: [exercises[1], exercises[3]],
+    exercises: generateExercises(6, 'lowerBody')
   },
   {
     id: 8,
@@ -98,7 +136,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 20,
     totalExercises: 8,
     tags: [tags[3]],  // Core
-    exercises: [exercises[5]],
+    exercises: generateExercises(8, 'core')
   },
   {
     id: 9,
@@ -110,7 +148,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 0,
     totalExercises: 15,
     tags: [tags[2], tags[3]],  // Flexibility, Core
-    exercises: [exercises[5]],
+    exercises: generateExercises(15, 'pilates')
   },
   {
     id: 10,
@@ -122,7 +160,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 200,
     totalExercises: 4,
     tags: [tags[0], tags[1]],  // Strength Training, Cardio
-    exercises: [exercises[0], exercises[1], exercises[2], exercises[3]],
+    exercises: generateExercises(4, 'crossfit')
   },
   {
     id: 11,
@@ -134,7 +172,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 0,
     totalExercises: 1,
     tags: [tags[1]],  // Cardio
-    exercises: [],
+    exercises: generateExercises(1, 'swimming')
   },
   {
     id: 12,
@@ -146,7 +184,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 600,
     totalExercises: 9,
     tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    exercises: [exercises[0], exercises[1], exercises[2], exercises[3], exercises[4], exercises[5]],
+    exercises: generateExercises(9, 'strength')
   },
   {
     id: 13,
@@ -158,7 +196,7 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 600,
     totalExercises: 9,
     tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    exercises: [exercises[0], exercises[1], exercises[2], exercises[3], exercises[4], exercises[5]],
+    exercises: generateExercises(9, 'strength')
   },
   {
     id: 14,
@@ -170,6 +208,6 @@ export const workoutHistory: WorkoutHistory[] = [
     totalWeight: 600,
     totalExercises: 9,
     tags: [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    exercises: [exercises[0], exercises[1], exercises[2], exercises[3], exercises[4], exercises[5]],
+    exercises: generateExercises(9, 'strength')
   },
 ];

@@ -4,7 +4,7 @@
 
   <div class="edit-template-container-header">
     <app-header-button icon="close" (click)="close()"></app-header-button>
-    <div class="timer m-text semi-bold">{{ isEdit ? 'Edit template' : 'New template' }}</div>
+    <div class="m-text semi-bold">{{ isEdit ? 'Edit template' : 'New template' }}</div>
     <app-header-button icon="check" [iconClasses]="['s-svg-icon-important']" [active]="true"
                        (click)="save()"></app-header-button>
   </div>

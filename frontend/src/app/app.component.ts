@@ -38,6 +38,7 @@ export class AppComponent {
       .addSvgIcon('dumbbell-1', this.setIconPath(`${this.iconsPath}/dumbbell-1.svg`))
       .addSvgIcon('text', this.setIconPath(`${this.iconsPath}/text.svg`))
       .addSvgIcon('medal', this.setIconPath(`${this.iconsPath}/medal.svg`))
+      .addSvgIcon('course-up', this.setIconPath(`${this.iconsPath}/course-up.svg`))
       .addSvgIcon('clear', this.setIconPath(`${this.iconsPath}/clear.svg`))
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`))

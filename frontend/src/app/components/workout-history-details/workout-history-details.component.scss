@@ -3,6 +3,7 @@
   width: 100%;
   max-width: 1024px;
   padding-top: var(--container-padding);
+  padding-bottom: var(--l-size);
   overflow-y: hidden;
   overflow-x: hidden;
 
@@ -30,7 +31,7 @@
     .workout-history-details-container-view {
       padding-bottom: var(--l-size);
 
-      .workout-template-details {
+      .workout-workout-details {
         padding-top: var(--m-size);
         padding-left: var(--container-padding);
         padding-right: var(--container-padding);
@@ -41,11 +42,72 @@
         }
       }
 
+      .status-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        padding: 4px;
+
+        &.pr {
+          color: var(--primary-1);
+        }
+
+        &.better {
+          color: var(--success);
+        }
+
+        &.worse {
+          color: var(--danger);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 var(--primary-2);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+        }
+      }
+
     }
 
     .workout-history-details-container-edit-view {
+      padding: var(--m-size) var(--container-padding) var(--l-size);
 
+      .workout-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
 
+        .workout-title-input {
+          width: 100%;
+          border-radius: 8px;
+          border: none;
+          background-color: var(--border);
+          outline: none;
+          padding: 0.34rem var(--m-size);
+          font-weight: 550;
+          font-family: 'Poppins', sans-serif;
+
+          &::placeholder {
+            color: var(--gray-2);
+            font-weight: 400;
+          }
+        }
+
+        .workout-title-input-invalid {
+          &::placeholder {
+            color: var(--danger) !important;
+          }
+        }
+      }
 
     }
 
@@ -156,6 +218,14 @@
             scale: var(--active-scale);
           }
         }
+      }
+
+      .exercise-divider {
+        width: 100%;
+        background-color: var(--border);
+        border-radius: 8px;
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
       }
     }
 

@@ -4,20 +4,23 @@
   <div class="workout-history-details-container-header">
     <ng-container *ngIf="isEditView">
       <app-header-button icon="close" (click)="switchView()"></app-header-button>
-      <b class="l-text">Edit workout</b>
-      <app-header-button text="Save" (click)="save()"></app-header-button>
+      <b class="m-text semi-bold">Edit workout</b>
+      <app-header-button icon="check" [iconClasses]="['s-svg-icon-important']" [active]="true"
+                         (click)="save()"></app-header-button>
     </ng-container>
     <ng-container *ngIf="!isEditView">
       <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
-      <b class="l-text">View workout</b>
-      <app-header-button icon="two-dots" (click)="openWorkoutMenu($event)"></app-header-button>
+      <app-header-button icon="two-dots" (click)="openWorkoutContainerMenu($event)"></app-header-button>
     </ng-container>
   </div>
 
-  <div class="workout-history-details-container-body">
-    <div class="workout-history-details-container-view" *ngIf="!isEditView">
+  <app-toast *ngIf="isInvalidated" #errorToast></app-toast>
 
-      <div class="workout-template-details">
+  <div class="workout-history-details-container-body">
+
+    <div class="workout-history-details-container-view" *ngIf="!isEditView" [@sideModalOpenClose]>
+
+      <div class="workout-workout-details">
         <div class="subtitle semi-bold">
           {{ workoutHistory.title }}
         </div>
@@ -44,7 +47,7 @@
           </div>
         </div>
 
-        <div class="section-margin-top exercises">
+        <div class="card-padding-top exercises">
           <div class="exercise" *ngFor="let exercise of workoutHistory?.exercises">
             <div class="exercise-info">
               <div class="exercise-header">
@@ -93,20 +96,181 @@
                   {{ set.reps }}
                 </div>
                 <div class="table-cell action">
+                  <div class="table-cell action">
+                    <ng-container *ngIf="calculateIsPR(set, exercise); else betterCheck">
+                      <mat-icon svgIcon="cup" class="status-icon pr" title="Personal Record"></mat-icon>
+                    </ng-container>
+                    <ng-template #betterCheck>
+                      <ng-container *ngIf="isSetBetter(set); else worseCheck">
+                        <mat-icon svgIcon="up-arrow" class="status-icon better" title="Better than previous"></mat-icon>
+                      </ng-container>
+                    </ng-template>
+                    <ng-template #worseCheck>
+                      <ng-container *ngIf="isSetWorse(set);">
+                        <mat-icon svgIcon="down-arrow" class="status-icon worse" title="Worse than previous"></mat-icon>
+                      </ng-container>
+                    </ng-template>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <div class="exercise-divider"></div>
           </div>
         </div>
       </div>
-
-      <div class="workout-history-details-container-edit-view" *ngIf="!isEditView">
-
-      </div>
-
     </div>
 
-    <app-context-menu #workoutMenu [menuItems]="workoutMenuItems"></app-context-menu>
+    <div class="workout-history-details-container-edit-view" *ngIf="isEditView" [@sideModalOpenClose]>
+
+      <div>
+        <div class="workout-header">
+          <div class="l-text semi-bold" *ngIf="!isTitleEditable">{{ workoutTitle }}</div>
+          <input type="text" class="workout-title-input black-color m-text"
+                 [class.workout-title-input-invalid]='isInvalidated && !workoutTitle'
+                 *ngIf="isTitleEditable"
+                 [(ngModel)]="workoutTitle"
+                 (blur)="makeTitleNonEditable()"
+                 (keyup.enter)="makeTitleNonEditable()"
+                 [placeholder]='isInvalidated && !workoutTitle ? "Please enter workout title" : "Enter workout workout"'>
+
+          <app-action-button *ngIf="!isTitleEditable" icon='two-dots' iconClasses="xs-svg-icon primary"
+                             (click)="openWorkoutMenu($event)"></app-action-button>
+          <mat-icon svgIcon="check" class="l-svg-icon clickable-m-icon primary" *ngIf="isTitleEditable"
+                    (click)="makeTitleNonEditable()"></mat-icon>
+        </div>
+
+        <div class="workout-info">
+          <div class="tags s-text card-padding-top">
+            <div class="tag" *ngFor="let tag of workoutHistory?.tags"
+                 (click)="openTagsModal()">{{ tag.name }}
+            </div>
+            <div *ngIf="!workoutHistory?.tags || workoutHistory!.tags.length === 0" class="add-tag"
+                 (click)="openTagsModal()">Add tags
+            </div>
+          </div>
+        </div>
+        <div class="section-margin-top exercises"
+             cdkDropList cdkDropListAutoScroll
+             (cdkDropListDropped)="drop($event)">
+          <div class="exercise"
+               *ngFor="let exercise of workoutHistory?.exercises"
+               (cdkDragEnded)="onDragEnded()"
+               [cdkDragDisabled]="!dragStarted"
+               cdkDrag
+               cdkDragLockAxis="y"
+               cdkDragBoundary=".exercises">
+            <div class="exercise-info" cdkDragHandle [class.exercise-info-draggable]="dragStarted">
+              <div class="exercise-header">
+                <div class="exercise-image secondary-background"></div>
+              </div>
+              <div class="exercise-body">
+                <div class="upper-section">
+                  <div class="m-text semi-bold">{{ exercise.name }}</div>
+                  <app-action-button *ngIf="deleteSetModeForExercise !== exercise" icon='two-dots'
+                                     iconClasses="xs-svg-icon"
+                                     (click)="openExerciseMenu($event, exercise)"></app-action-button>
+                  <app-action-button *ngIf="deleteSetModeForExercise === exercise" icon='undo'
+                                     iconClasses="s-svg-icon primary"
+                                     (click)="resetSetDelete()"></app-action-button>
+                </div>
+                <div class=" lower-section gray-1-color s-text">
+                  <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
+                  <div class="pr-set" *ngIf="exercise.prSet">
+                    <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
+                    <div>
+                      {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="exercise-sets s-text" *ngIf="!dragStarted" [@collapse] [@.disabled]="!setsAnimationEnabled">
+              <div class="table-row semi-bold" [ngClass]="{'error-text': isInvalidated && exercise.sets.length === 0}">
+                <div class="table-cell set">Set</div>
+                <div class="table-cell previous">Previous</div>
+                <div class="table-cell kg">Weight</div>
+                <div class="table-cell reps">Reps</div>
+                <div class="table-cell action">
+                  <mat-icon *ngIf="deleteSetModeForExercise !== exercise" svgIcon="check" class="s-svg-icon"></mat-icon>
+                </div>
+
+              </div>
+              <div class="table-row" *ngFor="let set of exercise.sets; index as i">
+                <div class="table-cell set" [class.completed-table-cell]="set.completed">
+                  <div class="set-sell">{{ i + 1 }}</div>
+                </div>
+                <div class="table-cell previous" [class.completed-table-cell]="set.completed">
+              <span *ngIf="set.previousReps">{{ set.previousWeight ? set.previousWeight : '0' }}
+                kg * {{ set.previousReps }}</span>
+                  <span *ngIf="!set.previousReps">-</span>
+                </div>
+                <div class="table-cell kg">
+                  <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
+                         [placeholder]="set.previousWeight ? set.previousWeight : 0"
+                         (blur)="updateSetWeight(set, $event)">
+                </div>
+                <div class="table-cell reps">
+                  <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
+                         [placeholder]="set.previousReps ? set.previousReps : 0"
+                         (blur)="updateSetReps(set, $event)">
+                </div>
+                <div class="table-cell action">
+                  <div *ngIf="deleteSetModeForExercise !== exercise" class="clickable action-icon-container">
+                    <mat-icon svgIcon="check" class="gray-1-color action-icon"
+                              [class.complete-set-action-icon]="set.completed" (click)="completeSet(set)"></mat-icon>
+                  </div>
+                  <div *ngIf="deleteSetModeForExercise === exercise" class="clickable action-icon-container">
+                    <mat-icon svgIcon="delete-2" class="gray-1-color action-icon delete-icon"
+                              (click)="deleteSet(set, i, exercise)"></mat-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="add-new-set semi-bold" (click)="addSet(exercise)">Add set</div>
+            </div>
+          </div>
+
+          <div class="add-new-exercise m-text semi-bold primary-background" (click)="addExercise()">Add exercise</div>
+        </div>
+      </div>
+
+      <app-tags-modal
+        #editWorkoutTagsModal
+        [workoutTags]="workoutHistory?.tags"
+        (closeModal)="onTagsModalClosed()">
+      </app-tags-modal>
+
+      <app-context-menu #exerciseMenu [menuItems]="exerciseMenuItems"></app-context-menu>
+      <app-context-menu #workoutMenu [menuItems]="workoutMenuItems"></app-context-menu>
+
+      <app-confirmation-modal
+        #deleteSetConfirmationModal
+        [header]="'Delete set?'"
+        (confirmed)="onDeleteSetConfirmed($event)"
+      ></app-confirmation-modal>
+
+      <app-confirmation-modal
+        #deleteExerciseConfirmationModal
+        [header]="'Delete exercise?'"
+        (confirmed)="onDeleteExerciseConfirmed($event)"
+      ></app-confirmation-modal>
+
+      <app-confirmation-modal
+        #replaceExerciseConfirmationModal
+        [header]="'Replace exercise?'"
+        (confirmed)="onReplaceExerciseConfirmed($event)"
+      ></app-confirmation-modal>
+
+      <app-exercises
+        #exercisesModal
+        (exercisesSelected)="onAddExercisesSelected($event)"
+        (exerciseReplaceSelected)="onReplaceExerciseSelected($event)">
+      </app-exercises>
+    </div>
 
   </div>
+
+  <app-context-menu #workoutContainerMenu [menuItems]="workoutContainerMenuItems"></app-context-menu>
+
 </div>
