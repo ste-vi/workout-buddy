@@ -245,9 +245,9 @@ export class WorkoutHistoryDetailsComponent {
       action: () => this.addExercise(),
     },
     {
-      label: 'Adjust start and end time',
+      label: 'Adjust time',
       icon: 'stopwatch',
-      action: () => this.addExercise(),
+      action: () => this.adjustTime(),
     },
   ];
 
@@ -453,4 +453,6 @@ export class WorkoutHistoryDetailsComponent {
     }
     this.exerciseToDelete = undefined;
   }
+
+  private adjustTime() {}
 }

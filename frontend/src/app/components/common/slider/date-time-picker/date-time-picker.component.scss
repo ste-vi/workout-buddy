@@ -1,0 +1,46 @@
+.date-time-picker {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  min-width: 100px;
+  gap: 0.5rem;
+
+  .slider-container {
+    display: flex;
+    min-width: 100px;
+    height: 140px;
+
+    .keen-slider {
+      max-width: 200px;
+      min-width: 70px;
+      cursor: grab;
+
+      .keen-slider__slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &.selected {
+          color: var(--primary-1);
+          font-weight: bold;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .year-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    span {
+      width: 9rem;
+      text-align: center;
+    }
+  }
+}

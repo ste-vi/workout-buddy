@@ -1,0 +1,28 @@
+<div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="workout-time-selector" *ngIf="isOpen" [@dialogOpenClose]>
+  <div class="selector-header s-text semi-bold black-color">
+    <div class="not-visible">Done</div>
+    <div>Adjust Time</div>
+    <div class="clickable primary" (click)="close()">Done</div>
+  </div>
+  <div class="selector-body s-text">
+    <div class="flex-space-between">
+      <span>Duration</span>
+      <span class="gray-1-color">{{ getDuration() }}</span>
+    </div>
+    <div class="flex-space-between clickable" (click)="toggleDateTimePicker('start')">
+      <span>Start time</span>
+      <span class="primary">{{ startTime | date:'dd.MM.yyyy HH:mm' }}</span>
+    </div>
+    <div *ngIf="activeTimePicker === 'start'">
+      <app-date-time-picker (dateTimeChange)="onStartTimeChange($event)"></app-date-time-picker>
+    </div>
+    <div class="flex-space-between clickable" (click)="toggleDateTimePicker('end')">
+      <span>End time</span>
+      <span class="primary">{{ endTime | date:'dd.MM.yyyy HH:mm' }}</span>
+    </div>
+    <div *ngIf="activeTimePicker === 'end'">
+      <app-date-time-picker (dateTimeChange)="onEndTimeChange($event)"></app-date-time-picker>
+    </div>
+  </div>
+</div>

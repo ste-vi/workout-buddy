@@ -6,6 +6,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {NavbarComponent} from "./components/common/navbar/navbar.component";
 import {WorkoutHistoryDetailsComponent} from "./components/workout-history-details/workout-history-details.component";
+import 'keen-slider/keen-slider.min.css';
 
 @Component({
   selector: 'app-root',

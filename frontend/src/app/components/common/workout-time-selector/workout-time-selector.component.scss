@@ -1,0 +1,38 @@
+.workout-time-selector {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 20rem;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  gap: var(--m-size);
+  padding: var(--m-size) var(--m-size);
+
+  .selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .selector-body {
+    width: 100%;
+
+
+  }
+
+  .flex-space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
