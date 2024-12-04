@@ -10,7 +10,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { DatePipe, NgClass, NgForOf, NgStyle } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import KeenSlider, { KeenSliderInstance, KeenSliderOptions } from 'keen-slider';
 import 'keen-slider/keen-slider.min.css';
@@ -28,7 +28,7 @@ type SliderKey = 'days' | 'months' | 'hours' | 'minutes';
   templateUrl: './date-time-picker.component.html',
   standalone: true,
   styleUrls: ['./date-time-picker.component.scss'],
-  imports: [NgClass, DatePipe, NgForOf, NgStyle, FormsModule, MatIcon],
+  imports: [NgForOf, FormsModule, MatIcon],
 })
 export class DateTimePickerComponent
   implements AfterViewInit, OnDestroy, OnInit

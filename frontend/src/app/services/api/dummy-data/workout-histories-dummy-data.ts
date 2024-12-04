@@ -45,7 +45,6 @@ export const workout: Workout[] = [
   new Workout(
     1,
     'Bodyweight Training',
-    new Date('2024-10-08'),
     new Date('2024-10-08T09:00:00'),
     new Date('2024-10-08T09:30:00'),
     10,
@@ -58,7 +57,6 @@ export const workout: Workout[] = [
   new Workout(
     2,
     'Cardio Workout',
-    new Date('2024-09-29'),
     new Date('2024-09-29T15:00:00'),
     new Date('2024-09-29T15:45:00'),
     5,
@@ -71,7 +69,6 @@ export const workout: Workout[] = [
   new Workout(
     3,
     'Strength Training',
-    new Date('2024-09-27'),
     new Date('2024-09-27T18:00:00'),
     new Date('2024-09-27T19:00:00'),
     15,
@@ -84,7 +81,6 @@ export const workout: Workout[] = [
   new Workout(
     4,
     'Yoga Session',
-    new Date('2024-09-12'),
     new Date('2024-09-12T07:00:00'),
     new Date('2024-09-12T08:15:00'),
     0,
@@ -97,7 +93,6 @@ export const workout: Workout[] = [
   new Workout(
     5,
     'HIIT Workout',
-    new Date('2024-09-13'),
     new Date('2024-09-13T12:00:00'),
     new Date('2024-09-13T12:25:00'),
     8,
@@ -110,7 +105,6 @@ export const workout: Workout[] = [
   new Workout(
     6,
     'Upper Body Focus',
-    new Date('2024-09-14'),
     new Date('2024-09-14T16:00:00'),
     new Date('2024-09-14T16:50:00'),
     12,
@@ -123,7 +117,6 @@ export const workout: Workout[] = [
   new Workout(
     7,
     'Lower Body Workout',
-    new Date('2024-10-01'),
     new Date('2024-10-01T17:00:00'),
     new Date('2024-10-01T17:55:00'),
     14,
@@ -136,7 +129,6 @@ export const workout: Workout[] = [
   new Workout(
     8,
     'Core Strength',
-    new Date('2024-10-02'),
     new Date('2024-10-02T19:00:00'),
     new Date('2024-10-02T19:40:00'),
     10,
@@ -149,7 +141,6 @@ export const workout: Workout[] = [
   new Workout(
     9,
     'Pilates Class',
-    new Date('2024-10-03'),
     new Date('2024-10-03T08:00:00'),
     new Date('2024-10-03T09:00:00'),
     0,
@@ -162,7 +153,6 @@ export const workout: Workout[] = [
   new Workout(
     10,
     'CrossFit WOD',
-    new Date('2024-09-18'),
     new Date('2024-09-18T06:00:00'),
     new Date('2024-09-18T06:35:00'),
     5,
@@ -175,7 +165,6 @@ export const workout: Workout[] = [
   new Workout(
     11,
     'Swimming Laps',
-    new Date('2024-09-19'),
     new Date('2024-09-19T20:00:00'),
     new Date('2024-09-19T20:45:00'),
     0,
@@ -188,7 +177,6 @@ export const workout: Workout[] = [
   new Workout(
     12,
     'Full Body Workout',
-    new Date('2024-09-20'),
     new Date('2024-09-20T17:00:00'),
     new Date('2024-09-20T18:10:00'),
     18,
@@ -201,7 +189,6 @@ export const workout: Workout[] = [
   new Workout(
     13,
     'Full Body Workout August',
-    new Date('2024-08-12'),
     new Date('2024-08-12T18:00:00'),
     new Date('2024-08-12T19:10:00'),
     18,
@@ -214,7 +201,6 @@ export const workout: Workout[] = [
   new Workout(
     14,
     'Full Body Workout October',
-    new Date('2024-10-12'),
     new Date('2024-10-12T16:00:00'),
     new Date('2024-10-12T17:10:00'),
     18,

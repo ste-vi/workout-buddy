@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+
   width: 100%;
   min-width: 100px;
   gap: 0.5rem;
@@ -11,7 +12,7 @@
   .slider-container {
     display: flex;
     min-width: 100px;
-    height: 140px;
+    height: 8rem;
 
     .keen-slider {
       max-width: 200px;
@@ -39,7 +40,7 @@
     gap: 1rem;
 
     span {
-      width: 9rem;
+      width: 7rem;
       text-align: center;
     }
   }

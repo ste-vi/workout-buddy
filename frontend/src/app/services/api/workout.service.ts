@@ -15,7 +15,6 @@ export class WorkoutService {
     const newWorkout = new Workout(
       Math.floor(Math.random() * 100000),
       template.title,
-      new Date(),
       new Date(), // startTime
       new Date(), // endTime (you might want to set this later)
       0, // totalSets
@@ -23,7 +22,7 @@ export class WorkoutService {
       0, // totalWeight
       template.exercises.length,
       template.tags,
-      template.exercises
+      template.exercises,
     );
 
     return of(newWorkout);
@@ -52,8 +51,8 @@ export class WorkoutService {
   ): Observable<PageResponse<Workout>> {
     const filteredWorkoutHistory = workout.filter(
       (workout) =>
-        (!dateFrom || workout.date >= dateFrom) &&
-        (!dateTo || workout.date <= dateTo) &&
+        (!dateFrom || workout.startTime >= dateFrom) &&
+        (!dateTo || workout.startTime <= dateTo) &&
         (!searchQuery ||
           workout.title.toLowerCase().includes(searchQuery.toLowerCase())),
     );

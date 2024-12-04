@@ -1,12 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  DatePipe,
-  NgClass,
-  NgForOf,
-  NgIf,
-  NgSwitch,
-  NgSwitchCase,
-} from '@angular/common';
+import { DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { WorkoutHistoryDetailsService } from '../../services/communication/workout-history-details.service';
 import {
@@ -18,7 +11,6 @@ import { fadeInOut } from '../../animations/fade-in-out';
 import { FormsModule } from '@angular/forms';
 import { ActionButtonComponent } from '../common/action-button/action-button.component';
 import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
-import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import {
   CdkDrag,
   CdkDragDrop,
@@ -35,6 +27,7 @@ import { ConfirmationModalComponent } from '../common/confirmation-modal/confirm
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
 import { collapse } from '../../animations/collapse';
 import { Workout } from '../../models/workout';
+import { WorkoutTimeSelectorComponent } from '../common/workout-time-selector/workout-time-selector.component';
 
 @Component({
   selector: 'app-workout-history-details',
@@ -47,18 +40,16 @@ import { Workout } from '../../models/workout';
     ActionButtonComponent,
     NgForOf,
     TagsModalComponent,
-    TimeAgoPipe,
     CdkDrag,
     CdkDragHandle,
     MatIcon,
     NgClass,
     CdkDropList,
-    NgSwitch,
-    NgSwitchCase,
     ToastComponent,
     ConfirmationModalComponent,
     SearchExercisesComponent,
     DatePipe,
+    WorkoutTimeSelectorComponent,
   ],
   templateUrl: './workout-history-details.component.html',
   styleUrl: './workout-history-details.component.scss',
@@ -70,6 +61,7 @@ export class WorkoutHistoryDetailsComponent {
   protected isEditView: boolean = false;
 
   protected isInvalidated: boolean = false;
+  protected openedAdjustWorkoutTime: boolean = false;
 
   protected dragStarted: boolean = false;
   protected setsAnimationEnabled: boolean = false;
@@ -454,5 +446,13 @@ export class WorkoutHistoryDetailsComponent {
     this.exerciseToDelete = undefined;
   }
 
-  private adjustTime() {}
+  private adjustTime() {
+    this.openedAdjustWorkoutTime = true;
+  }
+
+  onWorkoutTimeChange(event: { startTime: Date; endTime: Date }) {
+    this.workout.startTime = event.startTime;
+    this.workout.endTime = event.endTime;
+    this.openedAdjustWorkoutTime = false;
+  }
 }

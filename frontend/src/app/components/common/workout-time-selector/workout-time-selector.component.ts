@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DatePipe, NgIf } from '@angular/common';
 import { DateTimePickerComponent } from '../slider/date-time-picker/date-time-picker.component';
-import {fadeInOut} from "../../../animations/fade-in-out";
-import {sideModalOpenClose} from "../../../animations/side-modal-open-close";
-import {dialogOpenClose} from "../../../animations/dialog-open-close";
+import { fadeInOut } from '../../../animations/fade-in-out';
+import { dialogOpenClose } from '../../../animations/dialog-open-close';
+
+
 
 @Component({
   selector: 'app-workout-time-selector',
@@ -14,15 +15,13 @@ import {dialogOpenClose} from "../../../animations/dialog-open-close";
   animations: [fadeInOut, dialogOpenClose],
 })
 export class WorkoutTimeSelectorComponent implements OnInit {
-  isOpen: boolean = true;
-  startTime: Date;
-  endTime: Date;
+  @Input() isOpen: boolean = false;
+  @Input() startTime: Date = new Date();
+  @Input() endTime: Date = new Date(this.startTime.getTime() + 60 * 60 * 1000);
+  @Output() timeRangeChange = new EventEmitter<{ startTime: Date, endTime: Date }>();
   activeTimePicker: 'start' | 'end' | null = null;
 
-  constructor() {
-    this.startTime = new Date();
-    this.endTime = new Date(this.startTime.getTime() + 60 * 60 * 1000); // Default to 1 hour later
-  }
+  constructor() {}
 
   ngOnInit(): void {
     // Any initialization logic
@@ -55,6 +54,7 @@ export class WorkoutTimeSelectorComponent implements OnInit {
   close(): void {
     this.isOpen = false;
     this.activeTimePicker = null;
+    this.timeRangeChange.emit({ startTime: this.startTime, endTime: this.endTime });
   }
 
   open(): void {

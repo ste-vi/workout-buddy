@@ -26,7 +26,7 @@
         </div>
 
         <div class="s-text gray-1-color">
-          {{ workout.date | date:'dd-MM-yyyy' }} | {{ workout.totalExercises }} exercises | {{ workout.totalSets }} sets
+          {{ workout.startTime | date:'dd-MM-yyyy' }} | {{ workout.totalExercises }} exercises | {{ workout.totalSets }} sets
         </div>
 
         <div class="tags s-text card-padding-top">
@@ -144,7 +144,7 @@
         </div>
 
         <div class="s-text gray-1-color">
-          {{ workout.date | date:'dd-MM-yyyy' }} | {{ workout.getDuration() + ' min' }}
+          {{ workout.startTime | date:'dd-MM-yyyy' }} | {{ workout.getDuration() + ' min' }}
         </div>
 
         <div class="workout-info">
@@ -276,6 +276,10 @@
       </app-exercises>
     </div>
 
+    <app-workout-time-selector [isOpen]="openedAdjustWorkoutTime"
+                               [startTime]="workout.startTime"
+                               [endTime]="workout.endTime"
+                               (timeRangeChange)="onWorkoutTimeChange($event)"></app-workout-time-selector>
   </div>
 
   <app-context-menu #workoutContainerMenu [menuItems]="workoutContainerMenuItems"></app-context-menu>

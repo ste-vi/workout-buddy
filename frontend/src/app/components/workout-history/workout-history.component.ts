@@ -131,7 +131,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     this.groupedWorkoutHistory = new Map();
 
     this.workout.forEach((history) => {
-      const date = new Date(history.date);
+      const date = new Date(history.startTime);
       const monthYear = date.toLocaleString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -146,7 +146,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
 
     this.groupedWorkoutHistory.forEach((histories) => {
       histories.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        (a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
       );
     });
 
@@ -179,9 +179,9 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
 
     this.currentDayWorkoutHistory = this.workout.filter(
       (history) =>
-        history.date.getFullYear() === this.currentMonth.getFullYear() &&
-        history.date.getMonth() === this.currentMonth.getMonth() &&
-        history.date.getDate() === date,
+        history.startTime.getFullYear() === this.currentMonth.getFullYear() &&
+        history.startTime.getMonth() === this.currentMonth.getMonth() &&
+        history.startTime.getDate() === date,
     );
   }
 

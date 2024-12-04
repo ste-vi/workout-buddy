@@ -2,22 +2,22 @@
   <div class="slider-container s-text gray-1-color">
     <div #daysSlider class="keen-slider">
       <div *ngFor="let day of days.values; let i = index" class="keen-slider__slide"
-           [class.selected]="sliders?.days?.track?.details?.rel === i">{{ day }}
+           [class.selected]="sliders.days?.track?.details?.rel === i">{{ day }}
       </div>
     </div>
     <div #monthsSlider class="keen-slider">
       <div *ngFor="let month of months.values; let i = index" class="keen-slider__slide"
-           [class.selected]="sliders?.months?.track?.details?.rel === i">{{ month }}
+           [class.selected]="sliders.months?.track?.details?.rel === i">{{ month }}
       </div>
     </div>
     <div #hoursSlider class="keen-slider">
       <div *ngFor="let hour of hours.values; let i = index" class="keen-slider__slide"
-           [class.selected]="sliders?.hours?.track?.details?.rel === i">{{ hour }}
+           [class.selected]="sliders.hours?.track?.details?.rel === i">{{ hour }}
       </div>
     </div>
     <div #minutesSlider class="keen-slider">
       <div *ngFor="let minute of minutes.values; let i = index" class="keen-slider__slide"
-           [class.selected]="sliders?.minutes?.track?.details?.rel === i">{{ minute }}
+           [class.selected]="sliders.minutes?.track?.details?.rel === i">{{ minute }}
       </div>
     </div>
   </div>
