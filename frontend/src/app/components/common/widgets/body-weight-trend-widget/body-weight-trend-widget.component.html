@@ -1,0 +1,29 @@
+<div class="card-shadow weight-card">
+  <div class="weight-card-header">
+    <div class="current-weight s-text">
+      <span>Weight : </span>
+      <span class="semi-bold primary">100 kg</span>
+    </div>
+    <div class="actions caption gray-1-color">
+      <div class="clickable primary-2">Track</div>
+      <div class="clickable">History</div>
+    </div>
+  </div>
+  <div class="weight-trend-area-chart">
+    <ngx-charts-area-chart
+      [scheme]="colorScheme"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [animations]="true"
+      [xAxis]="true"
+      [yAxis]="true"
+      [showGridLines]="false"
+      [xAxisTickFormatting]="xAxisTickFormatting"
+      [yAxisTickFormatting]="yAxisTickFormatting"
+      [gradient]="false"
+      [curve]="curve"
+      [yScaleMin]="minYValue"
+      [results]="dataset">
+    </ngx-charts-area-chart>
+  </div>
+</div>
