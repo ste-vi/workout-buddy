@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MediumButtonComponent } from '../medium-button/medium-button.component';
 import { NgIf } from '@angular/common';
-import { dialogOpenClose } from '../../../animations/dialog-open-close';
-import { fadeInOut } from '../../../animations/fade-in-out';
+import {MediumButtonComponent} from "../../medium-button/medium-button.component";
+import {dialogOpenClose} from "../../../../animations/dialog-open-close";
+import {fadeInOut} from "../../../../animations/fade-in-out";
 
 @Component({
   selector: 'app-confirmation-modal',

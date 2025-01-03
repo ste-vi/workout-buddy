@@ -1,33 +1,27 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
-import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import {
   CdkDrag,
   CdkDragDrop,
   CdkDragHandle,
-  CdkDragPlaceholder,
-  CdkDragPreview,
   CdkDropList,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import {
   ContextMenuComponent,
   MenuItem,
 } from '../common/context-menu/context-menu.component';
 import { Exercise } from '../../models/exercise';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { ProgressBarComponent } from '../common/progress-bar/progress-bar.component';
-import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import { collapse } from '../../animations/collapse';
 import { WorkoutService } from '../../services/api/workout.service';
 import { Workout } from '../../models/workout';
 import { WorkoutTemplate } from '../../models/workout-template';
-import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
+import { TagsModalComponent } from '../common/modal/tags-modal/tags-modal.component';
 import { Sets } from '../../models/set';
 import { SetService } from '../../services/api/set-service';
 import { TagService } from '../../services/api/tag.service';
@@ -49,18 +43,7 @@ import { ActionButtonComponent } from '../common/action-button/action-button.com
     CdkDrag,
     CdkDropList,
     CdkDragHandle,
-    CdkDragPreview,
-    CdkDragPlaceholder,
-    CdkScrollable,
-    MatMenu,
-    MatMenuItem,
-    MatMenuTrigger,
-    CdkMenuTrigger,
-    CdkMenuItem,
-    CdkMenu,
     ContextMenuComponent,
-    MatProgressBar,
-    NgStyle,
     ProgressBarComponent,
     ConfirmationModalComponent,
     TagsModalComponent,

@@ -8,6 +8,7 @@
 
 :root {
   // colors
+  --background: #eaeef8;
   --primary-1: #92A3FD;
   --primary-2: #9DCEFF;
   --secondary-1: #C58BF2;
@@ -45,7 +46,7 @@ html, body {
   font-family: 'Poppins', sans-serif;
   max-width: 1024px;
   margin: 0 auto;
-  background-color: #eaeef8;
+  background-color: var(--background);
 }
 
 body {

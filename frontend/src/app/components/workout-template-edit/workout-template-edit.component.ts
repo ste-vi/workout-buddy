@@ -22,10 +22,10 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { MatIcon } from '@angular/material/icon';
-import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
+import { TagsModalComponent } from '../common/modal/tags-modal/tags-modal.component';
 import { collapse } from '../../animations/collapse';
 import { Sets } from '../../models/set';
-import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import {
   ContextMenuComponent,
   MenuItem,

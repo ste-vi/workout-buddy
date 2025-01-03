@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MediumButtonComponent } from '../medium-button/medium-button.component';
+import { MediumButtonComponent } from '../../medium-button/medium-button.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { Tag } from '../../../models/tag';
-import { dialogOpenClose } from '../../../animations/dialog-open-close';
-import { fadeInOut } from '../../../animations/fade-in-out';
-import { collapse } from '../../../animations/collapse';
-import { TagService } from '../../../services/api/tag.service';
-import { deleteFromArray } from '../../../utils/array-utils';
+import { Tag } from '../../../../models/tag';
+import { dialogOpenClose } from '../../../../animations/dialog-open-close';
+import { fadeInOut } from '../../../../animations/fade-in-out';
+import { collapse } from '../../../../animations/collapse';
+import { TagService } from '../../../../services/api/tag.service';
+import { deleteFromArray } from '../../../../utils/array-utils';
 
 @Component({
   selector: 'app-tags-modal',

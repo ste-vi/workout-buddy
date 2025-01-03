@@ -7,8 +7,12 @@ import {
 } from '@swimlane/ngx-charts';
 import * as shape from 'd3-shape';
 import { BodyWeightService } from '../../../../services/api/body-weight.service';
+import { BodyWeightMeasuresService } from '../../../../services/communication/body-weight-measures.service';
+import {BodyWeightMeasuresComponent} from "../../../body-weight-measures/body-weight-measures.component";
+import {NgIf} from "@angular/common";
+import {BodyWeightMeasure} from "../../../../models/body-weight-measure";
 
-interface ChartDataSet {
+export interface ChartDataSet {
   name: string;
   series: DataItem[];
 }
@@ -16,17 +20,20 @@ interface ChartDataSet {
 @Component({
   selector: 'app-weight-trend-widget',
   standalone: true,
-  imports: [AreaChartModule],
+  imports: [AreaChartModule, BodyWeightMeasuresComponent, NgIf],
   templateUrl: './body-weight-trend-widget.component.html',
   styleUrl: './body-weight-trend-widget.component.scss',
 })
 export class BodyWeightTrendWidgetComponent implements OnInit {
-  readonly curve = shape.curveMonotoneX;
+  readonly curve = shape.curveBasis;
   dataset: ChartDataSet[] = [];
   series: DataItem[] = [];
   minYValue = 40;
 
-  constructor(private bodyWeightService: BodyWeightService) {}
+  constructor(
+    private bodyWeightService: BodyWeightService,
+    private bodyWeightMeasuresService: BodyWeightMeasuresService,
+  ) {}
 
   ngOnInit(): void {
     this.bodyWeightService
@@ -41,7 +48,7 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
       });
   }
 
-  private updateChartData(measures: { date: Date; value: number }[]): void {
+  private updateChartData(measures: BodyWeightMeasure[]): void {
     this.series = measures.map((measure) => ({
       name: measure.date.toISOString(),
       value: measure.value,
@@ -64,7 +71,7 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
   colorScheme: Color = {
     name: 'myScheme',
     selectable: true,
-    group: ScaleType.Linear,
+    group: ScaleType.Time,
     domain: ['#92A3FD'],
   };
 
@@ -79,4 +86,8 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
   yAxisTickFormatting = (value: number): string => {
     return `${value} kg`;
   };
+
+  openBodyWeightMeasuresPage() {
+    this.bodyWeightMeasuresService.openModal();
+  }
 }

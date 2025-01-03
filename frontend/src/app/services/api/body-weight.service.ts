@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { WorkoutTemplate } from '../../models/workout-template';
 import { Observable, of } from 'rxjs';
-import { Workout } from '../../models/workout';
-import { PageResponse } from '../../models/page-response';
-import { workout } from './dummy-data/workout-histories-dummy-data';
 import { BodyWeightMeasure } from '../../models/body-weight-measure';
+import { PageResponse } from '../../models/page-response';
+import { bodyWightMeasures } from './dummy-data/body-weight-dummy-data';
+import {SortOrder} from "../../models/sort-order";
 
 @Injectable({
   providedIn: 'root',
@@ -38,4 +37,42 @@ export class BodyWeightService {
 
     return of(measures);
   }
+
+  searchBodyWeightMeasures(
+    page: number,
+    size: number,
+    dateFrom: Date,
+    dateTo: Date,
+    sortOrder: SortOrder
+  ): Observable<PageResponse<BodyWeightMeasure>> {
+    const start = page * size;
+    const end = start + size;
+
+    let filteredBodyWightMeasures = bodyWightMeasures;
+
+    if (dateFrom && dateTo) {
+      filteredBodyWightMeasures = filteredBodyWightMeasures.filter(
+        (measure) => measure.date >= dateFrom && measure.date <= dateTo,
+      );
+    }
+
+    filteredBodyWightMeasures = filteredBodyWightMeasures.sort((a, b) =>
+      sortOrder === 'asc'
+        ? new Date(a.date).getTime() - new Date(b.date).getTime() // Ascending order
+        : new Date(b.date).getTime() - new Date(a.date).getTime() // Descending order
+    );
+
+    const paginatedExercises = filteredBodyWightMeasures.slice(start, end);
+
+    return of({
+      content: paginatedExercises,
+      pageNumber: page,
+      pageSize: size,
+      totalPages: Math.ceil(filteredBodyWightMeasures.length / size),
+      totalElements: filteredBodyWightMeasures.length,
+      last: end >= filteredBodyWightMeasures.length,
+    });
+  }
+
+
 }

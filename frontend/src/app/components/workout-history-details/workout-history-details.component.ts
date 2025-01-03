@@ -10,7 +10,7 @@ import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { FormsModule } from '@angular/forms';
 import { ActionButtonComponent } from '../common/action-button/action-button.component';
-import { TagsModalComponent } from '../common/tags-modal/tags-modal.component';
+import { TagsModalComponent } from '../common/modal/tags-modal/tags-modal.component';
 import {
   CdkDrag,
   CdkDragDrop,
@@ -23,7 +23,7 @@ import { Exercise } from '../../models/exercise';
 import { Sets } from '../../models/set';
 import { ToastComponent } from '../common/toast/toast.component';
 import { replaceItemInArray } from '../../utils/array-utils';
-import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
 import { collapse } from '../../animations/collapse';
 import { Workout } from '../../models/workout';

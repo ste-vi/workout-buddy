@@ -1,0 +1,73 @@
+<div class="page-mask" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="body-weight-measures-container right-modal black-color" *ngIf="isOpen" [@sideModalOpenClose]
+     (swiperight)="onSwipeRight()">
+  <div class="body-weight-measures-container-header">
+    <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
+    <b class="m-text semi-bold">Body weight : <span class="">100 kg</span></b>
+    <app-header-button [text]="'Add'" class="s-text gray-1-color primary"
+                       (click)="addWeightMeasure()"></app-header-button>
+  </div>
+
+  <div class="body-weight-trend-area-chart" *ngIf="series.length > 1">
+    <ngx-charts-area-chart
+      [scheme]="colorScheme"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [animations]="true"
+      [xAxis]="true"
+      [yAxis]="true"
+      [showGridLines]="false"
+      [xAxisTickFormatting]="xAxisTickFormatting"
+      [yAxisTickFormatting]="yAxisTickFormatting"
+      [gradient]="false"
+      [curve]="curve"
+      [yScaleMin]="minYValue"
+      [results]="dataset"
+      style="fill: white;">>
+    </ngx-charts-area-chart>
+  </div>
+
+  <div class="body-weight-measures-container-body" infiniteScroll [infiniteScrollDistance]="2"
+       [infiniteScrollThrottle]="150"
+       [scrollWindow]="false" (scrolled)="loadMore()">
+    <table class="responsive-table m-text">
+      <thead>
+      <tr class="black-color">
+        <th class="semi-bold">Date</th>
+        <th class="semi-bold">Value</th>
+      </tr>
+      </thead>
+
+      <tbody class="gray-1-color">
+      <tr *ngFor="let measure of measures; let i = index" [@collapseEnter]>
+        <td>{{ measure.date | date: 'd MMMM y' }}</td>
+        <td>
+          {{ measure.value }} kg
+          <ng-container *ngIf="sortOrder === SortOrder.ASC && i > 0">
+            <mat-icon
+              *ngIf="compareValues(measure.value, measures[i - 1].value) === 'greater'"
+              svgIcon="up-arrow" class="status-icon" title="Heavier than previous">
+            </mat-icon>
+            <mat-icon
+              *ngIf="compareValues(measure.value, measures[i - 1].value) === 'less'"
+              svgIcon="down-arrow" class="status-icon" title="Lighter than previous">
+            </mat-icon>
+            <div *ngIf="compareValues(measure.value, measures[i - 1].value) === 'equal'">-</div>
+          </ng-container>
+          <ng-container *ngIf="sortOrder === SortOrder.DESC && i < measures.length - 1">
+            <mat-icon
+              *ngIf="compareValues(measure.value, measures[i + 1].value) === 'greater'"
+              svgIcon="up-arrow" class="status-icon" title="Heavier than previous">
+            </mat-icon>
+            <mat-icon
+              *ngIf="compareValues(measure.value, measures[i + 1].value) === 'less'"
+              svgIcon="down-arrow" class="status-icon" title="Lighter than previous">
+            </mat-icon>
+            <div *ngIf="compareValues(measure.value, measures[i + 1].value) === 'equal'">-</div>
+          </ng-container>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
