@@ -5,7 +5,7 @@ export const bodyWightMeasures: BodyWeightMeasure[] = Array.from(
   (_, index) => ({
     id: index,
     date: new Date(
-      2024,
+      2025,
       Math.floor(Math.random() * 2),
       Math.floor(Math.random() * 28) + 1,
     ),
