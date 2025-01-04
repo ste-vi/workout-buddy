@@ -1,1 +1,46 @@
-<p>update-weight-modal works!</p>
+<div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="update-weight-modal black-color" *ngIf="isOpen" [@dialogOpenClose]>
+  <div class="update-weight-modal-header l-text semi-bold">
+    {{ isEditMode ? 'Update measure' : 'Add measure' }}
+  </div>
+  <div class="update-weight-modal-body s-text">
+
+    <div class="weight-input">
+      <div class="input-wrapper">
+        <input [placeholder]="lastWeight"
+               [(ngModel)]="weight"
+               inputmode="numeric"
+               required
+               type="number"
+               min="40"
+               max="150">
+        <span class="unit">kg</span>
+      </div>
+    </div>
+
+    <div *ngIf="isEditMode">
+      <div class="flex-space-between clickable" (click)="toggleDatePicker()">
+        <span>Weight time</span>
+        <span class="primary">{{ bodyWeightMeasure?.date! | date:'dd.MM.yyyy' }}</span>
+      </div>
+      <div *ngIf="activeDatePicker">
+        <div [@collapse]>
+          <app-date-time-picker [initialDateTime]="bodyWeightMeasure?.date!" [showTime]="false"
+                                (dateTimeChange)="onDateChange($event)"></app-date-time-picker>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="update-weight-modal-footer">
+    <app-medium-button name="Confirm"
+                       [classes]="['primary-background', 'black-color']"
+                       [textClasses]="['white-color', 'semi-bold']"
+                       (click)="confirm()"></app-medium-button>
+    <app-medium-button name="Cancel"
+                       [classes]="['white-background', 'black-color']"
+                       [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                       (click)="close()"></app-medium-button>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { DatePipe, NgIf } from '@angular/common';
 import { DateTimePickerComponent } from '../slider/date-time-picker/date-time-picker.component';
 import { fadeInOut } from '../../../animations/fade-in-out';
 import { dialogOpenClose } from '../../../animations/dialog-open-close';
+import {collapse} from "../../../animations/collapse";
 
 
 
@@ -12,7 +13,7 @@ import { dialogOpenClose } from '../../../animations/dialog-open-close';
   standalone: true,
   styleUrls: ['./workout-time-selector.component.scss'],
   imports: [DatePipe, NgIf, DateTimePickerComponent],
-  animations: [fadeInOut, dialogOpenClose],
+  animations: [fadeInOut, dialogOpenClose, collapse],
 })
 export class WorkoutTimeSelectorComponent implements OnInit {
   @Input() isOpen: boolean = false;

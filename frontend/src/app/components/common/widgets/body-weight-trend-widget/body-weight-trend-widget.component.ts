@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {
   AreaChartModule,
   Color,
@@ -11,6 +11,8 @@ import { BodyWeightMeasuresService } from '../../../../services/communication/bo
 import {BodyWeightMeasuresComponent} from "../../../body-weight-measures/body-weight-measures.component";
 import {NgIf} from "@angular/common";
 import {BodyWeightMeasure} from "../../../../models/body-weight-measure";
+import {UpdateWeightModalComponent} from "../../modal/update-weight-modal/update-weight-modal.component";
+import {TagsModalComponent} from "../../modal/tags-modal/tags-modal.component";
 
 export interface ChartDataSet {
   name: string;
@@ -20,15 +22,24 @@ export interface ChartDataSet {
 @Component({
   selector: 'app-weight-trend-widget',
   standalone: true,
-  imports: [AreaChartModule, BodyWeightMeasuresComponent, NgIf],
+  imports: [
+    AreaChartModule,
+    BodyWeightMeasuresComponent,
+    NgIf,
+    UpdateWeightModalComponent,
+  ],
   templateUrl: './body-weight-trend-widget.component.html',
   styleUrl: './body-weight-trend-widget.component.scss',
 })
 export class BodyWeightTrendWidgetComponent implements OnInit {
-  readonly curve = shape.curveBasis;
-  dataset: ChartDataSet[] = [];
-  series: DataItem[] = [];
-  minYValue = 40;
+  protected readonly curve = shape.curveBasis;
+  protected dataset: ChartDataSet[] = [];
+  protected series: DataItem[] = [];
+  protected minYValue = 40;
+  protected currentWeightMeasure: BodyWeightMeasure | undefined;
+
+  @ViewChild('updateWeightModal')
+  updateWeightModal!: UpdateWeightModalComponent;
 
   constructor(
     private bodyWeightService: BodyWeightService,
@@ -36,6 +47,13 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadLast5Measures();
+    this.bodyWeightService.dataChanged$.subscribe(() => {
+      this.loadLast5Measures();
+    });
+  }
+
+  private loadLast5Measures() {
     this.bodyWeightService
       .getLast5BodyWeightMeasures()
       .subscribe((measures) => {
@@ -44,6 +62,7 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
           this.minYValue = 0;
           return;
         }
+        this.currentWeightMeasure = measures[0];
         this.updateChartData(measures);
       });
   }
@@ -89,5 +108,9 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
 
   openBodyWeightMeasuresPage() {
     this.bodyWeightMeasuresService.openModal();
+  }
+
+  track() {
+    this.updateWeightModal.show(undefined, this.currentWeightMeasure?.value);
   }
 }

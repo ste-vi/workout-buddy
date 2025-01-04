@@ -3,7 +3,9 @@
      (swiperight)="onSwipeRight()">
   <div class="body-weight-measures-container-header">
     <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
-    <b class="m-text semi-bold">Body weight : <span class="">100 kg</span></b>
+    <b class="m-text semi-bold">Body weight
+      <ng-container *ngIf="measures.length > 0"> : <span class="">{{ measures[0].value }} kg</span></ng-container>
+    </b>
     <app-header-button [text]="'Add'" class="s-text gray-1-color primary"
                        (click)="addWeightMeasure()"></app-header-button>
   </div>
@@ -30,44 +32,56 @@
   <div class="body-weight-measures-container-body" infiniteScroll [infiniteScrollDistance]="2"
        [infiniteScrollThrottle]="150"
        [scrollWindow]="false" (scrolled)="loadMore()">
-    <table class="responsive-table m-text">
-      <thead>
-      <tr class="black-color">
-        <th class="semi-bold">Date</th>
-        <th class="semi-bold">Value</th>
-      </tr>
-      </thead>
+    <div class="responsive-table m-text">
+      <div class="table-header black-color">
+        <div class="semi-bold">Date</div>
+        <div class="semi-bold">Value</div>
+        <div class="semi-bold">Actions</div>
+      </div>
 
-      <tbody class="gray-1-color">
-      <tr *ngFor="let measure of measures; let i = index" [@collapseEnter]>
-        <td>{{ measure.date | date: 'd MMMM y' }}</td>
-        <td>
-          {{ measure.value }} kg
-          <ng-container *ngIf="sortOrder === SortOrder.ASC && i > 0">
-            <mat-icon
-              *ngIf="compareValues(measure.value, measures[i - 1].value) === 'greater'"
-              svgIcon="up-arrow" class="status-icon" title="Heavier than previous">
-            </mat-icon>
-            <mat-icon
-              *ngIf="compareValues(measure.value, measures[i - 1].value) === 'less'"
-              svgIcon="down-arrow" class="status-icon" title="Lighter than previous">
-            </mat-icon>
-            <div *ngIf="compareValues(measure.value, measures[i - 1].value) === 'equal'">-</div>
-          </ng-container>
-          <ng-container *ngIf="sortOrder === SortOrder.DESC && i < measures.length - 1">
-            <mat-icon
-              *ngIf="compareValues(measure.value, measures[i + 1].value) === 'greater'"
-              svgIcon="up-arrow" class="status-icon" title="Heavier than previous">
-            </mat-icon>
-            <mat-icon
-              *ngIf="compareValues(measure.value, measures[i + 1].value) === 'less'"
-              svgIcon="down-arrow" class="status-icon" title="Lighter than previous">
-            </mat-icon>
-            <div *ngIf="compareValues(measure.value, measures[i + 1].value) === 'equal'">-</div>
-          </ng-container>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+      <div class="table-body gray-1-color">
+        <div *ngFor="let measure of measures; let i = index" class="table-row" [@collapseEnter]>
+          <div>{{ measure.date | date: 'd MMM y' }}</div>
+          <div>
+            {{ measure.value }} kg
+            <ng-container *ngIf="sortOrder === SortOrder.ASC && i > 0">
+              <mat-icon
+                *ngIf="compareValues(measure.value, measures[i - 1].value) === 'greater'"
+                svgIcon="up-arrow" class="status-icon" title="Heavier than previous">
+              </mat-icon>
+              <mat-icon
+                *ngIf="compareValues(measure.value, measures[i - 1].value) === 'less'"
+                svgIcon="down-arrow" class="status-icon" title="Lighter than previous">
+              </mat-icon>
+              <div *ngIf="compareValues(measure.value, measures[i - 1].value) === 'equal'">-</div>
+            </ng-container>
+            <ng-container *ngIf="sortOrder === SortOrder.DESC && i < measures.length - 1">
+              <mat-icon
+                *ngIf="compareValues(measure.value, measures[i + 1].value) === 'greater'"
+                svgIcon="up-arrow" class="status-icon" title="Heavier than previous">
+              </mat-icon>
+              <mat-icon
+                *ngIf="compareValues(measure.value, measures[i + 1].value) === 'less'"
+                svgIcon="down-arrow" class="status-icon" title="Lighter than previous">
+              </mat-icon>
+            </ng-container>
+          </div>
+          <div class="actions">
+            <mat-icon svgIcon="edit" class="action-icon clickable-m-icon" title="Edit"
+                      (click)="edit(measure)"></mat-icon>
+            <mat-icon svgIcon="delete" class="action-icon clickable-m-icon" title="Delete"
+                      (click)="delete(measure)"></mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <app-update-weight-modal #updateWeightModal></app-update-weight-modal>
+
+  <app-confirmation-modal
+    #deleteWeightConfirmationModal
+    [header]="'Delete weight measure?'"
+    (confirmed)="onDeleteWeightConfirmed($event)"
+  ></app-confirmation-modal>
 </div>

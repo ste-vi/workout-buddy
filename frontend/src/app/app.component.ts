@@ -43,6 +43,7 @@ export class AppComponent {
       .addSvgIcon('clear', this.setIconPath(`${this.iconsPath}/clear.svg`))
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`))
+      .addSvgIcon('edit', this.setIconPath(`${this.iconsPath}/edit.svg`))
       .addSvgIcon('search', this.setIconPath(`${this.iconsPath}/search.svg`))
       .addSvgIcon('undo', this.setIconPath(`${this.iconsPath}/undo.svg`))
       .addSvgIcon('swap', this.setIconPath(`${this.iconsPath}/swap.svg`))

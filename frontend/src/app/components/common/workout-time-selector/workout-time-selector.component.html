@@ -15,14 +15,20 @@
       <span class="primary">{{ startTime | date:'dd.MM.yyyy HH:mm' }}</span>
     </div>
     <div *ngIf="activeTimePicker === 'start'">
-      <app-date-time-picker [initialDateTime]="startTime" (dateTimeChange)="onStartTimeChange($event)"></app-date-time-picker>
+      <div [@collapse]>
+        <app-date-time-picker [initialDateTime]="startTime"
+                              (dateTimeChange)="onStartTimeChange($event)"></app-date-time-picker>
+      </div>
     </div>
     <div class="flex-space-between clickable" (click)="toggleDateTimePicker('end')">
       <span>End time</span>
       <span class="primary">{{ endTime | date:'dd.MM.yyyy HH:mm' }}</span>
     </div>
     <div *ngIf="activeTimePicker === 'end'">
-      <app-date-time-picker [initialDateTime]="endTime" (dateTimeChange)="onEndTimeChange($event)"></app-date-time-picker>
+      <div [@collapse]>
+        <app-date-time-picker [initialDateTime]="endTime"
+                              (dateTimeChange)="onEndTimeChange($event)"></app-date-time-picker>
+      </div>
     </div>
   </div>
 </div>

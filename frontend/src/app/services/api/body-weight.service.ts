@@ -1,41 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { BodyWeightMeasure } from '../../models/body-weight-measure';
 import { PageResponse } from '../../models/page-response';
 import { bodyWightMeasures } from './dummy-data/body-weight-dummy-data';
-import {SortOrder} from "../../models/sort-order";
+import { SortOrder } from '../../models/sort-order';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BodyWeightService {
+  private dataChangedSubject = new Subject<void>();
+  dataChanged$ = this.dataChangedSubject.asObservable();
+
   constructor() {}
 
   getLast5BodyWeightMeasures(): Observable<BodyWeightMeasure[]> {
-    let measures: BodyWeightMeasure[] = [
-      {
-        date: new Date('2024-08-19'),
-        value: 89,
-      },
-      {
-        date: new Date('2024-09-19'),
-        value: 90,
-      },
-      {
-        date: new Date('2024-09-21'),
-        value: 91,
-      },
-      {
-        date: new Date('2024-09-25'),
-        value: 93,
-      },
-      {
-        date: new Date('2024-09-30'),
-        value: 99,
-      },
-    ];
-
-    return of(measures);
+    return of(bodyWightMeasures.slice(0, 5));
   }
 
   searchBodyWeightMeasures(
@@ -43,7 +23,7 @@ export class BodyWeightService {
     size: number,
     dateFrom: Date,
     dateTo: Date,
-    sortOrder: SortOrder
+    sortOrder: SortOrder,
   ): Observable<PageResponse<BodyWeightMeasure>> {
     const start = page * size;
     const end = start + size;
@@ -56,10 +36,11 @@ export class BodyWeightService {
       );
     }
 
-    filteredBodyWightMeasures = filteredBodyWightMeasures.sort((a, b) =>
-      sortOrder === 'asc'
-        ? new Date(a.date).getTime() - new Date(b.date).getTime() // Ascending order
-        : new Date(b.date).getTime() - new Date(a.date).getTime() // Descending order
+    filteredBodyWightMeasures = filteredBodyWightMeasures.sort(
+      (a, b) =>
+        sortOrder === 'asc'
+          ? new Date(a.date).getTime() - new Date(b.date).getTime() // Ascending order
+          : new Date(b.date).getTime() - new Date(a.date).getTime(), // Descending order
     );
 
     const paginatedExercises = filteredBodyWightMeasures.slice(start, end);
@@ -74,5 +55,35 @@ export class BodyWeightService {
     });
   }
 
+  updateBodyWeight(
+    bodyWeightMeasure: BodyWeightMeasure,
+  ): Observable<BodyWeightMeasure> {
+    return of(bodyWeightMeasure);
+  }
 
+  addBodyWeight(weight: number): Observable<BodyWeightMeasure> {
+    let measure: BodyWeightMeasure = {
+      id: 12345,
+      date: new Date(),
+      value: weight,
+    };
+    bodyWightMeasures.unshift(measure);
+    this.notifyDataChanged();
+    return of(measure);
+  }
+
+  private notifyDataChanged(): void {
+    this.dataChangedSubject.next();
+  }
+
+  deleteBodyWeightMeasure(id: number): Observable<void> {
+    const index = bodyWightMeasures.findIndex((measure) => measure.id === id);
+    if (index !== -1) {
+      bodyWightMeasures.splice(index, 1);
+      this.notifyDataChanged();
+      return of(undefined);
+    } else {
+      return throwError(() => new Error('Measure not found'));
+    }
+  }
 }

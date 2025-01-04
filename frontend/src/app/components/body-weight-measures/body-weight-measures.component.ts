@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { BodyWeightMeasuresService } from '../../services/communication/body-weight-measures.service';
@@ -18,6 +18,8 @@ import {
 } from '@swimlane/ngx-charts';
 import * as shape from 'd3-shape';
 import { ChartDataSet } from '../common/widgets/body-weight-trend-widget/body-weight-trend-widget.component';
+import { UpdateWeightModalComponent } from '../common/modal/update-weight-modal/update-weight-modal.component';
+import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-body-weight-measures',
@@ -30,15 +32,18 @@ import { ChartDataSet } from '../common/widgets/body-weight-trend-widget/body-we
     DatePipe,
     MatIcon,
     AreaChartModule,
+    UpdateWeightModalComponent,
+    ConfirmationModalComponent,
   ],
   templateUrl: './body-weight-measures.component.html',
   styleUrl: './body-weight-measures.component.scss',
   animations: [fadeInOut, sideModalOpenClose, collapseEnter],
 })
 export class BodyWeightMeasuresComponent implements OnInit {
-  protected isOpen: boolean = true;
+  protected isOpen: boolean = false;
 
   protected measures: BodyWeightMeasure[] = [];
+  protected measureToDelete: BodyWeightMeasure | undefined;
 
   protected currentPage: number = 0;
   protected itemsPerPage: number = 30;
@@ -54,6 +59,12 @@ export class BodyWeightMeasuresComponent implements OnInit {
   series: DataItem[] = [];
   minYValue = 40;
 
+  @ViewChild('updateWeightModal')
+  updateWeightModal!: UpdateWeightModalComponent;
+
+  @ViewChild('deleteWeightConfirmationModal')
+  deleteWeightConfirmationModal!: ConfirmationModalComponent;
+
   constructor(
     private bodyWeightMeasuresService: BodyWeightMeasuresService,
     private bodyWeightService: BodyWeightService,
@@ -64,6 +75,9 @@ export class BodyWeightMeasuresComponent implements OnInit {
       this.dateTo.getDate(),
     );
     this.loadMeasures();
+    this.bodyWeightService.dataChanged$.subscribe(() => {
+      this.loadMeasures();
+    });
   }
 
   ngOnInit(): void {
@@ -118,8 +132,6 @@ export class BodyWeightMeasuresComponent implements OnInit {
     }
   }
 
-  addWeightMeasure() {}
-
   colorScheme: Color = {
     name: 'myScheme',
     selectable: true,
@@ -159,5 +171,31 @@ export class BodyWeightMeasuresComponent implements OnInit {
         series: this.series,
       },
     ];
+  }
+
+  addWeightMeasure() {
+    this.updateWeightModal.show(undefined, this.measures[0].value);
+  }
+
+  edit(measure: BodyWeightMeasure) {
+    this.updateWeightModal.show(measure);
+  }
+
+  onDeleteWeightConfirmed(confirmed: boolean) {
+    if (confirmed) {
+      this.bodyWeightService
+        .deleteBodyWeightMeasure(this.measureToDelete!.id)
+        .subscribe(() => {
+          this.measures = this.measures.filter(
+            (m) => m.id !== this.measureToDelete!.id,
+          );
+          this.updateChartData(this.measures);
+        });
+    }
+  }
+
+  delete(measure: BodyWeightMeasure) {
+    this.measureToDelete = measure;
+    this.deleteWeightConfirmationModal.show("This action cannot be undone");
   }
 }

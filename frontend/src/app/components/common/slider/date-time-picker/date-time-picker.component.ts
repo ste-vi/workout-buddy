@@ -10,7 +10,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import KeenSlider, { KeenSliderInstance, KeenSliderOptions } from 'keen-slider';
 import 'keen-slider/keen-slider.min.css';
@@ -28,7 +28,7 @@ type SliderKey = 'days' | 'months' | 'hours' | 'minutes';
   templateUrl: './date-time-picker.component.html',
   standalone: true,
   styleUrls: ['./date-time-picker.component.scss'],
-  imports: [NgForOf, FormsModule, MatIcon],
+  imports: [NgForOf, FormsModule, MatIcon, NgIf],
 })
 export class DateTimePickerComponent
   implements AfterViewInit, OnDestroy, OnInit
@@ -39,6 +39,8 @@ export class DateTimePickerComponent
   @ViewChild('minutesSlider') minutesSliderRef!: ElementRef<HTMLElement>;
 
   @Input() initialDateTime: Date = new Date();
+  @Input() showDate: boolean = true;
+  @Input() showTime: boolean = true;
   @Output() dateTimeChange = new EventEmitter<Date>();
 
   days: SliderData = { values: [], currentIndex: 0 };
@@ -115,22 +117,30 @@ export class DateTimePickerComponent
       },
     };
 
-    this.sliders.days = new KeenSlider(this.daysSliderRef.nativeElement, {
-      ...sliderOptions,
-      initial: this.days.currentIndex,
-    });
-    this.sliders.months = new KeenSlider(this.monthsSliderRef.nativeElement, {
-      ...sliderOptions,
-      initial: this.months.currentIndex,
-    });
-    this.sliders.hours = new KeenSlider(this.hoursSliderRef.nativeElement, {
-      ...sliderOptions,
-      initial: this.hours.currentIndex,
-    });
-    this.sliders.minutes = new KeenSlider(this.minutesSliderRef.nativeElement, {
-      ...sliderOptions,
-      initial: this.minutes.currentIndex,
-    });
+    if (this.showDate) {
+      this.sliders.days = new KeenSlider(this.daysSliderRef.nativeElement, {
+        ...sliderOptions,
+        initial: this.days.currentIndex,
+      });
+      this.sliders.months = new KeenSlider(this.monthsSliderRef.nativeElement, {
+        ...sliderOptions,
+        initial: this.months.currentIndex,
+      });
+    }
+
+    if (this.showTime) {
+      this.sliders.hours = new KeenSlider(this.hoursSliderRef.nativeElement, {
+        ...sliderOptions,
+        initial: this.hours.currentIndex,
+      });
+      this.sliders.minutes = new KeenSlider(
+        this.minutesSliderRef.nativeElement,
+        {
+          ...sliderOptions,
+          initial: this.minutes.currentIndex,
+        },
+      );
+    }
   }
 
   private updateDateTime(): void {

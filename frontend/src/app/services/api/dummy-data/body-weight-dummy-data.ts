@@ -3,6 +3,7 @@ import { BodyWeightMeasure } from '../../../models/body-weight-measure';
 export const bodyWightMeasures: BodyWeightMeasure[] = Array.from(
   { length: 100 },
   (_, index) => ({
+    id: index,
     date: new Date(
       2024,
       Math.floor(Math.random() * 2),

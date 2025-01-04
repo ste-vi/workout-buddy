@@ -1,11 +1,11 @@
 <div class="card-shadow weight-card">
   <div class="weight-card-header">
-    <div class="current-weight s-text">
-      <span>Body Weight - </span>
-      <span class="semi-bold primary">100 kg</span>
+    <div class="current-weight m-text">
+      <b>Body Weight - </b>
+      <span class="semi-bold primary">{{ currentWeightMeasure?.value + ' kg' }}</span>
     </div>
     <div class="actions s-text gray-1-color">
-      <div class="clickable primary-2">Track</div>
+      <div class="clickable primary-2" (click)="track()">Track</div>
       <div class="clickable" (click)="openBodyWeightMeasuresPage()">History</div>
     </div>
   </div>
@@ -28,4 +28,5 @@
   </div>
 
   <app-body-weight-measures></app-body-weight-measures>
+  <app-update-weight-modal #updateWeightModal></app-update-weight-modal>
 </div>
