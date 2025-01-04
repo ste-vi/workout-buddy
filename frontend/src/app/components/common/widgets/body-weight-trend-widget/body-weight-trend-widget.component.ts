@@ -69,7 +69,7 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
 
   private updateChartData(measures: BodyWeightMeasure[]): void {
     this.series = measures.map((measure) => ({
-      name: measure.date.toISOString(),
+      name: measure.date,
       value: measure.value,
     }));
 

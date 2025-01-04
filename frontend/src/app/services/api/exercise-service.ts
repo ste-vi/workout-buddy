@@ -29,7 +29,6 @@ export class ExerciseService {
     let filteredExercises = exercises;
 
     if (query && query.trim() !== '') {
-      console.log("aa")
       filteredExercises = exercises.filter((exercise) =>
         exercise.name.toLowerCase().includes(query.toLowerCase()),
       );

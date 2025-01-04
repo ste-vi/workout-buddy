@@ -1,89 +1,78 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, Subject, tap } from 'rxjs';
 import { BodyWeightMeasure } from '../../models/body-weight-measure';
 import { PageResponse } from '../../models/page-response';
-import { bodyWightMeasures } from './dummy-data/body-weight-dummy-data';
 import { SortOrder } from '../../models/sort-order';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BodyWeightService {
+  private apiUrl = `${environment.apiUrl}/api/body-weight-measures`;
   private dataChangedSubject = new Subject<void>();
   dataChanged$ = this.dataChangedSubject.asObservable();
-
-  constructor() {}
-
-  getLast5BodyWeightMeasures(): Observable<BodyWeightMeasure[]> {
-    return of(bodyWightMeasures.slice(0, 5));
-  }
 
   searchBodyWeightMeasures(
     page: number,
     size: number,
-    dateFrom: Date,
-    dateTo: Date,
     sortOrder: SortOrder,
+    dateFrom?: Date,
+    dateTo?: Date,
   ): Observable<PageResponse<BodyWeightMeasure>> {
-    const start = page * size;
-    const end = start + size;
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sortOrder', sortOrder);
 
-    let filteredBodyWightMeasures = bodyWightMeasures;
-
-    if (dateFrom && dateTo) {
-      filteredBodyWightMeasures = filteredBodyWightMeasures.filter(
-        (measure) => measure.date >= dateFrom && measure.date <= dateTo,
-      );
+    if (dateFrom) {
+      params = params.set('dateFrom', dateFrom.toISOString());
+    }
+    if (dateTo) {
+      params = params.set('dateTo', dateTo.toISOString());
     }
 
-    filteredBodyWightMeasures = filteredBodyWightMeasures.sort(
-      (a, b) =>
-        sortOrder === 'asc'
-          ? new Date(a.date).getTime() - new Date(b.date).getTime() // Ascending order
-          : new Date(b.date).getTime() - new Date(a.date).getTime(), // Descending order
+    return this.http.get<PageResponse<BodyWeightMeasure>>(
+      `${this.apiUrl}/search`,
+      { params },
     );
+  }
 
-    const paginatedExercises = filteredBodyWightMeasures.slice(start, end);
+  constructor(private http: HttpClient) {}
 
-    return of({
-      content: paginatedExercises,
-      pageNumber: page,
-      pageSize: size,
-      totalPages: Math.ceil(filteredBodyWightMeasures.length / size),
-      totalElements: filteredBodyWightMeasures.length,
-      last: end >= filteredBodyWightMeasures.length,
-    });
+  getLast5BodyWeightMeasures(): Observable<BodyWeightMeasure[]> {
+    return this.http.get<BodyWeightMeasure[]>(`${this.apiUrl}/last-5`);
   }
 
   updateBodyWeight(
     bodyWeightMeasure: BodyWeightMeasure,
   ): Observable<BodyWeightMeasure> {
-    return of(bodyWeightMeasure);
+    return this.http
+      .put<BodyWeightMeasure>(
+        `${this.apiUrl}/${bodyWeightMeasure.id}`,
+        bodyWeightMeasure,
+      )
+      .pipe(tap(() => this.notifyDataChanged()));
   }
 
   addBodyWeight(weight: number): Observable<BodyWeightMeasure> {
-    let measure: BodyWeightMeasure = {
-      id: 12345,
-      date: new Date(),
+    const measure = {
       value: weight,
+      date: new Date(),
     };
-    bodyWightMeasures.unshift(measure);
-    this.notifyDataChanged();
-    return of(measure);
+    return this.http
+      .post<BodyWeightMeasure>(this.apiUrl, measure)
+      .pipe(tap(() => this.notifyDataChanged()));
+  }
+
+  deleteBodyWeightMeasure(id: number): Observable<void> {
+    return this.http
+      .delete<void>(`${this.apiUrl}/${id}`)
+      .pipe(tap(() => this.notifyDataChanged()));
   }
 
   private notifyDataChanged(): void {
     this.dataChangedSubject.next();
-  }
-
-  deleteBodyWeightMeasure(id: number): Observable<void> {
-    const index = bodyWightMeasures.findIndex((measure) => measure.id === id);
-    if (index !== -1) {
-      bodyWightMeasures.splice(index, 1);
-      this.notifyDataChanged();
-      return of(undefined);
-    } else {
-      return throwError(() => new Error('Measure not found'));
-    }
   }
 }

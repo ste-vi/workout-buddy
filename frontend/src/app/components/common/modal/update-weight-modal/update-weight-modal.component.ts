@@ -42,6 +42,7 @@ export class UpdateWeightModalComponent {
     this.lastWeight = lastWeight?? 70;
     if (measure !== undefined) {
       this.bodyWeightMeasure = measure;
+      console.log(measure.date) // issue
       this.weight = measure.value;
       this.lastWeight = measure.value;
       this.isEditMode = true;
@@ -57,7 +58,6 @@ export class UpdateWeightModalComponent {
   }
 
   confirm() {
-    console.log(this.weight);
     if (this.weight === undefined || this.weight < 40 || this.weight > 190) {
       return;
     }

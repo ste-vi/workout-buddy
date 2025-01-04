@@ -47,8 +47,6 @@ export class BodyWeightMeasuresComponent implements OnInit {
 
   protected currentPage: number = 0;
   protected itemsPerPage: number = 30;
-  protected dateFrom: Date = new Date();
-  protected dateTo: Date = new Date();
   protected hasMoreItems: boolean = true;
   protected sortOrder: SortOrder = SortOrder.DESC;
 
@@ -69,12 +67,6 @@ export class BodyWeightMeasuresComponent implements OnInit {
     private bodyWeightMeasuresService: BodyWeightMeasuresService,
     private bodyWeightService: BodyWeightService,
   ) {
-    this.dateFrom = new Date(
-      this.dateTo.getFullYear(),
-      this.dateTo.getMonth() - 12,
-      this.dateTo.getDate(),
-    );
-    this.loadMeasures();
     this.bodyWeightService.dataChanged$.subscribe(() => {
       this.loadMeasures();
     });
@@ -99,17 +91,19 @@ export class BodyWeightMeasuresComponent implements OnInit {
     this.isOpen = false;
   }
 
-  private loadMeasures() {
+  private loadMeasures(search?: boolean) {
     this.bodyWeightService
       .searchBodyWeightMeasures(
         this.currentPage,
         this.itemsPerPage,
-        this.dateFrom,
-        this.dateTo,
-        this.sortOrder,
+        this.sortOrder
       )
       .subscribe((pageResponse) => {
-        this.measures = this.measures.concat(pageResponse.content);
+        if (search) {
+          this.measures = this.measures.concat(pageResponse.content);
+        } else {
+          this.measures = pageResponse.content;
+        }
         this.hasMoreItems = !pageResponse.last;
         this.updateChartData(this.measures);
       });
@@ -118,7 +112,7 @@ export class BodyWeightMeasuresComponent implements OnInit {
   loadMore() {
     if (this.hasMoreItems) {
       this.currentPage++;
-      this.loadMeasures();
+      this.loadMeasures(true);
     }
   }
 
@@ -174,7 +168,7 @@ export class BodyWeightMeasuresComponent implements OnInit {
   }
 
   addWeightMeasure() {
-    this.updateWeightModal.show(undefined, this.measures[0].value);
+    this.updateWeightModal.show(undefined, this.measures[0]?.value);
   }
 
   edit(measure: BodyWeightMeasure) {
@@ -196,6 +190,6 @@ export class BodyWeightMeasuresComponent implements OnInit {
 
   delete(measure: BodyWeightMeasure) {
     this.measureToDelete = measure;
-    this.deleteWeightConfirmationModal.show("This action cannot be undone");
+    this.deleteWeightConfirmationModal.show('This action cannot be undone');
   }
 }
