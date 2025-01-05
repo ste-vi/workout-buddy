@@ -62,6 +62,9 @@ export class DateTimePickerComponent
   }
 
   ngOnInit(): void {
+    if (this.initialDateTime) {
+      this.initialDateTime = new Date(this.initialDateTime);
+    }
     this.initializeSliderData();
   }
 
@@ -99,11 +102,16 @@ export class DateTimePickerComponent
       (_, i) => `${i.toString().padStart(2, '0')}`,
     );
 
-    this.days.currentIndex = this.initialDateTime.getDate() - 1;
-    this.months.currentIndex = this.initialDateTime.getMonth();
-    this.hours.currentIndex = this.initialDateTime.getHours();
-    this.minutes.currentIndex = this.initialDateTime.getMinutes();
-    this.currentYear = this.initialDateTime.getFullYear();
+    if (this.showDate) {
+      console.log(this.initialDateTime);
+      this.currentYear = this.initialDateTime.getFullYear();
+      this.months.currentIndex = this.initialDateTime.getMonth();
+      this.days.currentIndex = this.initialDateTime.getDate() - 1;
+    }
+    if (this.showTime) {
+      this.hours.currentIndex = this.initialDateTime.getHours();
+      this.minutes.currentIndex = this.initialDateTime.getMinutes();
+    }
   }
 
   private initializeSliders(): void {
