@@ -1,0 +1,14 @@
+<div class="modal-overlay" *ngIf="showPrompt" [@fadeInOut]></div>
+<div *ngIf="showPrompt" class="ios-prompt" [@dialogOpenClose]>
+  <p class="m-text">Install this application on your home screen for quick, easy and offline access when you’re on the
+    go</p>
+  <ol class="s-text">
+    <li>Close this modal</li>
+    <li>Tap the "Share" icon</li>
+    <li>Tap "Add to Home Screen"</li>
+  </ol>
+  <app-medium-button name="Got it"
+                     [classes]="['primary-background', 'black-color']"
+                     [textClasses]="['white-color', 'semi-bold']"
+                     (click)="dismiss()"></app-medium-button>
+</div>

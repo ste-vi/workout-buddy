@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { NavigationEnd, Router } from '@angular/router';
-import {NgClass, NgIf} from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatIcon, NgIf, NgClass],
+  imports: [MatIcon, NgIf],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
   protected currentPage: string = 'dashboard';
+  protected isStandalone: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -25,6 +26,8 @@ export class NavbarComponent implements OnInit {
         }
       }
     });
+
+    this.isStandalone = window.matchMedia('(display-mode: standalone)').matches;
   }
 
   navigateTo(path: string) {

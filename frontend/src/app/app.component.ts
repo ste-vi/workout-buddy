@@ -1,27 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ButtonComponent } from './components/common/button/button.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import {NavbarComponent} from "./components/common/navbar/navbar.component";
-import {WorkoutHistoryDetailsComponent} from "./components/workout-history-details/workout-history-details.component";
+import { NavbarComponent } from './components/common/navbar/navbar.component';
+import { WorkoutHistoryDetailsComponent } from './components/workout-history-details/workout-history-details.component';
 import 'keen-slider/keen-slider.min.css';
+import { IosInstallPromptComponent } from './components/common/modal/ios-install-prompt/ios-install-prompt.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
-    ButtonComponent,
-    DashboardComponent,
     NavbarComponent,
     WorkoutHistoryDetailsComponent,
+    IosInstallPromptComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'workout-buddy';
 
   private iconsPath = '../assets/icons/svg';
@@ -31,6 +29,10 @@ export class AppComponent {
     private domSanitizer: DomSanitizer,
   ) {
     this.initSvgIcons();
+  }
+
+  ngOnInit() {
+
   }
 
   private initSvgIcons() {

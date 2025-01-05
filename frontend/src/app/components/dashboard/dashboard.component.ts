@@ -48,4 +48,8 @@ export class DashboardComponent {
   openWorkoutHistoryPage() {
     this.router.navigate(['/workout/history']).then((r) => {});
   }
+
+  openNotifications() {
+    window.location.reload();
+  }
 }

@@ -356,6 +356,12 @@ input:focus::placeholder {
   }
 }
 
+@media (display-mode: standalone) {
+  .container {
+    height: 90vh;
+  }
+}
+
 .metrics-container {
   display: flex;
   flex-direction: row;

@@ -76,4 +76,8 @@
   }
 }
 
-
+@media (display-mode: standalone) {
+  .navbar-container {
+    height: 10vh;
+  }
+}
