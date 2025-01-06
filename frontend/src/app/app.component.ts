@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -6,6 +6,7 @@ import { NavbarComponent } from './components/common/navbar/navbar.component';
 import { WorkoutHistoryDetailsComponent } from './components/workout-history-details/workout-history-details.component';
 import 'keen-slider/keen-slider.min.css';
 import { IosInstallPromptComponent } from './components/common/modal/ios-install-prompt/ios-install-prompt.component';
+import { NetworkStatusComponent } from "./components/common/network-status/network-status.component";
 
 @Component({
   selector: 'app-root',
@@ -15,24 +16,27 @@ import { IosInstallPromptComponent } from './components/common/modal/ios-install
     NavbarComponent,
     WorkoutHistoryDetailsComponent,
     IosInstallPromptComponent,
+    NetworkStatusComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'workout-buddy';
 
   private iconsPath = '../assets/icons/svg';
 
   constructor(
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
+    private domSanitizer: DomSanitizer
   ) {
     this.initSvgIcons();
   }
 
   ngOnInit() {
+  }
 
+  ngOnDestroy() {
   }
 
   private initSvgIcons() {

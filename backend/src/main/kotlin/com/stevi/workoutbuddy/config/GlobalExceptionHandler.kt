@@ -12,12 +12,13 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException::class)
     fun handleResourceNotFoundException(ex: ResourceNotFoundException): ResponseEntity<ErrorResponse> {
-        val errorResponse = ErrorResponse(ex.message ?: "An error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value())
+        val errorResponse = ErrorResponse(ex.message ?: "No resource found", HttpStatus.NOT_FOUND.value())
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
 
     @ExceptionHandler(Exception::class)
     fun handleGenericException(ex: Exception): ResponseEntity<ErrorResponse> {
+        ex.printStackTrace()
         val errorResponse = ErrorResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value())
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }

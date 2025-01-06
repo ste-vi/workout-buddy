@@ -1,5 +1,6 @@
 export interface BodyWeightMeasure {
-  id: number;
+  id?: number;
   date: Date;
   value: number;
+  synced?: boolean;
 }

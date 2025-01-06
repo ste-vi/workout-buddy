@@ -65,14 +65,14 @@ export class UpdateWeightModalComponent {
       this.bodyWeightMeasure!.value = this.weight;
 
       this.bodyWeightService
-        .updateBodyWeight(this.bodyWeightMeasure!)
+        .updateBodyWeightMeasure(this.bodyWeightMeasure!)
         .subscribe(() => {
           this.closeModal.next(this.bodyWeightMeasure!);
           this.isOpen = false;
         });
     } else {
       this.bodyWeightService
-        .addBodyWeight(this.weight)
+        .addBodyWeightMeasure(this.weight)
         .subscribe((bodyWeightMeasure: BodyWeightMeasure) => {
           this.closeModal.next(bodyWeightMeasure);
           this.isOpen = false;

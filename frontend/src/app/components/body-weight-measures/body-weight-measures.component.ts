@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { BodyWeightMeasuresService } from '../../services/communication/body-weight-measures.service';
@@ -20,6 +20,8 @@ import * as shape from 'd3-shape';
 import { ChartDataSet } from '../common/widgets/body-weight-trend-widget/body-weight-trend-widget.component';
 import { UpdateWeightModalComponent } from '../common/modal/update-weight-modal/update-weight-modal.component';
 import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
+import {interval, startWith, Subscription} from "rxjs";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-body-weight-measures',
@@ -178,7 +180,7 @@ export class BodyWeightMeasuresComponent implements OnInit {
   onDeleteWeightConfirmed(confirmed: boolean) {
     if (confirmed) {
       this.bodyWeightService
-        .deleteBodyWeightMeasure(this.measureToDelete!.id)
+        .deleteBodyWeightMeasure(this.measureToDelete!.id!)
         .subscribe(() => {
           this.measures = this.measures.filter(
             (m) => m.id !== this.measureToDelete!.id,
