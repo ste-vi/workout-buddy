@@ -11,13 +11,10 @@ import { fadeInOut } from '../../../animations/fade-in-out';
 import { sideModalOpenClose } from '../../../animations/side-modal-open-close';
 import { HeaderButtonComponent } from '../header-button/header-button.component';
 import { ExerciseService } from '../../../services/api/exercise-service';
-import { Exercise } from '../../../models/exercise';
+import {BodyPart, Category, Exercise} from '../../../models/exercise';
 import { MatIcon } from '@angular/material/icon';
 import { collapse } from '../../../animations/collapse';
-import {
-  BodyPart,
-  Category,
-} from '../../../services/api/dummy-data/exercises-dummy-data';
+
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import {
   SelectionItem,
@@ -26,6 +23,9 @@ import {
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { FormsModule } from '@angular/forms';
 import { collapseEnter } from '../../../animations/collapse-enter';
+import { ConfirmationModalComponent } from '../modal/confirmation-modal/confirmation-modal.component';
+import {CreateExerciseModalComponent} from "../modal/create-exercise-modal/create-exercise-modal.component";
+import {ActionButtonComponent} from "../action-button/action-button.component";
 
 @Component({
   selector: 'app-exercises',
@@ -40,6 +40,9 @@ import { collapseEnter } from '../../../animations/collapse-enter';
     NgClass,
     InfiniteScrollDirective,
     FormsModule,
+    ConfirmationModalComponent,
+    CreateExerciseModalComponent,
+    ActionButtonComponent,
   ],
   templateUrl: './search-exercises.component.html',
   styleUrl: './search-exercises.component.scss',
@@ -68,13 +71,26 @@ export class SearchExercisesComponent implements OnInit {
   protected bodyPart: BodyPart | undefined = undefined;
   protected category: Category | undefined = undefined;
 
+  private exerciseToDelete: Exercise | undefined = undefined;
+
   @ViewChild('bodyPartSelectionMenu')
   bodyPartSelectionMenu!: SelectionMenuComponent;
 
   @ViewChild('categorySelectionMenu')
   categorySelectionMenu!: SelectionMenuComponent;
 
-  constructor(private exerciseService: ExerciseService) {}
+  @ViewChild('exerciseMenu')
+  exerciseMenu!: ContextMenuComponent;
+
+  @ViewChild('deleteExerciseConfirmationModal')
+  deleteExerciseConfirmationModal!: ConfirmationModalComponent;
+
+  @ViewChild('createExerciseModal')
+  createExerciseModal!: CreateExerciseModalComponent;
+
+  constructor(private exerciseService: ExerciseService) {
+    this.loadExercises();
+  }
 
   ngOnInit(): void {}
 
@@ -232,5 +248,57 @@ export class SearchExercisesComponent implements OnInit {
       this.exerciseReplaceSelected.emit(exercise);
       this.selectedExercises.clear();
     }
+  }
+
+  exerciseMenuItems: any = [];
+
+  showExercisesMenu($event: MouseEvent, exercise: Exercise) {
+    this.exerciseMenuItems = [
+      {
+        label: 'Edit exercise',
+        icon: 'edit',
+        action: () => this.openEditExerciseModal(exercise),
+      },
+      {
+        label: 'Delete exercise',
+        icon: 'delete',
+        action: () => this.deleteExercise(exercise),
+      },
+    ];
+    this.exerciseMenu.show({
+      x: $event.clientX,
+      y: $event.clientY,
+      xOffset: 70,
+      yOffset: 0,
+    });
+  }
+
+  protected openAddExerciseModal() {
+    this.createExerciseModal.show();
+  }
+
+  private openEditExerciseModal(exercise: Exercise) {
+    this.createExerciseModal.show(exercise);
+  }
+
+  deleteExercise(exercise: Exercise) {
+    this.deleteExerciseConfirmationModal.show(
+      `Exercise "${exercise.name}" will be deleted. This operation cannot be undone.`,
+    );
+    this.exerciseToDelete = exercise;
+  }
+
+  onDeleteExerciseConfirmed(confirmed: boolean) {
+    if (confirmed && this.exercises && this.exerciseToDelete) {
+      this.exerciseService
+        .deleteExercise(this.exerciseToDelete!.id)
+        .subscribe(() => {
+          const index = this.exercises!.indexOf(this.exerciseToDelete!);
+          if (index > -1) {
+            this.exercises!.splice(index, 1);
+          }
+        });
+    }
+    this.exerciseToDelete = undefined;
   }
 }

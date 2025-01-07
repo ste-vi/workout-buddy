@@ -21,14 +21,14 @@
     justify-content: center;
     gap: 4px;
     color: var(--gray-2);
-    scale: 1.12;
+    scale: 1.16;
 
     &:hover {
-      scale: var(--hover-scale);
+      scale: 1.2;
     }
 
     &:active {
-      scale: var(--active-scale);
+      scale: 1.06;
     }
 
     .active-nav-icon {
@@ -59,16 +59,16 @@
     justify-content: center;
     color: white;
     border-radius: 50%;
-    scale: 1.8;
+    scale: 2;
     cursor: pointer;
     background: linear-gradient(274deg, var(--primary-1) 0%, var(--primary-2) 100%);
 
     &:hover {
-      scale: 1.83;
+      scale: 2.05;
     }
 
     &:active {
-      scale: 1.77;
+      scale: 1.95;
     }
   }
 
@@ -80,5 +80,13 @@
 @media (display-mode: standalone) {
   .navbar-container {
     height: 10vh;
+
+    .nav-icon-container {
+      margin-bottom: 1rem;
+    }
+
+    .main-action-container {
+      margin-bottom: 1rem;
+    }
   }
 }

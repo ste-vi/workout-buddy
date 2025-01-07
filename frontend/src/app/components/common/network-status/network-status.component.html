@@ -1,11 +1,17 @@
 <div *ngIf="showOfflineMessage" class="network-message secondary-background" [@toastTop]>
-  <div class="l-text semi-bold">You are offline!</div>
+  <div class="l-text semi-bold network-message-header">
+    <mat-icon svgIcon="warning" class="m-svg-icon"></mat-icon>
+    <span>You are offline</span>
+  </div>
   <div class="s-text">You can continue to use the app as usual, data will be synced with database once connection
     is reestablished
   </div>
 </div>
 <div *ngIf="showSyncMessage" class="network-message secondary-background" [@toastTop]>
-  <div class="l-text semi-bold">You're back online!</div>
+  <div class="l-text semi-bold network-message-header">
+    <mat-icon svgIcon="warning" class="m-svg-icon"></mat-icon>
+    <span>You back online</span>
+  </div>
   <div class="s-text">Syncing data with the server...
   </div>
 </div>

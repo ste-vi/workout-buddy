@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Sets } from '../../models/set';
 import { PageResponse } from '../../models/page-response';
-import { Exercise } from '../../models/exercise';
+import {BodyPart, Category, Exercise} from '../../models/exercise';
 import {
-  BodyPart,
-  Category,
   exercises,
 } from './dummy-data/exercises-dummy-data';
 
@@ -62,5 +60,17 @@ export class ExerciseService {
       totalElements: filteredExercises.length,
       last: end >= filteredExercises.length,
     });
+  }
+
+  getCategories(): Observable<Category[]> {
+    return of(Object.values(Category));
+  }
+
+  getBodyParts(): Observable<BodyPart[]> {
+    return of(Object.values(BodyPart));
+  }
+
+  deleteExercise(id: number): Observable<void> {
+    return of(undefined);
   }
 }

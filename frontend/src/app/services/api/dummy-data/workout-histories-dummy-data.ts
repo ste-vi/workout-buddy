@@ -1,44 +1,104 @@
-import { Exercise } from "../../../models/exercise";
-import { tags } from "./workflow-templates-dummy-daya";
-import { Sets } from "../../../models/set";
-import {Workout} from "../../../models/workout";
+import { BodyPart, Category, Exercise } from '../../../models/exercise';
+import { tags } from './workflow-templates-dummy-daya';
+import { Sets } from '../../../models/set';
+import { Workout } from '../../../models/workout';
 
 function generateExercises(count: number, workoutType: string): Exercise[] {
   const exercisePool = {
-    strength: ['Squats', 'Deadlifts', 'Bench Press', 'Overhead Press', 'Rows', 'Pull-ups'],
+    strength: [
+      'Squats',
+      'Deadlifts',
+      'Bench Press',
+      'Overhead Press',
+      'Rows',
+      'Pull-ups',
+    ],
     cardio: ['Running', 'Cycling', 'Jump Rope', 'Burpees', 'Mountain Climbers'],
-    yoga: ['Downward Dog', 'Warrior Pose', 'Tree Pose', 'Child\'s Pose', 'Sun Salutation'],
-    core: ['Planks', 'Crunches', 'Some Twists', 'Leg Raises', 'Bicycle Crunches'],
-    upperBody: ['Push-ups', 'Dips', 'Shoulder Press', 'Bicep Curls', 'Tricep Extensions'],
-    lowerBody: ['Lunges', 'Leg Press', 'Calf Raises', 'Leg Curls', 'Hip Thrusts'],
-    crossfit: ['Box Jumps', 'Kettlebell Swings', 'Thrusters', 'Wall Balls', 'Double Unders'],
-    swimming: ['Freestyle Laps', 'Breaststroke Laps', 'Backstroke Laps', 'Butterfly Laps'],
-    pilates: ['The Hundred', 'Roll Up', 'Single Leg Circles', 'Spine Stretch', 'Saw']
+    yoga: [
+      'Downward Dog',
+      'Warrior Pose',
+      'Tree Pose',
+      "Child's Pose",
+      'Sun Salutation',
+    ],
+    core: [
+      'Planks',
+      'Crunches',
+      'Some Twists',
+      'Leg Raises',
+      'Bicycle Crunches',
+    ],
+    upperBody: [
+      'Push-ups',
+      'Dips',
+      'Shoulder Press',
+      'Bicep Curls',
+      'Tricep Extensions',
+    ],
+    lowerBody: [
+      'Lunges',
+      'Leg Press',
+      'Calf Raises',
+      'Leg Curls',
+      'Hip Thrusts',
+    ],
+    crossfit: [
+      'Box Jumps',
+      'Kettlebell Swings',
+      'Thrusters',
+      'Wall Balls',
+      'Double Unders',
+    ],
+    swimming: [
+      'Freestyle Laps',
+      'Breaststroke Laps',
+      'Backstroke Laps',
+      'Butterfly Laps',
+    ],
+    pilates: [
+      'The Hundred',
+      'Roll Up',
+      'Single Leg Circles',
+      'Spine Stretch',
+      'Saw',
+    ],
   };
 
-  const selectedExercises = exercisePool[workoutType as keyof typeof exercisePool] || exercisePool.strength;
+  const selectedExercises =
+    exercisePool[workoutType as keyof typeof exercisePool] ||
+    exercisePool.strength;
 
-  return Array(count).fill(null).map((_, index) => {
-    const exerciseName = selectedExercises[index % selectedExercises.length];
-    const setCount = Math.floor(Math.random() * 4) + 1; // 1 to 4 sets
-    const sets: Sets[] = Array(setCount).fill(null).map((_, setIndex) => ({
-      id: setIndex + 1,
-      reps: Math.floor(Math.random() * 12) + 5, // 5 to 16 reps
-      weight: workoutType === 'cardio' || workoutType === 'yoga' ? 0 : Math.floor(Math.random() * 100) + 10, // 10 to 109 weight
-      previousReps: Math.floor(Math.random() * 12) + 5,
-      previousWeight: workoutType === 'cardio' || workoutType === 'yoga' ? 0 : Math.floor(Math.random() * 100) + 10,
-      completed: true
-    }));
+  return Array(count)
+    .fill(null)
+    .map((_, index) => {
+      const exerciseName = selectedExercises[index % selectedExercises.length];
+      const setCount = Math.floor(Math.random() * 4) + 1; // 1 to 4 sets
+      const sets: Sets[] = Array(setCount)
+        .fill(null)
+        .map((_, setIndex) => ({
+          id: setIndex + 1,
+          reps: Math.floor(Math.random() * 12) + 5, // 5 to 16 reps
+          weight:
+            workoutType === 'cardio' || workoutType === 'yoga'
+              ? 0
+              : Math.floor(Math.random() * 100) + 10, // 10 to 109 weight
+          previousReps: Math.floor(Math.random() * 12) + 5,
+          previousWeight:
+            workoutType === 'cardio' || workoutType === 'yoga'
+              ? 0
+              : Math.floor(Math.random() * 100) + 10,
+          completed: true,
+        }));
 
-    return {
-      id: index + 1,
-      name: exerciseName,
-      sets: sets,
-      bodyPart: 'Various',
-      category: workoutType === 'cardio' ? 'Cardio' : 'Strength',
-      prSet: sets[0] // Add the PR set to the exercise
-    };
-  });
+      return {
+        id: index + 1,
+        name: exerciseName,
+        sets: sets,
+        bodyPart: BodyPart.FullBody,
+        category: Category.Strength,
+        prSet: sets[0], // Add the PR set to the exercise
+      };
+    });
 }
 
 export const workout: Workout[] = [
@@ -51,8 +111,8 @@ export const workout: Workout[] = [
     10,
     100,
     10,
-    [tags[0], tags[3]],  // Strength Training, Core
-    generateExercises(10, 'strength')
+    [tags[0], tags[3]], // Strength Training, Core
+    generateExercises(10, 'strength'),
   ),
   new Workout(
     2,
@@ -63,8 +123,8 @@ export const workout: Workout[] = [
     15,
     0,
     3,
-    [tags[1]],  // Cardio
-    generateExercises(3, 'cardio')
+    [tags[1]], // Cardio
+    generateExercises(3, 'cardio'),
   ),
   new Workout(
     3,
@@ -75,8 +135,8 @@ export const workout: Workout[] = [
     8,
     500,
     6,
-    [tags[0]],  // Strength Training
-    generateExercises(6, 'strength')
+    [tags[0]], // Strength Training
+    generateExercises(6, 'strength'),
   ),
   new Workout(
     4,
@@ -87,8 +147,8 @@ export const workout: Workout[] = [
     0,
     0,
     12,
-    [tags[2], tags[4]],  // Flexibility, Yoga
-    generateExercises(12, 'yoga')
+    [tags[2], tags[4]], // Flexibility, Yoga
+    generateExercises(12, 'yoga'),
   ),
   new Workout(
     5,
@@ -99,8 +159,8 @@ export const workout: Workout[] = [
     20,
     50,
     8,
-    [tags[1], tags[3]],  // Cardio, Core
-    generateExercises(8, 'cardio')
+    [tags[1], tags[3]], // Cardio, Core
+    generateExercises(8, 'cardio'),
   ),
   new Workout(
     6,
@@ -111,8 +171,8 @@ export const workout: Workout[] = [
     12,
     300,
     5,
-    [tags[0]],  // Strength Training
-    generateExercises(5, 'upperBody')
+    [tags[0]], // Strength Training
+    generateExercises(5, 'upperBody'),
   ),
   new Workout(
     7,
@@ -123,8 +183,8 @@ export const workout: Workout[] = [
     10,
     450,
     6,
-    [tags[0]],  // Strength Training
-    generateExercises(6, 'lowerBody')
+    [tags[0]], // Strength Training
+    generateExercises(6, 'lowerBody'),
   ),
   new Workout(
     8,
@@ -135,8 +195,8 @@ export const workout: Workout[] = [
     25,
     20,
     8,
-    [tags[3]],  // Core
-    generateExercises(8, 'core')
+    [tags[3]], // Core
+    generateExercises(8, 'core'),
   ),
   new Workout(
     9,
@@ -147,8 +207,8 @@ export const workout: Workout[] = [
     0,
     0,
     15,
-    [tags[2], tags[3]],  // Flexibility, Core
-    generateExercises(15, 'pilates')
+    [tags[2], tags[3]], // Flexibility, Core
+    generateExercises(15, 'pilates'),
   ),
   new Workout(
     10,
@@ -159,8 +219,8 @@ export const workout: Workout[] = [
     30,
     200,
     4,
-    [tags[0], tags[1]],  // Strength Training, Cardio
-    generateExercises(4, 'crossfit')
+    [tags[0], tags[1]], // Strength Training, Cardio
+    generateExercises(4, 'crossfit'),
   ),
   new Workout(
     11,
@@ -171,8 +231,8 @@ export const workout: Workout[] = [
     0,
     0,
     1,
-    [tags[1]],  // Cardio
-    generateExercises(1, 'swimming')
+    [tags[1]], // Cardio
+    generateExercises(1, 'swimming'),
   ),
   new Workout(
     12,
@@ -183,8 +243,8 @@ export const workout: Workout[] = [
     15,
     600,
     9,
-    [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    generateExercises(9, 'strength')
+    [tags[0], tags[1], tags[3]], // Strength Training, Cardio, Core
+    generateExercises(9, 'strength'),
   ),
   new Workout(
     13,
@@ -195,8 +255,8 @@ export const workout: Workout[] = [
     15,
     600,
     9,
-    [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    generateExercises(9, 'strength')
+    [tags[0], tags[1], tags[3]], // Strength Training, Cardio, Core
+    generateExercises(9, 'strength'),
   ),
   new Workout(
     14,
@@ -207,7 +267,7 @@ export const workout: Workout[] = [
     15,
     600,
     9,
-    [tags[0], tags[1], tags[3]],  // Strength Training, Cardio, Core
-    generateExercises(9, 'strength')
+    [tags[0], tags[1], tags[3]], // Strength Training, Cardio, Core
+    generateExercises(9, 'strength'),
   ),
 ];

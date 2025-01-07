@@ -29,7 +29,6 @@ export class BodyWeightService {
     dateTo?: Date,
   ): Observable<PageResponse<BodyWeightMeasure>> {
     if (navigator.onLine) {
-      // Online: Use the backend API
       let params = new HttpParams()
         .set('page', page.toString())
         .set('size', size.toString())
@@ -56,7 +55,6 @@ export class BodyWeightService {
           }),
           catchError((error) => {
             console.error('Error fetching measures from API:', error);
-            // Fallback to offline data if API call fails
             return this.getOfflineBodyWeightMeasures(
               page,
               size,
@@ -67,7 +65,6 @@ export class BodyWeightService {
           }),
         );
     } else {
-      // Offline: Use IndexedDB
       return this.getOfflineBodyWeightMeasures(
         page,
         size,
@@ -292,7 +289,6 @@ export class BodyWeightService {
           }
         });
 
-        // Fetch latest measures from the backend
         syncOperations.push(
           this.http
             .get<PageResponse<BodyWeightMeasure>>(`${this.apiUrl}/search`, {
@@ -319,6 +315,14 @@ export class BodyWeightService {
       }),
       map(() => {
         this.notifyDataChanged();
+      }),
+    );
+  }
+
+  getOfflineLatestMeasure(): Observable<BodyWeightMeasure | undefined> {
+    return from(this.indexedDBService.getAll('bodyWeightMeasures')).pipe(
+      map((measures) => {
+        return measures.length > 0 ? measures[measures.length - 1] : undefined;
       }),
     );
   }

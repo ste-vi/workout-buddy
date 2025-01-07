@@ -16,12 +16,26 @@
       }
     },
     {
-      "name": "assets",
+      "name": "svg-and-fonts",
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+          "/**/*.svg",
+          "/**/*.otf",
+          "/**/*.ttf",
+          "/**/*.woff",
+          "/**/*.woff2"
+        ]
+      }
+    },
+    {
+      "name": "other-assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/**/*.(cur|jpg|jpeg|png|apng|webp|avif|gif)"
         ]
       }
     }

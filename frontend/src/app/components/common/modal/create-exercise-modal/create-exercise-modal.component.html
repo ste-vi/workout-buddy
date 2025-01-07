@@ -1,0 +1,53 @@
+<div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="create-exercise-modal black-color" *ngIf="isOpen" [@dialogOpenClose]>
+  <div class="create-exercise-modal-header l-text semi-bold">
+    {{ isEditMode ? 'Update exercise' : 'Create new exercise' }}
+  </div>
+  <form [formGroup]="exerciseForm" (ngSubmit)="confirm()" class="create-exercise-modal-body s-text">
+    <div>
+      <input placeholder="Name" formControlName="name" class="s-text" required>
+      <div *ngIf="exerciseForm.get('name')?.invalid && exerciseForm.get('name')?.touched"
+           class="error-message caption semi-bold">
+        Name is required
+      </div>
+    </div>
+
+    <div>
+      <select formControlName="bodyPart" class="s-text" required>
+        <option [ngValue]="null" [disabled]="true" class="placeholder-option">Select Body Part</option>
+        <option *ngFor="let bodyPart of bodyParts" [ngValue]="bodyPart">
+          {{ bodyPart }}
+        </option>
+      </select>
+      <div *ngIf="exerciseForm.get('bodyPart')?.invalid && exerciseForm.get('bodyPart')?.touched"
+           class="error-message caption semi-bold">
+        Body part is required
+      </div>
+    </div>
+
+    <div>
+      <select formControlName="category" class="s-text" required>
+        <option [ngValue]="null" [disabled]="true" class="placeholder-option">Select Category</option>
+        <option *ngFor="let category of categories" [value]="category">
+          {{ category }}
+        </option>
+      </select>
+      <div *ngIf="exerciseForm.get('category')?.invalid && exerciseForm.get('category')?.touched"
+           class="error-message caption semi-bold">
+        Category is required
+      </div>
+    </div>
+
+  </form>
+
+  <div class="create-exercise-modal-footer">
+    <app-medium-button name="Submit"
+                       [classes]="['primary-background', 'black-color']"
+                       [textClasses]="['white-color', 'semi-bold']"
+                       (click)="confirm()"></app-medium-button>
+    <app-medium-button name="Cancel"
+                       [classes]="['white-background', 'black-color']"
+                       [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                       (click)="close()"></app-medium-button>
+  </div>
+</div>

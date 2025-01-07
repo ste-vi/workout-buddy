@@ -4,13 +4,16 @@
 
   <div class="exercises-container-header">
     <app-header-button icon="left-arrow" (click)="close()"></app-header-button>
-    <app-header-button *ngIf="!isAddModal && !isReplaceModal" icon="two-dots"></app-header-button>
-    <app-header-button *ngIf="isAddModal" [text]="'Add'" class="s-text gray-1-color"
-                       [ngClass]="{'primary' : selectedExercises.size > 0, 'semi-bold': selectedExercises.size > 0}"
-                       (click)="addExercises()"></app-header-button>
-    <app-header-button *ngIf="isReplaceModal" [text]="'Replace'" class="s-text gray-1-color"
-                       [ngClass]="{'primary' : selectedExercises.size == 1, 'semi-bold': selectedExercises.size == 1}"
-                       (click)="replaceExercises()"></app-header-button>
+    <div class="actions">
+      <app-header-button [text]="'Create'" class="s-text gray-1-color"
+                         (click)="openAddExerciseModal()"></app-header-button>
+      <app-header-button *ngIf="isAddModal" [text]="'Add'" class="s-text gray-1-color"
+                         [ngClass]="{'primary' : selectedExercises.size > 0, 'semi-bold': selectedExercises.size > 0}"
+                         (click)="addExercises()"></app-header-button>
+      <app-header-button *ngIf="isReplaceModal" [text]="'Replace'" class="s-text gray-1-color"
+                         [ngClass]="{'primary' : selectedExercises.size == 1, 'semi-bold': selectedExercises.size == 1}"
+                         (click)="replaceExercises()"></app-header-button>
+    </div>
   </div>
 
   <div class="exercises-search-section card-padding-top">
@@ -51,6 +54,10 @@
                       [class.active-add-icon]="selectedExercises.has(exercise)"
                       (click)="replaceExercise(exercise)"></mat-icon>
           </div>
+          <div *ngIf="!isAddModal && !isReplaceModal" >
+            <app-action-button icon='two-dots' iconClasses="xs-svg-icon"
+                               (click)="showExercisesMenu($event, exercise)"></app-action-button>
+          </div>
         </div>
         <div class="lower-section gray-1-color s-text">
           <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
@@ -70,5 +77,15 @@
                       (selectedItemSelected)="onBodyPartItemSelected($event)"></app-selection-menu>
   <app-selection-menu #categorySelectionMenu
                       (selectedItemSelected)="onCategoryItemSelected($event)"></app-selection-menu>
+
+  <app-context-menu #exerciseMenu [menuItems]="exerciseMenuItems"></app-context-menu>
+
+  <app-confirmation-modal
+    #deleteExerciseConfirmationModal
+    [header]="'Delete exercise?'"
+    (confirmed)="onDeleteExerciseConfirmed($event)"
+  ></app-confirmation-modal>
+
+  <app-create-exercise-modal #createExerciseModal></app-create-exercise-modal>
 
 </div>

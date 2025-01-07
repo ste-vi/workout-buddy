@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="last-workout-container card-padding-top">
+    <div class="last-workout-container">
       <div class="last-workout-container-header">
         <div class="m-text semi-bold">Latest Workout</div>
         <div class="gray-1-color s-text clickable" (click)="openWorkoutHistoryPage()">See more</div>
@@ -36,11 +36,23 @@
         <app-latest-workout-widget [workout]="latestWorkoutHistory"></app-latest-workout-widget>
       </div>
     </div>
+
+    <div class="exercises-card">
+      <div class="semi-bold m-text">Exercise list</div>
+      <div class="exercises-card-button">
+        <app-medium-button [name]="'Browse'"
+                           [classes]="['white-background', 'black-color']"
+                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           (click)="browseExercises()"></app-medium-button>
+      </div>
+    </div>
   </div>
 
   <app-workout-template-details></app-workout-template-details>
 
   <app-ongoing-workout></app-ongoing-workout>
+
+  <app-exercises #exercisesModal></app-exercises>
 
 </div>
 

@@ -14,6 +14,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .actions {
+      display: flex;
+      gap: var(--l-size);
+    }
   }
 
   .exercises-search-section {
@@ -86,7 +91,7 @@
       gap: 0.5rem;
       padding-bottom: var(--m-size);
       width: 100%;
-      cursor: pointer;
+     // cursor: pointer;
 
       .exercise-header {
 
