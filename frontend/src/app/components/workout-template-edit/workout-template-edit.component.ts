@@ -10,7 +10,7 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { WorkoutTemplate } from '../../models/workout-template';
-import { Exercise } from '../../models/exercise';
+import {Exercise, getBodyPartDisplayName, getCategoryDisplayName} from '../../models/exercise';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
 import { suggestedWorkoutTemplate } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
 import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
@@ -373,4 +373,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
       }
     }
   }
+
+  protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+  protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

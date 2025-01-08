@@ -5,34 +5,40 @@
   </div>
   <form [formGroup]="exerciseForm" (ngSubmit)="confirm()" class="create-exercise-modal-body s-text">
     <div>
-      <input placeholder="Name" formControlName="name" class="s-text" required>
-      <div *ngIf="exerciseForm.get('name')?.invalid && exerciseForm.get('name')?.touched"
+      <input placeholder="Name" formControlName="name" class="s-text"
+             [ngClass]="exerciseForm.get('name')?.invalid && exerciseForm.get('name')?.touched ? 'invalid-input': ''"
+             required>
+      <div *ngIf="exerciseForm.get('name')?.invalid && exerciseForm.get('name')?.touched" [@collapse]
            class="error-message caption semi-bold">
         Name is required
       </div>
     </div>
 
     <div>
-      <select formControlName="bodyPart" class="s-text" required>
+      <select formControlName="bodyPart" class="s-text"
+              [ngClass]="exerciseForm.get('bodyPart')?.invalid && exerciseForm.get('bodyPart')?.touched ? 'invalid-input': ''"
+              required>
         <option [ngValue]="null" [disabled]="true" class="placeholder-option">Select Body Part</option>
         <option *ngFor="let bodyPart of bodyParts" [ngValue]="bodyPart">
-          {{ bodyPart }}
+          {{ getBodyPartDisplayName(bodyPart) }}
         </option>
       </select>
-      <div *ngIf="exerciseForm.get('bodyPart')?.invalid && exerciseForm.get('bodyPart')?.touched"
+      <div *ngIf="exerciseForm.get('bodyPart')?.invalid && exerciseForm.get('bodyPart')?.touched" [@collapse]
            class="error-message caption semi-bold">
         Body part is required
       </div>
     </div>
 
     <div>
-      <select formControlName="category" class="s-text" required>
+      <select formControlName="category" class="s-text"
+              [ngClass]="exerciseForm.get('category')?.invalid && exerciseForm.get('category')?.touched ? 'invalid-input': ''"
+              required>
         <option [ngValue]="null" [disabled]="true" class="placeholder-option">Select Category</option>
         <option *ngFor="let category of categories" [value]="category">
-          {{ category }}
+          {{ getCategoryDisplayName(category) }}
         </option>
       </select>
-      <div *ngIf="exerciseForm.get('category')?.invalid && exerciseForm.get('category')?.touched"
+      <div *ngIf="exerciseForm.get('category')?.invalid && exerciseForm.get('category')?.touched" [@collapse]
            class="error-message caption semi-bold">
         Category is required
       </div>

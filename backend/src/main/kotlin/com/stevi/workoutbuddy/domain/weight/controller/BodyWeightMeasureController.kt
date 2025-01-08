@@ -5,6 +5,7 @@ import com.stevi.workoutbuddy.domain.weight.model.request.BodyWeightMeasureReque
 import com.stevi.workoutbuddy.domain.weight.model.response.BodyWeightMeasureResponse
 import com.stevi.workoutbuddy.domain.weight.service.BodyWeightMeasureService
 import com.stevi.workoutbuddy.security.SecurityUtil
+import jakarta.validation.Valid
 import java.time.LocalDateTime
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -25,7 +26,7 @@ class BodyWeightMeasureController(private val bodyWeightMeasureService: BodyWeig
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addBodyWeightMeasure(@RequestBody request: BodyWeightMeasureRequest): BodyWeightMeasureResponse {
+    fun addBodyWeightMeasure(@Valid @RequestBody request: BodyWeightMeasureRequest): BodyWeightMeasureResponse {
         return bodyWeightMeasureService.addBodyWeightMeasure(request)
     }
 
@@ -51,7 +52,7 @@ class BodyWeightMeasureController(private val bodyWeightMeasureService: BodyWeig
     @ResponseStatus(HttpStatus.OK)
     fun updateBodyWeightMeasure(
         @PathVariable id: Long,
-        @RequestBody request: BodyWeightMeasureRequest
+        @Valid  @RequestBody request: BodyWeightMeasureRequest
     ): BodyWeightMeasureResponse {
         return bodyWeightMeasureService.updateBodyWeightMeasure(id, request)
     }

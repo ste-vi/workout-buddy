@@ -19,7 +19,7 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { MatIcon } from '@angular/material/icon';
-import { Exercise } from '../../models/exercise';
+import {Exercise, getBodyPartDisplayName, getCategoryDisplayName} from '../../models/exercise';
 import { Sets } from '../../models/set';
 import { ToastComponent } from '../common/toast/toast.component';
 import { replaceItemInArray } from '../../utils/array-utils';
@@ -455,4 +455,7 @@ export class WorkoutHistoryDetailsComponent {
     this.workout.endTime = event.endTime;
     this.openedAdjustWorkoutTime = false;
   }
+
+  protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+  protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

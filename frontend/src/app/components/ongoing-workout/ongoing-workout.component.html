@@ -56,7 +56,7 @@
                                  (click)="resetSetDelete()"></app-action-button>
             </div>
             <div class=" lower-section gray-1-color s-text">
-              <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
+              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}</div>
               <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
                 <div>

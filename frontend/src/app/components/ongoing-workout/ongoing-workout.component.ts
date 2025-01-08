@@ -14,7 +14,7 @@ import {
   ContextMenuComponent,
   MenuItem,
 } from '../common/context-menu/context-menu.component';
-import { Exercise } from '../../models/exercise';
+import {Exercise, getBodyPartDisplayName, getCategoryDisplayName} from '../../models/exercise';
 import { ProgressBarComponent } from '../common/progress-bar/progress-bar.component';
 import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import { collapse } from '../../animations/collapse';
@@ -397,4 +397,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
         this.ongoingWorkout!.tags = tags;
       });
   }
+
+  protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+  protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

@@ -12,6 +12,7 @@ import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
 import {ContextMenuComponent} from "../common/context-menu/context-menu.component";
 import {WorkoutTemplateEditComponent} from "../workout-template-edit/workout-template-edit.component";
+import {getBodyPartDisplayName, getCategoryDisplayName} from "../../models/exercise";
 
 @Component({
   selector: 'app-workout-template-details',
@@ -96,4 +97,7 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
   openEdit(template: WorkoutTemplate) {
     this.workoutTemplateEditComponent.show(template);
   }
+
+  protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+  protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

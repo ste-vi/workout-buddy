@@ -18,17 +18,18 @@
 
   <div class="exercises-search-section card-padding-top">
     <div class="search card-shadow m-text">
-      <mat-icon svgIcon="search" class="gray-2-color clickable-m-icon" (click)="search()"></mat-icon>
+      <mat-icon svgIcon="search" class="gray-2-color l-svg-icon clickable-l-icon" (click)="search()"></mat-icon>
       <input placeholder="Search exercises" [(ngModel)]="searchQuery" (keyup)="search()">
-      <mat-icon svgIcon="options" class="clickable-m-icon" (click)="openSearchOptions()"></mat-icon>
+      <mat-icon svgIcon="options" class="l-svg-icon clickable-l-icon" (click)="openSearchOptions()"></mat-icon>
+      <mat-icon svgIcon="clear" class="gray-2-color l-svg-icon clickable-l-icon" (click)="clearSearch()"></mat-icon>
     </div>
 
     <div class="search-options s-text gray-1-color" *ngIf="isSearchOptionsOpen" [@collapse]>
       <div class="search-option card-shadow clickable" (click)="openBodyPartSelectionModal($event)"
-           [class.search-option-active]='bodyPart'>{{ bodyPart ? bodyPart : 'Any body part' }}
+           [class.search-option-active]='bodyPart'>{{ bodyPart ? getBodyPartDisplayName(bodyPart) : 'Any body part' }}
       </div>
       <div class="search-option card-shadow clickable" (click)="openCategorySelectionModal($event)"
-           [class.search-option-active]='category'>{{ category ? category : 'Any category' }}
+           [class.search-option-active]='category'>{{ category ? getCategoryDisplayName(category) : 'Any category' }}
       </div>
     </div>
 
@@ -60,7 +61,7 @@
           </div>
         </div>
         <div class="lower-section gray-1-color s-text">
-          <div>{{ exercise.bodyPart }} | {{ exercise.category }}</div>
+          <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}</div>
           <div class="pr-set" *ngIf="exercise.prSet">
             <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
             <div>

@@ -1,6 +1,6 @@
 import { WorkoutTemplate } from '../../../models/workout-template';
 import { Tag } from '../../../models/tag';
-import {BodyPart, Category} from "../../../models/exercise";
+import {BodyPart, ExerciseCategory} from "../../../models/exercise";
 
 export const tags: Tag[] = [
   { id: 1, name: 'Strength Training' },
@@ -45,8 +45,8 @@ export const suggestedWorkoutTemplate: WorkoutTemplate = {
         previousWeight: 120,
         completed: false,
       },
-      bodyPart: BodyPart.Back,
-      category: Category.Machine,
+      bodyPart: BodyPart.BACK,
+      category: ExerciseCategory.MACHINE,
     },
     {
       id: 2,
@@ -69,8 +69,8 @@ export const suggestedWorkoutTemplate: WorkoutTemplate = {
         previousWeight: 120,
         completed: false,
       },
-      bodyPart: BodyPart.Back,
-      category: Category.Machine,
+      bodyPart: BodyPart.BACK,
+      category: ExerciseCategory.MACHINE,
     },
     {
       id: 3,
@@ -93,8 +93,8 @@ export const suggestedWorkoutTemplate: WorkoutTemplate = {
         previousWeight: 120,
         completed: false,
       },
-      bodyPart: BodyPart.Back,
-      category: Category.Machine,
+      bodyPart: BodyPart.BACK,
+      category: ExerciseCategory.MACHINE,
     },
     {
       id: 4,
@@ -117,8 +117,8 @@ export const suggestedWorkoutTemplate: WorkoutTemplate = {
         previousWeight: 120,
         completed: false,
       },
-      bodyPart: BodyPart.Back,
-      category: Category.Machine,
+      bodyPart: BodyPart.BACK,
+      category: ExerciseCategory.MACHINE,
     },
   ],
   estimatedDuration: '30 min',
@@ -141,9 +141,9 @@ export const workoutTemplates: WorkoutTemplate[] = [
   suggestedWorkoutTemplate,
   {
     id: 1,
-    title: 'Back + Biceps',
+    title: 'BACK + Biceps',
     description:
-      'Back and biceps workouts involve exercises that target the back muscles and biceps muscles.',
+      'BACK and biceps workouts involve exercises that target the BACK muscles and biceps muscles.',
     exercises: [
       {
         id: 1,
@@ -214,8 +214,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
       {
         id: 2,
@@ -246,8 +246,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
       {
         id: 3,
@@ -278,8 +278,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
       {
         id: 4,
@@ -334,8 +334,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
       {
         id: 5,
@@ -358,8 +358,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
       {
         id: 6,
@@ -390,8 +390,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
       {
         id: 7,
@@ -422,8 +422,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
       {
         id: 7,
@@ -454,8 +454,8 @@ export const workoutTemplates: WorkoutTemplate[] = [
           previousWeight: 120,
           completed: false,
         },
-        bodyPart: BodyPart.Back,
-        category: Category.Machine,
+        bodyPart: BodyPart.BACK,
+        category: ExerciseCategory.MACHINE,
       },
     ],
     estimatedDuration: '30 min',

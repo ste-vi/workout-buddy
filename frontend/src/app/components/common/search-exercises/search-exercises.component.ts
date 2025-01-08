@@ -11,7 +11,13 @@ import { fadeInOut } from '../../../animations/fade-in-out';
 import { sideModalOpenClose } from '../../../animations/side-modal-open-close';
 import { HeaderButtonComponent } from '../header-button/header-button.component';
 import { ExerciseService } from '../../../services/api/exercise-service';
-import {BodyPart, Category, Exercise} from '../../../models/exercise';
+import {
+  BodyPart,
+  ExerciseCategory,
+  Exercise,
+  getBodyPartDisplayName,
+  getCategoryDisplayName,
+} from '../../../models/exercise';
 import { MatIcon } from '@angular/material/icon';
 import { collapse } from '../../../animations/collapse';
 
@@ -24,8 +30,8 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { FormsModule } from '@angular/forms';
 import { collapseEnter } from '../../../animations/collapse-enter';
 import { ConfirmationModalComponent } from '../modal/confirmation-modal/confirmation-modal.component';
-import {CreateExerciseModalComponent} from "../modal/create-exercise-modal/create-exercise-modal.component";
-import {ActionButtonComponent} from "../action-button/action-button.component";
+import { CreateExerciseModalComponent } from '../modal/create-exercise-modal/create-exercise-modal.component';
+import { ActionButtonComponent } from '../action-button/action-button.component';
 
 @Component({
   selector: 'app-exercises',
@@ -69,7 +75,7 @@ export class SearchExercisesComponent implements OnInit {
   protected hasMoreItems: boolean = true;
   protected searchQuery: string = '';
   protected bodyPart: BodyPart | undefined = undefined;
-  protected category: Category | undefined = undefined;
+  protected category: ExerciseCategory | undefined = undefined;
 
   private exerciseToDelete: Exercise | undefined = undefined;
 
@@ -88,11 +94,13 @@ export class SearchExercisesComponent implements OnInit {
   @ViewChild('createExerciseModal')
   createExerciseModal!: CreateExerciseModalComponent;
 
-  constructor(private exerciseService: ExerciseService) {
-    this.loadExercises();
-  }
+  constructor(private exerciseService: ExerciseService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.exerciseService.dataChanged$.subscribe(() => {
+      this.loadExercises(true);
+    });
+  }
 
   show(
     excludeExercisesIds?: number[],
@@ -160,6 +168,13 @@ export class SearchExercisesComponent implements OnInit {
     this.isSearchOptionsOpen = !this.isSearchOptionsOpen;
   }
 
+  clearSearch() {
+    this.searchQuery = '';
+    this.bodyPart = undefined;
+    this.category = undefined;
+    this.loadExercises(true);
+  }
+
   openBodyPartSelectionModal($event: MouseEvent) {
     let position = {
       x: $event.clientX,
@@ -173,7 +188,7 @@ export class SearchExercisesComponent implements OnInit {
 
     selectionItems.push(
       ...Object.values(BodyPart).map((bodyPart) => ({
-        label: bodyPart.toString(),
+        label: getBodyPartDisplayName(bodyPart),
         value: bodyPart as BodyPart,
       })),
     );
@@ -198,20 +213,23 @@ export class SearchExercisesComponent implements OnInit {
       yOffset: 0,
     };
 
-    let allItem: SelectionItem<Category | null> = { label: 'All', value: null };
-    let selectionItems: SelectionItem<Category | null>[] = [allItem];
+    let allItem: SelectionItem<ExerciseCategory | null> = {
+      label: 'All',
+      value: null,
+    };
+    let selectionItems: SelectionItem<ExerciseCategory | null>[] = [allItem];
 
     selectionItems.push(
-      ...Object.values(Category).map((category) => ({
-        label: category.toString(),
-        value: category as Category,
+      ...Object.values(ExerciseCategory).map((category) => ({
+        label: getCategoryDisplayName(category),
+        value: category as ExerciseCategory,
       })),
     );
 
     this.categorySelectionMenu.show(position, selectionItems);
   }
 
-  onCategoryItemSelected(selectionItem: SelectionItem<Category>) {
+  onCategoryItemSelected(selectionItem: SelectionItem<ExerciseCategory>) {
     if (selectionItem.value) {
       this.category = selectionItem.value;
     } else {
@@ -301,4 +319,7 @@ export class SearchExercisesComponent implements OnInit {
     }
     this.exerciseToDelete = undefined;
   }
+
+  protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+  protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

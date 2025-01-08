@@ -11,6 +11,7 @@ export class IndexedDBService {
     this.dbPromise = openDB('WorkoutBuddyDB', 1, {
       upgrade(db) {
         db.createObjectStore('bodyWeightMeasures', { keyPath: 'id', autoIncrement: true });
+        db.createObjectStore('exercises', { keyPath: 'id', autoIncrement: true });
       },
     });
   }

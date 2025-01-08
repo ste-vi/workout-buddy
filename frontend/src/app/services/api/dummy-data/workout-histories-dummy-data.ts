@@ -1,4 +1,4 @@
-import { BodyPart, Category, Exercise } from '../../../models/exercise';
+import { BodyPart, ExerciseCategory, Exercise } from '../../../models/exercise';
 import { tags } from './workflow-templates-dummy-daya';
 import { Sets } from '../../../models/set';
 import { Workout } from '../../../models/workout';
@@ -94,8 +94,8 @@ function generateExercises(count: number, workoutType: string): Exercise[] {
         id: index + 1,
         name: exerciseName,
         sets: sets,
-        bodyPart: BodyPart.FullBody,
-        category: Category.Strength,
+        bodyPart: BodyPart.FULL_BODY,
+        category: ExerciseCategory.STRENGTH,
         prSet: sets[0], // Add the PR set to the exercise
       };
     });
