@@ -133,7 +133,6 @@ export class WorkoutTemplateEditComponent implements OnInit {
     return {
       id: undefined,
       title: '',
-      description: '',
       exercises: [],
       estimatedDuration: undefined,
       totalSets: 0,
@@ -295,7 +294,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
   onReplaceExerciseConfirmed(confirmed: boolean) {
     if (confirmed && this.exerciseToReplace)
       this.exercisesModal.show(
-        this.template?.exercises?.map((e) => e.id),
+        this.template?.exercises?.map((e) => e.id!),
         false,
         true,
       );
@@ -312,7 +311,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
 
   addExercise() {
     this.exercisesModal.show(
-      this.template?.exercises?.map((e) => e.id),
+      this.template?.exercises?.map((e) => e.id!),
       true,
     );
   }

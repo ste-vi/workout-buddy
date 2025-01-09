@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  postgresql:
+    container_name: "workout-buddy"
+    image: postgres:15.2-alpine
+    restart: on-failure
+    ports:
+      - '5433:5432'
+    volumes:
+      - "C:/space/docker-volumes/db/workout-buddy:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=workout-buddy
+      - POSTGRES_USER=stef
+      - POSTGRES_PASSWORD=rootadmin

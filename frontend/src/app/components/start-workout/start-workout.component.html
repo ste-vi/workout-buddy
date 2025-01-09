@@ -29,7 +29,7 @@
           <div>
             <span *ngIf="template.exercises.length > 0">{{ template.exercises.length }} exercises | </span>
             <span *ngIf="template.totalSets > 0">{{ template.totalSets }} sets | </span>
-            <span>{{ template.estimatedDuration }}</span>
+            <span>{{ template.estimatedDuration + ' min'}}</span>
           </div>
           <div class="last-workout-time">
             <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>

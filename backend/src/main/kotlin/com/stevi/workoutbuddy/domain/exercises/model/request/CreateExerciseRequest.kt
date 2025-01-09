@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
-data class ExerciseRequest(
+data class CreateExerciseRequest(
 
     @field:NotBlank(message = "Name is required")
     @field:Size(max = 200, message = "Name must not exceed 200 characters")

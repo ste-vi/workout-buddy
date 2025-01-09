@@ -33,7 +33,7 @@ export class WorkoutService {
   replaceExercise(
     workoutId: number,
     exerciseId: number,
-    newExerciseId: number,
+    newExerciseId?: number,
   ) {}
 
   updateExercisesPositionForWorkout(workoutId: number, exerciseIds: number[]) {

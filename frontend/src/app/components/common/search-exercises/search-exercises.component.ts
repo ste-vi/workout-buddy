@@ -309,7 +309,7 @@ export class SearchExercisesComponent implements OnInit {
   onDeleteExerciseConfirmed(confirmed: boolean) {
     if (confirmed && this.exercises && this.exerciseToDelete) {
       this.exerciseService
-        .deleteExercise(this.exerciseToDelete!.id)
+        .deleteExercise(this.exerciseToDelete!.id!)
         .subscribe(() => {
           const index = this.exercises!.indexOf(this.exerciseToDelete!);
           if (index > -1) {

@@ -240,7 +240,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   addExercise() {
     this.exercisesModal.show(
-      this.ongoingWorkout?.exercises?.map((e) => e.id),
+      this.ongoingWorkout?.exercises?.map((e) => e.id!),
       true,
     );
   }
@@ -249,7 +249,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     if (selectedExercises.length > 0) {
       this.workoutService.addExerciseToWorkout(
         this.ongoingWorkout?.id!,
-        selectedExercises.map((e) => e.id),
+        selectedExercises.map((e) => e.id!),
       );
       this.ongoingWorkout?.exercises!.push(...selectedExercises);
       this.recalculateProgress();
@@ -266,7 +266,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   onReplaceExerciseConfirmed(confirmed: boolean) {
     if (confirmed && this.exerciseToReplace)
       this.exercisesModal.show(
-        this.ongoingWorkout?.exercises?.map((e) => e.id),
+        this.ongoingWorkout?.exercises?.map((e) => e.id!),
         false,
         true,
       );
@@ -322,7 +322,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
 
   addSet(exercise: Exercise) {
     let newSet: Sets = { reps: 0, weight: 0, completed: false };
-    this.setService.create(newSet, exercise.id).subscribe((set) => {
+    this.setService.create(newSet, exercise.id!).subscribe((set) => {
       exercise.sets.push(set);
       this.recalculateProgress();
     });

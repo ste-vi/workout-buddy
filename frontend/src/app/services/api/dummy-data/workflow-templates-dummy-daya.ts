@@ -13,8 +13,6 @@ export const tags: Tag[] = [
 export const suggestedWorkoutTemplate: WorkoutTemplate = {
   id: 1,
   title: 'High-Intensity Interval Training',
-  description:
-    'A high-intensity interval training (HIIT) workout is a cardiovascular exercise technique that combines high-intensity aerobic activities with short bursts of low-intensity activities called intervals.',
   exercises: [
     {
       id: 1,
@@ -121,7 +119,7 @@ export const suggestedWorkoutTemplate: WorkoutTemplate = {
       category: ExerciseCategory.MACHINE,
     },
   ],
-  estimatedDuration: '30 min',
+  estimatedDuration: 30,
   totalSets: 5,
   lastPerformedWorkout: {
     id: 1,
@@ -141,9 +139,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
   suggestedWorkoutTemplate,
   {
     id: 1,
-    title: 'BACK + Biceps',
-    description:
-      'BACK and biceps workouts involve exercises that target the BACK muscles and biceps muscles.',
+    title: 'Back + Biceps',
     exercises: [
       {
         id: 1,
@@ -458,7 +454,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
         category: ExerciseCategory.MACHINE,
       },
     ],
-    estimatedDuration: '30 min',
+    estimatedDuration: 30,
     totalSets: 5,
     lastPerformedWorkout: {
       id: 1,

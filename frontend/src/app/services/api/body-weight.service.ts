@@ -12,7 +12,7 @@ import { IndexedDBService } from '../offline/indexed-db.service';
   providedIn: 'root',
 })
 export class BodyWeightService {
-  private apiUrl = `${environment.apiUrl}/api/body-weight-measures`;
+  private apiUrl = `${environment.apiUrl}/body-weight-measures`;
   private dataChangedSubject = new Subject<void>();
   dataChanged$ = this.dataChangedSubject.asObservable();
 

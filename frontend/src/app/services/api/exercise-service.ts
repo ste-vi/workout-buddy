@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, Subject, from, forkJoin } from 'rxjs';
+import {Observable, of, Subject, from, forkJoin, throwError} from 'rxjs';
 import { tap, catchError, map, switchMap } from 'rxjs/operators';
 import { PageResponse } from '../../models/page-response';
 import { BodyPart, Exercise, ExerciseCategory } from '../../models/exercise';
@@ -11,7 +11,7 @@ import { IndexedDBService } from '../offline/indexed-db.service';
   providedIn: 'root',
 })
 export class ExerciseService {
-  private apiUrl = `${environment.apiUrl}/api/exercises`;
+  private apiUrl = `${environment.apiUrl}/exercises`;
   private dataChangedSubject = new Subject<void>();
   dataChanged$ = this.dataChangedSubject.asObservable();
 
@@ -103,29 +103,30 @@ export class ExerciseService {
     bodyPart: BodyPart,
     category: ExerciseCategory,
   ): Observable<Exercise> {
+    if (!navigator.onLine) {
+      return throwError(() => new Error('Cannot create exercises while offline'));
+    }
+
     const newExercise: Exercise = {
-      id: -Date.now(),
+      id: undefined,
       name,
       sets: [],
       bodyPart,
       category,
       synced: false,
     };
-    if (navigator.onLine) {
-      return this.http.post<Exercise>(this.apiUrl, newExercise).pipe(
-        tap((createdExercise) => {
-          createdExercise.synced = true;
-          this.indexedDBService.put('exercises', createdExercise);
-          this.notifyDataChanged();
-        }),
-        catchError((error) => {
-          console.error('Error creating exercise on API:', error);
-          return this.createOfflineExercise(newExercise);
-        }),
-      );
-    } else {
-      return this.createOfflineExercise(newExercise);
-    }
+
+    return this.http.post<Exercise>(this.apiUrl, newExercise).pipe(
+      tap((createdExercise) => {
+        createdExercise.synced = true;
+        this.indexedDBService.put('exercises', createdExercise);
+        this.notifyDataChanged();
+      }),
+      catchError((error) => {
+        console.error('Error creating exercise on API:', error);
+        return throwError(() => new Error('Failed to create exercise'));
+      }),
+    );
   }
 
   updateExercise(

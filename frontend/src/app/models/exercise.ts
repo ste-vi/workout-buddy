@@ -1,7 +1,7 @@
 import { Sets } from './set';
 
 export interface Exercise {
-  id: number;
+  id?: number;
   name: string;
   sets: Sets[];
   prSet?: Sets;

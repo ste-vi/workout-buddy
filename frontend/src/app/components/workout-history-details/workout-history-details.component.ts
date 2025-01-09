@@ -303,7 +303,7 @@ export class WorkoutHistoryDetailsComponent {
 
   addExercise() {
     this.exercisesModal.show(
-      this.workout?.exercises?.map((e) => e.id),
+      this.workout?.exercises?.map((e) => e.id!),
       true,
     );
   }
@@ -329,7 +329,7 @@ export class WorkoutHistoryDetailsComponent {
   onReplaceExerciseConfirmed(confirmed: boolean) {
     if (confirmed && this.exerciseToReplace)
       this.exercisesModal.show(
-        this.workout?.exercises?.map((e) => e.id),
+        this.workout?.exercises?.map((e) => e.id!),
         false,
         true,
       );

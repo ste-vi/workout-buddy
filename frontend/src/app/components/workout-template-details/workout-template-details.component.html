@@ -13,12 +13,12 @@
         {{ template.title }}
       </div>
       <div class="s-text gray-1-color">
-        {{ template.exercises.length }} exercises | {{ template.totalSets }} sets | {{ template.estimatedDuration }}
+        {{ template.exercises.length }} exercises | {{ template.totalSets }} sets | {{ template.estimatedDuration }} min
       </div>
-      <div class="tags s-text card-padding-top">
+      <div class="tags s-text card-padding-top" *ngIf="template.tags.length > 0">
         <div class="tag" *ngFor="let tag of template.tags">{{ tag.name }}</div>
       </div>
-      <div class="info-cards s-text">
+      <div class="info-cards s-text" *ngIf="template.lastPerformedWorkout">
         <div class="info-card card-shadow">
           <div class="semi-bold">
             {{ template.lastPerformedWorkout.duration }}
@@ -45,8 +45,10 @@
     </div>
 
     <div class="exercises-list-container">
-      <div class="l-text black-color semi-bold">Exercises</div>
       <div class="exercises">
+        <div *ngIf="template.exercises.length === 0" class="s-text gray-1-color">Note: no exercises has been added to the template.<br> You can add exercises
+          by editing current template or starting workout and adding new exercises there.
+        </div>
         <div class="exercise" *ngFor="let exercise of template.exercises">
           <div class="exercise-header">
             <div class="exercise-image secondary-background"></div>
@@ -59,7 +61,8 @@
               </div>
             </div>
             <div class="lower-section gray-1-color s-text">
-              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}</div>
+              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}
+              </div>
               <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
                 <div>

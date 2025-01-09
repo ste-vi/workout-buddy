@@ -1,14 +1,17 @@
 package com.stevi.workoutbuddy.domain.exercises.service
 
 import com.stevi.workoutbuddy.common.model.response.PageResponse
-import com.stevi.workoutbuddy.domain.exercises.model.request.ExerciseRequest
+import com.stevi.workoutbuddy.domain.exercises.model.request.CreateExerciseRequest
+import com.stevi.workoutbuddy.domain.exercises.model.request.WorkoutExerciseRequest
 import com.stevi.workoutbuddy.domain.exercises.model.response.ExerciseResponse
 import com.stevi.workoutbuddy.domain.exercises.specification.ExerciseSpecification
 import com.stevi.workoutbuddy.entity.Exercise
+import com.stevi.workoutbuddy.entity.Sets
 import com.stevi.workoutbuddy.enumeration.BodyPart
 import com.stevi.workoutbuddy.enumeration.ExerciseCategory
 import com.stevi.workoutbuddy.exception.ResourceNotFoundException
 import com.stevi.workoutbuddy.repository.ExerciseRepository
+import com.stevi.workoutbuddy.repository.UserRepository
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -16,8 +19,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ExerciseService(private val exerciseRepository: ExerciseRepository) {
+class ExerciseService(private val exerciseRepository: ExerciseRepository, private val userRepository: UserRepository) {
 
+    @Transactional(readOnly = true)
     fun searchExercises(
         page: Int,
         size: Int,
@@ -45,21 +49,21 @@ class ExerciseService(private val exerciseRepository: ExerciseRepository) {
     }
 
     @Transactional
-    fun createExercise(request: ExerciseRequest): ExerciseResponse {
+    fun createExercise(request: CreateExerciseRequest, userId: Long): ExerciseResponse {
+        val user = userRepository.findById(userId).orElseThrow { ResourceNotFoundException("User not found") }
         val exercise = Exercise(
-            id = null,
             name = request.name,
             bodyPart = request.bodyPart,
             category = request.category,
             deleted = false,
+            user = user
         )
         val savedExercise = exerciseRepository.save(exercise)
         return ExerciseResponse.fromEntity(savedExercise)
     }
 
-
     @Transactional
-    fun updateExercise(id: Long, request: ExerciseRequest): ExerciseResponse {
+    fun updateExercise(id: Long, request: CreateExerciseRequest): ExerciseResponse {
         val existingExercise = exerciseRepository.findById(id)
             .orElseThrow { ResourceNotFoundException("Exercise not found with id: $id") }
 
@@ -78,5 +82,27 @@ class ExerciseService(private val exerciseRepository: ExerciseRepository) {
         val exercise = exerciseRepository.findById(id)
             .orElseThrow { EntityNotFoundException("Exercise not found with id: $id") }
         exerciseRepository.delete(exercise)
+    }
+
+    @Transactional
+    fun updateExercisesForWorkout(exerciseRequests: List<WorkoutExerciseRequest>): MutableSet<Exercise> {
+        val exerciseIds = exerciseRequests.map { it.id }
+        val exercises = exerciseRepository.findAllById(exerciseIds).associateBy { it.id }
+
+        val updatedExercises = exerciseRequests.mapNotNull { request ->
+            exercises[request.id]?.apply {
+                sets.clear()
+                sets.addAll(request.sets.map { setRequest ->
+                    Sets(
+                        reps = setRequest.reps,
+                        weight = setRequest.weight,
+                        completed = setRequest.completed,
+                        exercise = this
+                    )
+                })
+            }
+        }.toMutableSet()
+
+        return exerciseRepository.saveAll(updatedExercises).toMutableSet()
     }
 }

@@ -4,9 +4,8 @@ import { Tag } from './tag';
 export interface WorkoutTemplate {
   id?: number;
   title: string;
-  description: string;
   exercises: Exercise[];
-  estimatedDuration?: string;
+  estimatedDuration?: number;
   totalSets: number;
   lastPerformedWorkout?: LastPerformedWorkout;
   tags: Tag[];

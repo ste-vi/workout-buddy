@@ -1,12 +1,12 @@
 package com.stevi.workoutbuddy.domain.exercises.controller
 
 import com.stevi.workoutbuddy.common.model.response.PageResponse
-import com.stevi.workoutbuddy.domain.exercises.model.*
-import com.stevi.workoutbuddy.domain.exercises.model.request.ExerciseRequest
+import com.stevi.workoutbuddy.domain.exercises.model.request.CreateExerciseRequest
 import com.stevi.workoutbuddy.domain.exercises.model.response.ExerciseResponse
 import com.stevi.workoutbuddy.domain.exercises.service.ExerciseService
 import com.stevi.workoutbuddy.enumeration.BodyPart
 import com.stevi.workoutbuddy.enumeration.ExerciseCategory
+import com.stevi.workoutbuddy.security.SecurityUtil
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -30,13 +30,13 @@ class ExerciseController(private val exerciseService: ExerciseService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createExercise(@Valid @RequestBody request: ExerciseRequest): ExerciseResponse {
-        return exerciseService.createExercise(request)
+    fun createExercise(@Valid @RequestBody request: CreateExerciseRequest): ExerciseResponse {
+        return exerciseService.createExercise(request, SecurityUtil.getCurrentUserId())
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun updateExercise(@Valid @PathVariable id: Long, @RequestBody request: ExerciseRequest): ExerciseResponse {
+    fun updateExercise(@Valid @PathVariable id: Long, @RequestBody request: CreateExerciseRequest): ExerciseResponse {
         return exerciseService.updateExercise(id, request)
     }
 
