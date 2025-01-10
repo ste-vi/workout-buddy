@@ -97,6 +97,8 @@ function generateExercises(count: number, workoutType: string): Exercise[] {
         bodyPart: BodyPart.FULL_BODY,
         category: ExerciseCategory.STRENGTH,
         prSet: sets[0], // Add the PR set to the exercise
+        synced: true,
+        position: index + 1,
       };
     });
 }

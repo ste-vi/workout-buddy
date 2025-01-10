@@ -8,6 +8,7 @@ export interface Exercise {
   bodyPart?: BodyPart;
   category: ExerciseCategory;
   synced?: boolean;
+  position?: number;
 }
 
 export enum BodyPart {

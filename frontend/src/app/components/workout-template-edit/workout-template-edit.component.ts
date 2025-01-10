@@ -32,7 +32,6 @@ import {
   ContextMenuComponent,
   MenuItem,
 } from '../common/context-menu/context-menu.component';
-import { replaceItemInArray } from '../../utils/array-utils';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../common/toast/toast.component';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
@@ -196,6 +195,10 @@ export class WorkoutTemplateEditComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     let exercises = this.template?.exercises!;
     moveItemInArray(exercises, event.previousIndex, event.currentIndex);
+
+    exercises.forEach((exercise, index) => {
+      exercise.position = index;
+    });
   }
 
   onDragEnded() {
@@ -271,6 +274,11 @@ export class WorkoutTemplateEditComponent implements OnInit {
       const index = this.template!.exercises!.indexOf(this.exerciseToDelete);
       if (index > -1) {
         this.template!.exercises!.splice(index, 1);
+        this.template!.exercises!.forEach((exercise, i) => {
+          if (i >= index) {
+            exercise.position = i;
+          }
+        });
       }
     }
     this.exerciseToDelete = undefined;
@@ -293,11 +301,13 @@ export class WorkoutTemplateEditComponent implements OnInit {
   }
 
   onReplaceExerciseSelected(exercise: Exercise) {
-    replaceItemInArray(
-      this.template?.exercises!,
-      exercise,
+    const index = this.template?.exercises!.findIndex(
       (e) => e.id === this.exerciseToReplace.id,
     );
+    if (index && index !== -1) {
+      exercise.position = this.template?.exercises![index].position;
+      this.template?.exercises!.splice(index, 1, exercise);
+    }
     this.exerciseToReplace = undefined;
   }
 
@@ -310,6 +320,10 @@ export class WorkoutTemplateEditComponent implements OnInit {
 
   onAddExercisesSelected(selectedExercises: Exercise[]) {
     if (selectedExercises.length > 0) {
+      const startPosition = this.template?.exercises?.length || 0;
+      selectedExercises.forEach((exercise, index) => {
+        exercise.position = startPosition + index;
+      });
       this.template?.exercises!.push(...selectedExercises);
     }
   }

@@ -17,12 +17,12 @@ export class WorkoutTemplate {
     if (data) {
       this.id = data.id;
       this.title = data.title || '';
-      this.exercises = data.exercises || [];
       this.totalSets = data.totalSets || 0;
       this.lastPerformedWorkout = data.lastPerformedWorkout;
       this.tags = data.tags || [];
       this.volumeTrend = data.volumeTrend;
       this.archived = data.archived;
+      this.exercises = sortExercises(data.exercises);
 
       this.recalculateTotalSets();
     }
@@ -45,4 +45,10 @@ interface LastPerformedWorkout {
 export interface Trend {
   value: string;
   percentage: number;
+}
+
+export function sortExercises(exercises: Exercise[] | undefined) {
+  return (exercises || []).sort(
+    (a, b) => (a.position || 0) - (b.position || 0),
+  );
 }

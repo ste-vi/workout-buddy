@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import { WorkoutTemplateDetailsService } from '../../services/communication/workout-template-details.service';
-import { WorkoutTemplate } from '../../models/workout-template';
+import {sortExercises, WorkoutTemplate} from '../../models/workout-template';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { MatIcon } from '@angular/material/icon';
 import { ButtonComponent } from '../common/button/button.component';
@@ -54,6 +54,7 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.workoutTemplateDetailsService.modalOpened$.subscribe((template) => {
       this.template = template;
+      template.exercises = sortExercises(template.exercises)
       this.isOpen = true;
     });
   }
