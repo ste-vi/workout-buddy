@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull
 
 data class SetsRequest(
 
+    val id: Long?,
+
     @field:NotNull(message = "Reps are required")
     @field:Min(value = 0, message = "Cannot be less then 0")
     @field:Max(value = 10_000, message = "Cannot be more then 10_000")

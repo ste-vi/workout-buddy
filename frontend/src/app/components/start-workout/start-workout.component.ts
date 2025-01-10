@@ -13,10 +13,8 @@ import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.comp
 import { WorkoutTemplateDetailsComponent } from '../workout-template-details/workout-template-details.component';
 import { WorkoutTemplateEditComponent } from '../workout-template-edit/workout-template-edit.component';
 import { ContextMenuComponent } from '../common/context-menu/context-menu.component';
-import {
-  WorkoutTemplateWidgetComponent
-} from "../common/widgets/workout-template-widget/workout-template-widget.component";
-import {fadeInOut} from "../../animations/fade-in-out";
+import { WorkoutTemplateWidgetComponent } from '../common/widgets/workout-template-widget/workout-template-widget.component';
+import { fadeInOut } from '../../animations/fade-in-out';
 
 @Component({
   selector: 'app-start-workout',
@@ -37,11 +35,14 @@ import {fadeInOut} from "../../animations/fade-in-out";
   ],
   templateUrl: './start-workout.component.html',
   styleUrl: './start-workout.component.scss',
-  animations: [fadeInOut]
+  animations: [fadeInOut],
 })
 export class StartWorkoutComponent implements OnInit {
-  protected suggestedWorkoutTemplate: WorkoutTemplate | any = undefined;
+  protected suggestedWorkoutTemplate: WorkoutTemplate | undefined = undefined;
   protected workoutTemplates: WorkoutTemplate[] = [];
+  protected archivedWorkoutTemplates: WorkoutTemplate[] = [];
+
+  protected showArchivedWorkouts: boolean = true;
 
   @ViewChild('workoutTemplateEditComponent')
   workoutTemplateEditComponent!: WorkoutTemplateEditComponent;
@@ -59,9 +60,13 @@ export class StartWorkoutComponent implements OnInit {
       .getSuggestedWorkoutTemplate()
       .subscribe((wt) => (this.suggestedWorkoutTemplate = wt));
 
-    this.workoutTemplateService
-      .getWorkoutTemplates()
-      .subscribe((array) => (this.workoutTemplates = array));
+    this.workoutTemplateService.getWorkoutTemplates().subscribe((array) => {
+      this.workoutTemplates = array.filter((e) => !e.archived);
+      this.archivedWorkoutTemplates = array.filter((e) => e.archived);
+    });
+
+    const showArchived = localStorage.getItem('showArchivedWorkouts');
+    this.showArchivedWorkouts = showArchived ? JSON.parse(showArchived) : true;
   }
 
   openWorkoutTemplateDetails(workoutTemplate: WorkoutTemplate) {
@@ -76,7 +81,17 @@ export class StartWorkoutComponent implements OnInit {
     this.workoutTemplateEditComponent.show();
   }
 
-  onTemplateUpdated(updatedTemplate: WorkoutTemplate) {}
+  onTemplateUpdated(updatedTemplate: WorkoutTemplate) {
+    const index = this.workoutTemplates.findIndex(t => t.id === updatedTemplate.id);
+    if (index !== -1) {
+      this.workoutTemplates[index] = updatedTemplate;
+    } else {
+      const archivedIndex = this.archivedWorkoutTemplates.findIndex(t => t.id === updatedTemplate.id);
+      if (archivedIndex !== -1) {
+        this.archivedWorkoutTemplates[archivedIndex] = updatedTemplate;
+      }
+    }
+  }
 
   onTemplateCreated(createdTemplate: WorkoutTemplate) {
     this.workoutTemplates.push(createdTemplate);
@@ -92,9 +107,12 @@ export class StartWorkoutComponent implements OnInit {
         action: () => this.openEdit(template),
       },
       {
-        label: 'Delete template',
-        icon: 'delete',
-        action: () => this.openEdit(template),
+        label: template.archived ? 'Unarchive template' : 'Archive template',
+        icon: template.archived ? 'unarchive' : 'archive',
+        action: () =>
+          template.archived
+            ? this.unArchiveTemplate(template)
+            : this.archiveTemplate(template),
       },
     ];
 
@@ -108,5 +126,34 @@ export class StartWorkoutComponent implements OnInit {
 
   openEdit(template: WorkoutTemplate) {
     this.workoutTemplateEditComponent.show(template);
+  }
+
+  archiveTemplate(template: WorkoutTemplate) {
+    this.workoutTemplateService
+      .archiveWorkoutTemplate(template.id!)
+      .subscribe(() => {
+        template.archived = true;
+        this.workoutTemplates = this.workoutTemplates.filter(
+          (t) => t.id !== template.id,
+        );
+        this.archivedWorkoutTemplates.push(template);
+      });
+  }
+
+  unArchiveTemplate(template: WorkoutTemplate) {
+    this.workoutTemplateService
+      .unarchiveWorkoutTemplate(template.id!)
+      .subscribe(() => {
+        template.archived = false;
+        this.archivedWorkoutTemplates = this.archivedWorkoutTemplates.filter(
+          (t) => t.id !== template.id,
+        );
+        this.workoutTemplates.push(template);
+      });
+  }
+
+  toggleArchivedWorkouts(): void {
+    this.showArchivedWorkouts = !this.showArchivedWorkouts;
+    localStorage.setItem('showArchivedWorkouts', JSON.stringify(this.showArchivedWorkouts));
   }
 }

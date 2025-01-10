@@ -6,6 +6,7 @@ import com.stevi.workoutbuddy.domain.workouttemplate.service.WorkoutTemplateServ
 import com.stevi.workoutbuddy.security.SecurityUtil
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -50,5 +51,17 @@ class WorkoutTemplateController(
     ): WorkoutTemplateResponse {
         val userId = SecurityUtil.getCurrentUserId()
         return workoutTemplateService.updateWorkoutTemplate(userId, id, request)
+    }
+
+    @DeleteMapping("/{id}/archive")
+    @ResponseStatus(HttpStatus.OK)
+    fun archiveWorkoutTemplate(@PathVariable id: Long) {
+        workoutTemplateService.archiveWorkoutTemplate(id, SecurityUtil.getCurrentUserId())
+    }
+
+    @DeleteMapping("/{id}/unarchive")
+    @ResponseStatus(HttpStatus.OK)
+    fun unArchiveWorkoutTemplate(@PathVariable id: Long) {
+        workoutTemplateService.unArchiveWorkoutTemplate(id, SecurityUtil.getCurrentUserId())
     }
 }

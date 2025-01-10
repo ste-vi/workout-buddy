@@ -10,18 +10,17 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "sets")
 class Sets(
-    // composite id
 
     @Column(nullable = false)
-    val reps: Short,
+    var reps: Short,
 
     @Column(nullable = false)
-    val weight: Short,
+    var weight: Short,
 
     @Column(nullable = false)
-    val completed: Boolean,
+    var completed: Boolean,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exercise_id", nullable = false)
-    var exercise: Exercise,
+    @JoinColumn(name = "exercise_instance_id", nullable = false)
+    var exerciseInstance: ExerciseInstance,
 ) : Base()

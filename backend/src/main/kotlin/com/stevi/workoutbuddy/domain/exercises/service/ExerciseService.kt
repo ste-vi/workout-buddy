@@ -83,26 +83,4 @@ class ExerciseService(private val exerciseRepository: ExerciseRepository, privat
             .orElseThrow { EntityNotFoundException("Exercise not found with id: $id") }
         exerciseRepository.delete(exercise)
     }
-
-    @Transactional
-    fun updateExercisesForWorkout(exerciseRequests: List<WorkoutExerciseRequest>): MutableSet<Exercise> {
-        val exerciseIds = exerciseRequests.map { it.id }
-        val exercises = exerciseRepository.findAllById(exerciseIds).associateBy { it.id }
-
-        val updatedExercises = exerciseRequests.mapNotNull { request ->
-            exercises[request.id]?.apply {
-                sets.clear()
-                sets.addAll(request.sets.map { setRequest ->
-                    Sets(
-                        reps = setRequest.reps,
-                        weight = setRequest.weight,
-                        completed = setRequest.completed,
-                        exercise = this
-                    )
-                })
-            }
-        }.toMutableSet()
-
-        return exerciseRepository.saveAll(updatedExercises).toMutableSet()
-    }
 }

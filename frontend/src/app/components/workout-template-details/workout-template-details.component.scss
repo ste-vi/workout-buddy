@@ -32,6 +32,21 @@
     .workout-template-details {
       padding-top: var(--m-size);
 
+      .details {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+
+        .archived {
+          color: var(--border);
+          background-color: var(--gray-3);
+          border-radius: 8px;
+          padding: 0.2rem 0.46rem;
+        }
+      }
+
       .info-cards {
         display: flex;
         flex-direction: row;

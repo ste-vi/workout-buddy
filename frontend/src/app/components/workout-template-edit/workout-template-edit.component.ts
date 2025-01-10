@@ -10,10 +10,12 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { WorkoutTemplate } from '../../models/workout-template';
-import {Exercise, getBodyPartDisplayName, getCategoryDisplayName} from '../../models/exercise';
+import {
+  Exercise,
+  getBodyPartDisplayName,
+  getCategoryDisplayName,
+} from '../../models/exercise';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
-import { suggestedWorkoutTemplate } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
-import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
 import {
   CdkDrag,
   CdkDragDrop,
@@ -34,7 +36,7 @@ import { replaceItemInArray } from '../../utils/array-utils';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../common/toast/toast.component';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
-import {ActionButtonComponent} from "../common/action-button/action-button.component";
+import { ActionButtonComponent } from '../common/action-button/action-button.component';
 
 @Component({
   selector: 'app-workout-template-edit',
@@ -42,7 +44,6 @@ import {ActionButtonComponent} from "../common/action-button/action-button.compo
   imports: [
     HeaderButtonComponent,
     NgIf,
-    MediumButtonComponent,
     CdkDrag,
     CdkDragHandle,
     MatIcon,
@@ -65,7 +66,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
   protected isOpen: boolean = false;
   protected isEdit: boolean = false;
 
-  protected template: WorkoutTemplate | undefined = suggestedWorkoutTemplate;
+  protected template: WorkoutTemplate | undefined;
 
   @Output() createdTemplate: any = new EventEmitter<WorkoutTemplate>();
   @Output() updatedTemplate: any = new EventEmitter<WorkoutTemplate>();
@@ -105,6 +106,8 @@ export class WorkoutTemplateEditComponent implements OnInit {
   @ViewChild('errorToast')
   errorToast!: ToastComponent;
 
+  private beforeUnloadListener: any;
+
   constructor(private workoutTemplateService: WorkoutTemplateService) {}
 
   ngOnInit(): void {}
@@ -112,34 +115,23 @@ export class WorkoutTemplateEditComponent implements OnInit {
   show(template?: WorkoutTemplate) {
     if (template) {
       this.isEdit = true;
-      this.template = { ...template };
+      this.template = new WorkoutTemplate(template);
       this.templateTitle = this.template.title;
       this.isTitleEditable = false;
     } else {
       this.isEdit = false;
-      this.template = this.initNewTemplate();
+      this.template = new WorkoutTemplate();
       this.templateTitle = '';
       this.isTitleEditable = true;
     }
+    this.setupBeforeUnloadListener();
     this.isInvalidated = false;
     this.isOpen = true;
   }
 
   close() {
     this.isOpen = false;
-  }
-
-  private initNewTemplate(): WorkoutTemplate {
-    return {
-      id: undefined,
-      title: '',
-      exercises: [],
-      estimatedDuration: undefined,
-      totalSets: 0,
-      lastPerformedWorkout: undefined,
-      tags: [],
-      volumeTrend: undefined,
-    };
+    this.removeBeforeUnloadListener();
   }
 
   save() {
@@ -371,6 +363,17 @@ export class WorkoutTemplateEditComponent implements OnInit {
         this.template.title = this.templateTitle;
       }
     }
+  }
+
+  private setupBeforeUnloadListener(): void {
+    this.beforeUnloadListener = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+    window.addEventListener('beforeunload', this.beforeUnloadListener);
+  }
+
+  private removeBeforeUnloadListener(): void {
+    window.removeEventListener('beforeunload', this.beforeUnloadListener);
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import { WorkoutTemplateDetailsService } from '../../services/communication/workout-template-details.service';
 import { WorkoutTemplate } from '../../models/workout-template';
@@ -10,9 +10,13 @@ import { OngoingWorkoutService } from '../../services/communication/ongoing-work
 import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
-import {ContextMenuComponent} from "../common/context-menu/context-menu.component";
-import {WorkoutTemplateEditComponent} from "../workout-template-edit/workout-template-edit.component";
-import {getBodyPartDisplayName, getCategoryDisplayName} from "../../models/exercise";
+import { ContextMenuComponent } from '../common/context-menu/context-menu.component';
+import { WorkoutTemplateEditComponent } from '../workout-template-edit/workout-template-edit.component';
+import {
+  getBodyPartDisplayName,
+  getCategoryDisplayName,
+} from '../../models/exercise';
+import { WorkoutTemplateService } from '../../services/api/workout-template.service';
 
 @Component({
   selector: 'app-workout-template-details',
@@ -43,6 +47,7 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
 
   constructor(
     private workoutTemplateDetailsService: WorkoutTemplateDetailsService,
+    private workoutTemplateService: WorkoutTemplateService,
     private ongoingWorkoutService: OngoingWorkoutService,
   ) {}
 
@@ -67,7 +72,7 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
   }
 
   onTemplateUpdated(template: WorkoutTemplate) {
-
+    this.template = template;
   }
 
   templateMenuItems: any = [];
@@ -80,9 +85,14 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
         action: () => this.openEdit(this.template),
       },
       {
-        label: 'Delete template',
-        icon: 'delete',
-        action: () => this.openEdit(this.template),
+        label: this.template.archived
+          ? 'Unarchive template'
+          : 'Archive template',
+        icon: this.template.archived ? 'unarchive' : 'archive',
+        action: () =>
+          this.template.archived
+            ? this.unArchiveTemplate(this.template)
+            : this.archiveTemplate(this.template),
       },
     ];
 
@@ -96,6 +106,22 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
 
   openEdit(template: WorkoutTemplate) {
     this.workoutTemplateEditComponent.show(template);
+  }
+
+  archiveTemplate(template: WorkoutTemplate) {
+    this.workoutTemplateService
+      .archiveWorkoutTemplate(template.id!)
+      .subscribe(() => {
+        template.archived = true;
+      });
+  }
+
+  unArchiveTemplate(template: WorkoutTemplate) {
+    this.workoutTemplateService
+      .unarchiveWorkoutTemplate(template.id!)
+      .subscribe(() => {
+        template.archived = false;
+      });
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;

@@ -1,5 +1,6 @@
 package com.stevi.workoutbuddy.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import java.time.LocalDateTime
 
 @Entity
@@ -21,10 +23,10 @@ class WorkoutTemplate(
     var title: String,
 
     @Column
-    var estimatedDuration: Short,
+    var totalSets: Short,
 
     @Column
-    var totalSets: Short,
+    var archived: Boolean = false,
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -34,15 +36,21 @@ class WorkoutTemplate(
     )
     var tags: MutableSet<Tag> = mutableSetOf(),
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "workout_template_exercises",
-        joinColumns = [JoinColumn(name = "workout_template_id")],
-        inverseJoinColumns = [JoinColumn(name = "exercise_id")]
+    @OneToMany(
+        mappedBy = "workoutTemplate",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
     )
-    var exercises: MutableSet<Exercise> = mutableSetOf(),
+    var exerciseInstances: MutableList<ExerciseInstance> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     val user: User,
-) : Base()
+) : Base() {
+    fun updateExerciseInstances(newInstances: List<ExerciseInstance>) {
+        exerciseInstances.clear()
+        exerciseInstances.addAll(newInstances)
+        newInstances.forEach { it.workoutTemplate = this }
+    }
+}

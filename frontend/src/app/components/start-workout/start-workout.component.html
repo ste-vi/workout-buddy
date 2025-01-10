@@ -9,7 +9,7 @@
 
     <div class="workout-container" *ngIf="suggestedWorkoutTemplate">
       <div class="m-text semi-bold">Suggested workout</div>
-      <app-workout-template-widget [workoutTemplate]="suggestedWorkoutTemplate"></app-workout-template-widget>
+      <app-workout-template-widget [workoutTemplate]="suggestedWorkoutTemplate!"></app-workout-template-widget>
     </div>
 
     <div class="workout-container">
@@ -28,8 +28,7 @@
         <div class="workout-card-body s-text white-color">
           <div>
             <span *ngIf="template.exercises.length > 0">{{ template.exercises.length }} exercises | </span>
-            <span *ngIf="template.totalSets > 0">{{ template.totalSets }} sets | </span>
-            <span>{{ template.estimatedDuration + ' min'}}</span>
+            <span *ngIf="template.totalSets > 0">{{ template.totalSets }} sets</span>
           </div>
           <div class="last-workout-time">
             <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
@@ -50,6 +49,49 @@
                              name="Start"></app-medium-button>
         </div>
       </div>
+    </div>
+
+    <div class="workout-container" *ngIf="archivedWorkoutTemplates.length > 0">
+      <div class="workout-container-header m-text semi-bold">
+        <div>Archived Templates</div>
+        <mat-icon [svgIcon]="showArchivedWorkouts ? 'inbox' : 'inbox-line'"
+                  class="primary clickable" (click)="toggleArchivedWorkouts()"></mat-icon>
+      </div>
+
+      <ng-container *ngIf="showArchivedWorkouts">
+        <div class="workout-card blue-shadow primary-background-reversed"
+             *ngFor="let template of archivedWorkoutTemplates"
+             @fadeInOut>
+          <div class="workout-card-header">
+            <div class="m-text semi-bold white-color">{{ template.title }}</div>
+            <mat-icon svgIcon="two-dots" class="xs-svg-icon white-color clickable-xs-icon"
+                      (click)="openTemplateMenu(template, $event)"></mat-icon>
+          </div>
+          <div class="workout-card-body s-text white-color">
+            <div>
+              <span *ngIf="template.exercises.length > 0">{{ template.exercises.length }} exercises | </span>
+              <span *ngIf="template.totalSets > 0">{{ template.totalSets }} sets</span>
+            </div>
+            <div class="last-workout-time">
+              <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
+              <div class="caption"
+                   *ngIf="template.lastPerformedWorkout">{{ template.lastPerformedWorkout.date | timeAgo }}
+              </div>
+              <div class="caption" *ngIf="!template.lastPerformedWorkout">New</div>
+            </div>
+          </div>
+          <div class="workout-card-footer">
+            <app-medium-button [classes]="['white-background', 'black-color']"
+                               [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                               name="View details"
+                               (click)="openWorkoutTemplateDetails(template)"></app-medium-button>
+            <app-medium-button [classes]="['white-background', 'black-color']"
+                               [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                               (click)="startWorkout(template)"
+                               name="Start"></app-medium-button>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 

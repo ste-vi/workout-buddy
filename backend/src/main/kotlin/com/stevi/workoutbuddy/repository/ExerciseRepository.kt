@@ -11,4 +11,6 @@ import org.springframework.data.repository.PagingAndSortingRepository
 
 interface ExerciseRepository : JpaRepository<Exercise, Long>, JpaSpecificationExecutor<Exercise> {
 
+    fun findAllByIdIn(map: List<Long>): List<Exercise>
+
 }

@@ -80,6 +80,10 @@ export class AppComponent implements OnInit, OnDestroy {
       .addSvgIcon('camera', this.setIconPath(`${this.iconsPath}/camera.svg`))
       .addSvgIcon('profile', this.setIconPath(`${this.iconsPath}/profile.svg`))
       .addSvgIcon('add', this.setIconPath(`${this.iconsPath}/add-svgrepo-com.svg`))
+      .addSvgIcon('inbox', this.setIconPath(`${this.iconsPath}/inbox.svg`))
+      .addSvgIcon('inbox-line', this.setIconPath(`${this.iconsPath}/inbox-line.svg`))
+      .addSvgIcon('archive', this.setIconPath(`${this.iconsPath}/archive.svg`))
+      .addSvgIcon('unarchive', this.setIconPath(`${this.iconsPath}/unarchive.svg`))
       .addSvgIcon('add-circle', this.setIconPath(`${this.iconsPath}/add-circle-svgrepo-com.svg`));
   }
 

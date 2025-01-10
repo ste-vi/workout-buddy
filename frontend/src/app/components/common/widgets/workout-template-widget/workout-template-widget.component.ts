@@ -1,13 +1,12 @@
-import {Component, Input} from '@angular/core';
-import {suggestedWorkoutTemplate} from "../../../../services/api/dummy-data/workflow-templates-dummy-daya";
-import {MatIcon} from "@angular/material/icon";
-import {MediumButtonComponent} from "../../medium-button/medium-button.component";
-import {TimeAgoPipe} from "../../../../pipes/time-ago-pipe";
-import {WorkoutTemplate} from "../../../../models/workout-template";
-import {WorkoutTemplateDetailsService} from "../../../../services/communication/workout-template-details.service";
-import {OngoingWorkoutService} from "../../../../services/communication/ongoing-workout.service";
-import {fadeInOut} from "../../../../animations/fade-in-out";
-import {NgIf} from "@angular/common";
+import { Component, Input } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
+import { MediumButtonComponent } from '../../medium-button/medium-button.component';
+import { TimeAgoPipe } from '../../../../pipes/time-ago-pipe';
+import { WorkoutTemplate } from '../../../../models/workout-template';
+import { WorkoutTemplateDetailsService } from '../../../../services/communication/workout-template-details.service';
+import { OngoingWorkoutService } from '../../../../services/communication/ongoing-workout.service';
+import { fadeInOut } from '../../../../animations/fade-in-out';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-workout-template-widget',

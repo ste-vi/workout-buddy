@@ -1,7 +1,6 @@
-import {Component, ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
-import { suggestedWorkoutTemplate } from '../../services/api/dummy-data/workflow-templates-dummy-daya';
 import { workout } from '../../services/api/dummy-data/workout-histories-dummy-data';
 import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
 import { WorkoutTemplateDetailsComponent } from '../workout-template-details/workout-template-details.component';
@@ -9,8 +8,10 @@ import { LatestWorkoutWidgetComponent } from '../common/widgets/latest-workout-w
 import { WorkoutTemplateWidgetComponent } from '../common/widgets/workout-template-widget/workout-template-widget.component';
 import { Router } from '@angular/router';
 import { fadeInOut } from '../../animations/fade-in-out';
-import {ExerciseService} from "../../services/api/exercise-service";
-import {SearchExercisesComponent} from "../common/search-exercises/search-exercises.component";
+import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
+import { WorkoutTemplateService } from '../../services/api/workout-template.service';
+import { WorkoutTemplate } from '../../models/workout-template';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-dashboard',
@@ -23,19 +24,29 @@ import {SearchExercisesComponent} from "../common/search-exercises/search-exerci
     LatestWorkoutWidgetComponent,
     WorkoutTemplateWidgetComponent,
     SearchExercisesComponent,
+    NgIf,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   animations: [fadeInOut],
 })
 export class DashboardComponent {
-  protected readonly suggestedWorkoutTemplate = suggestedWorkoutTemplate;
+  protected suggestedWorkoutTemplate: WorkoutTemplate | undefined = undefined;
   protected readonly latestWorkoutHistory = workout[0];
 
   @ViewChild('exercisesModal')
   exercisesModal!: SearchExercisesComponent;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private workoutTemplateService: WorkoutTemplateService,
+  ) {
+    workoutTemplateService
+      .getSuggestedWorkoutTemplate()
+      .subscribe((template) => {
+        this.suggestedWorkoutTemplate = template;
+      });
+  }
 
   openWorkoutTemplatesPage() {
     this.router.navigate(['/workout/start']).then((r) => {});

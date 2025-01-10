@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WorkoutTemplate } from '../../models/workout-template';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -28,7 +28,11 @@ export class WorkoutTemplateService {
     return this.http.put<WorkoutTemplate>(`${this.apiUrl}/${workoutTemplate.id}`, workoutTemplate);
   }
 
-  deleteWorkoutTemplate(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  archiveWorkoutTemplate(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}/archive`);
+  }
+
+  unarchiveWorkoutTemplate(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}/unarchive`);
   }
 }
