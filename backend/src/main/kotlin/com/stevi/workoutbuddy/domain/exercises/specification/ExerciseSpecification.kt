@@ -1,8 +1,10 @@
 package com.stevi.workoutbuddy.domain.exercises.specification
 
 import com.stevi.workoutbuddy.entity.Exercise
+import com.stevi.workoutbuddy.entity.User
 import com.stevi.workoutbuddy.enumeration.BodyPart
 import com.stevi.workoutbuddy.enumeration.ExerciseCategory
+import com.stevi.workoutbuddy.security.SecurityUtil
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.CriteriaQuery
 import jakarta.persistence.criteria.Predicate
@@ -40,6 +42,8 @@ class ExerciseSpecification(
                 predicates.add(root.get<Long>("id").`in`(it).not())
             }
         }
+
+        predicates.add(criteriaBuilder.equal(root.get<User>("user").get<Long>("id"), SecurityUtil.getCurrentUserId()))
 
         return criteriaBuilder.and(*predicates.toTypedArray())
     }

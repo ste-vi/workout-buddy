@@ -39,8 +39,7 @@ class WorkoutTemplateController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createWorkoutTemplate(@Valid @RequestBody request: WorkoutTemplateRequest): WorkoutTemplateResponse {
-        val userId = SecurityUtil.getCurrentUserId()
-        return workoutTemplateService.createWorkoutTemplate(userId, request)
+        return workoutTemplateService.createWorkoutTemplate(request)
     }
 
     @PutMapping("/{id}")

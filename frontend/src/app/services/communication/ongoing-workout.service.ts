@@ -1,19 +1,23 @@
 import { Injectable } from '@angular/core';
-import { WorkoutTemplate } from '../../models/workout-template';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { Workout } from '../../models/workout';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OngoingWorkoutService {
-
-  private openModalSource = new Subject<WorkoutTemplate>();
+  private openModalSource = new Subject<Workout>();
+  private isModalOpenSource = new BehaviorSubject<boolean>(false);
 
   constructor() {}
 
   modalOpened$ = this.openModalSource.asObservable();
 
-  openModal(workoutTemplate: WorkoutTemplate){
-    this.openModalSource.next(workoutTemplate);
+  openModal(workout: Workout) {
+    this.openModalSource.next(workout);
+  }
+
+  closeModal() {
+    this.isModalOpenSource.next(false);
   }
 }

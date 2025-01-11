@@ -9,7 +9,7 @@ abstract class Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     var createdAt: LocalDateTime = LocalDateTime.now()
 
     @Column(nullable = false)

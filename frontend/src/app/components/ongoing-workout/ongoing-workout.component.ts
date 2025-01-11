@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
@@ -14,13 +14,16 @@ import {
   ContextMenuComponent,
   MenuItem,
 } from '../common/context-menu/context-menu.component';
-import {Exercise, getBodyPartDisplayName, getCategoryDisplayName} from '../../models/exercise';
+import {
+  Exercise,
+  getBodyPartDisplayName,
+  getCategoryDisplayName,
+} from '../../models/exercise';
 import { ProgressBarComponent } from '../common/progress-bar/progress-bar.component';
 import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import { collapse } from '../../animations/collapse';
 import { WorkoutService } from '../../services/api/workout.service';
 import { Workout } from '../../models/workout';
-import { WorkoutTemplate } from '../../models/workout-template';
 import { TagsModalComponent } from '../common/modal/tags-modal/tags-modal.component';
 import { Sets } from '../../models/set';
 import { SetService } from '../../services/api/set-service';
@@ -31,6 +34,7 @@ import { SearchExercisesComponent } from '../common/search-exercises/search-exer
 import { replaceItemInArray } from '../../utils/array-utils';
 import { ToastComponent } from '../common/toast/toast.component';
 import { ActionButtonComponent } from '../common/action-button/action-button.component';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -56,7 +60,7 @@ import { ActionButtonComponent } from '../common/action-button/action-button.com
   templateUrl: './ongoing-workout.component.html',
   styleUrl: './ongoing-workout.component.scss',
 })
-export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
+export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   protected isOpen: boolean = false;
 
   protected isTemplateUpdated: boolean = false;
@@ -83,6 +87,12 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   @ViewChild('replaceExerciseConfirmationModal')
   replaceExerciseConfirmationModal!: ConfirmationModalComponent;
 
+  @ViewChild('cancelWorkoutConfirmationModal')
+  cancelWorkoutConfirmationModal!: ConfirmationModalComponent;
+
+  @ViewChild('resetTimerConfirmationModal')
+  resetTimerConfirmationModal!: ConfirmationModalComponent;
+
   @ViewChild('editWorkoutTagsModal')
   editWorkoutTagsModal!: TagsModalComponent;
 
@@ -96,6 +106,9 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   @ViewChild('errorToast')
   errorToast!: ToastComponent;
 
+  protected formattedTime: string = '';
+  private timerSubscription: Subscription | null = null;
+
   constructor(
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
@@ -104,28 +117,70 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.ongoingWorkoutService.modalOpened$.subscribe((wt) => {
-      this.isInvalidated = false;
-      this.startNewWorkout(wt);
-      this.isOpen = true; // open only after workout creation is submitted from BE?
-    });
-  }
-
-  ngAfterViewInit(): void {}
-
-  private startNewWorkout(wt: WorkoutTemplate) {
-    this.workoutService.startWorkout(wt).subscribe((workout) => {
+    this.ongoingWorkoutService.modalOpened$.subscribe((workout) => {
       this.ongoingWorkout = workout;
-      this.progress = 0.0;
+      this.recalculateProgress();
+      this.isInvalidated = false;
+      this.startTimer();
+      this.isOpen = true;
     });
   }
 
-  stopWorkout() {
-    this.isOpen = false;
-    this.dragStarted = false;
-    this.isTemplateUpdated = false;
-    this.deleteSetModeForExercise = undefined;
-    this.isInvalidated = false;
+  ngOnDestroy() {
+    this.stopTimer();
+  }
+
+  startTimer() {
+    const startTime = new Date(this.ongoingWorkout!.startTime).getTime();
+    this.timerSubscription = interval(1000).subscribe(() => {
+      const now = new Date().getTime();
+      const duration = now - startTime;
+      this.formattedTime = this.formatDuration(duration);
+    });
+  }
+
+  formatDuration(duration: number): string {
+    const hours = Math.floor(duration / (1000 * 60 * 60));
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((duration % (1000 * 60)) / 1000);
+
+    if (hours > 0) {
+      return `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+    } else {
+      return `${this.pad(minutes)}:${this.pad(seconds)}`;
+    }
+  }
+
+  pad(num: number): string {
+    return num.toString().padStart(2, '0');
+  }
+
+  stopTimer() {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = null;
+    }
+  }
+
+  cancelWorkout() {
+    this.cancelWorkoutConfirmationModal.show(
+      'Ongoing workout will be deleted, current progress will be lost',
+    );
+  }
+
+  onCancelWorkoutConfirmed(confirmed: boolean) {
+    if (confirmed) {
+      this.workoutService
+        .deleteWorkout(this.ongoingWorkout!.id!)
+        .subscribe(() => {
+          this.isOpen = false;
+          this.dragStarted = false;
+          this.isTemplateUpdated = false;
+          this.deleteSetModeForExercise = undefined;
+          this.isInvalidated = false;
+          this.stopTimer();
+        });
+    }
   }
 
   finishWorkout() {
@@ -138,6 +193,8 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
       this.errorToast.open('Error', errorMessages, 'danger');
       return;
     }
+
+    this.stopTimer();
   }
 
   private validateInput() {
@@ -189,7 +246,7 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
     {
       label: 'Reset timer',
       icon: 'stopwatch',
-      action: () => this.addExercise(),
+      action: () => this.resetTimer(),
     },
   ];
 
@@ -396,6 +453,22 @@ export class OngoingWorkoutComponent implements OnInit, AfterViewInit {
       .subscribe((tags) => {
         this.ongoingWorkout!.tags = tags;
       });
+  }
+
+  resetTimer() {
+    this.resetTimerConfirmationModal.show()
+  }
+
+  onResetTimerConfirmed(confirmed: boolean) {
+    if (confirmed) {
+      this.workoutService
+        .resetTimer(this.ongoingWorkout!.id!)
+        .subscribe((newStartTime) => {
+          this.ongoingWorkout!.startTime = newStartTime;
+          this.stopTimer();
+          this.startTimer();
+        });
+    }
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;

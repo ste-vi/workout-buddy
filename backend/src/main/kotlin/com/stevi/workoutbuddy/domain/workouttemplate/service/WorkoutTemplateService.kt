@@ -2,10 +2,10 @@ package com.stevi.workoutbuddy.domain.workouttemplate.service
 
 import com.stevi.workoutbuddy.domain.exercises.service.ExerciseInstanceService
 import com.stevi.workoutbuddy.domain.tag.service.TagService
+import com.stevi.workoutbuddy.domain.workout.service.UserService
 import com.stevi.workoutbuddy.domain.workouttemplate.model.request.WorkoutTemplateRequest
 import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplateResponse
 import com.stevi.workoutbuddy.entity.WorkoutTemplate
-import com.stevi.workoutbuddy.repository.UserRepository
 import com.stevi.workoutbuddy.repository.WorkoutTemplateRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 class WorkoutTemplateService(
     private val workoutTemplateRepository: WorkoutTemplateRepository,
     private val exerciseInstanceService: ExerciseInstanceService,
-    private val userRepository: UserRepository,
+    private val userService: UserService,
     private val tagService: TagService
 ) {
 
@@ -40,15 +40,12 @@ class WorkoutTemplateService(
     }
 
     @Transactional
-    fun createWorkoutTemplate(userId: Long, request: WorkoutTemplateRequest): WorkoutTemplateResponse {
-        val user = userRepository.findById(userId)
-            .orElseThrow { NoSuchElementException("User not found with id: $userId") }
-
+    fun createWorkoutTemplate(request: WorkoutTemplateRequest): WorkoutTemplateResponse {
         val template = WorkoutTemplate(
             title = request.title,
             totalSets = request.exercises.sumOf { it.sets.size }.toShort(),
-            user = user,
-            tags = tagService.getTagsOrCreate(request.tags, userId).toMutableSet(),
+            user = userService.getCurrentUser(),
+            tags = tagService.getTagsOrCreate(request.tags).toMutableSet(),
             exerciseInstances = mutableListOf(),
         )
         val savedTemplate = workoutTemplateRepository.save(template)
@@ -69,7 +66,7 @@ class WorkoutTemplateService(
 
         existingTemplate.title = request.title
         existingTemplate.totalSets = totalSets.toShort()
-        existingTemplate.tags = tagService.getTagsOrCreate(request.tags, userId).toMutableSet()
+        existingTemplate.tags = tagService.getTagsOrCreate(request.tags).toMutableSet()
         existingTemplate.updateExerciseInstances(exInstances)
 
         val updatedTemplate = workoutTemplateRepository.save(existingTemplate)

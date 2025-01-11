@@ -1,31 +1,36 @@
 import { Injectable } from '@angular/core';
-import { WorkoutTemplate } from '../../models/workout-template';
 import { Observable, of } from 'rxjs';
 import { Workout } from '../../models/workout';
 import { PageResponse } from '../../models/page-response';
 import { workout } from './dummy-data/workout-histories-dummy-data';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkoutService {
-  constructor() {}
+  private apiUrl = `${environment.apiUrl}/workouts`;
 
-  startWorkout(template: WorkoutTemplate): Observable<Workout> {
-    const newWorkout = new Workout(
-      Math.floor(Math.random() * 100000),
-      template.title,
-      new Date(), // startTime
-      new Date(), // endTime (you might want to set this later)
-      0, // totalSets
-      0, // prReps
-      0, // totalWeight
-      template.exercises.length,
-      template.tags,
-      template.exercises,
+  constructor(private http: HttpClient) {}
+
+  startWorkout(workoutTemplateId: number): Observable<Workout> {
+    return this.http.post<Workout>(
+      `${this.apiUrl}/start/${workoutTemplateId}`,
+      {},
     );
+  }
 
-    return of(newWorkout);
+  getOngoingWorkout(): Observable<Workout | undefined> {
+    return this.http.get<Workout | undefined>(`${this.apiUrl}/ongoing`);
+  }
+
+  deleteWorkout(workoutId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${workoutId}`);
+  }
+
+  resetTimer(workoutId: number): Observable<Date> {
+    return this.http.delete<Date>(`${this.apiUrl}/ongoing/${workoutId}/timer`);
   }
 
   removeExercise(exerciseId: number, workoutId: number) {}

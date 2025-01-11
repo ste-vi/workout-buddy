@@ -3,11 +3,9 @@ package com.stevi.workoutbuddy.domain.weight.service
 import com.stevi.workoutbuddy.common.model.response.PageResponse
 import com.stevi.workoutbuddy.domain.weight.model.request.BodyWeightMeasureRequest
 import com.stevi.workoutbuddy.domain.weight.model.response.BodyWeightMeasureResponse
+import com.stevi.workoutbuddy.domain.workout.service.UserService
 import com.stevi.workoutbuddy.entity.BodyWeightMeasure
 import com.stevi.workoutbuddy.repository.BodyWeightMeasureRepository
-import com.stevi.workoutbuddy.repository.UserRepository
-import com.stevi.workoutbuddy.security.SecurityUtil
-import java.time.LocalDateTime
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -17,17 +15,15 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class BodyWeightMeasureService(
     private val bodyWeightMeasureRepository: BodyWeightMeasureRepository,
-    private val userRepository: UserRepository
+    private val userService: UserService
 ) {
 
     @Transactional
     fun addBodyWeightMeasure(request: BodyWeightMeasureRequest): BodyWeightMeasureResponse {
-        val user = userRepository.findById(SecurityUtil.getCurrentUserId())
-            .orElseThrow { IllegalArgumentException("User not found") }
         val bodyWeightMeasure = BodyWeightMeasure(
             weight = request.value,
             date = request.date,
-            user = user
+            user = userService.getCurrentUser()
         )
         val savedMeasure = bodyWeightMeasureRepository.save(bodyWeightMeasure)
         return BodyWeightMeasureResponse.fromEntity(savedMeasure)

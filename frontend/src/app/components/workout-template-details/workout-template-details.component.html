@@ -85,8 +85,6 @@
     <div *ngIf="template.archived" class="s-text gray-1-color p-b-4-rm">To <b>start workout</b> from this template, please, unarchive it first in the template menu</div>
   </div>
 
-  <app-ongoing-workout></app-ongoing-workout>
-
   <app-workout-template-edit #workoutTemplateEditComponent
                              (updatedTemplate)="onTemplateUpdated($event)"></app-workout-template-edit>
 

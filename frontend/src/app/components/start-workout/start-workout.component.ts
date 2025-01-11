@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
-import { ButtonComponent } from '../common/button/button.component';
 import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
 import { MatIcon } from '@angular/material/icon';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
@@ -15,13 +14,13 @@ import { WorkoutTemplateEditComponent } from '../workout-template-edit/workout-t
 import { ContextMenuComponent } from '../common/context-menu/context-menu.component';
 import { WorkoutTemplateWidgetComponent } from '../common/widgets/workout-template-widget/workout-template-widget.component';
 import { fadeInOut } from '../../animations/fade-in-out';
+import { WorkoutService } from '../../services/api/workout.service';
 
 @Component({
   selector: 'app-start-workout',
   standalone: true,
   imports: [
     HeaderButtonComponent,
-    ButtonComponent,
     MediumButtonComponent,
     MatIcon,
     NgIf,
@@ -53,6 +52,7 @@ export class StartWorkoutComponent implements OnInit {
     private workoutTemplateService: WorkoutTemplateService,
     private workoutTemplateDetailsService: WorkoutTemplateDetailsService,
     private ongoingWorkoutService: OngoingWorkoutService,
+    private workoutService: WorkoutService,
   ) {}
 
   ngOnInit(): void {
@@ -74,7 +74,9 @@ export class StartWorkoutComponent implements OnInit {
   }
 
   startWorkout(template: WorkoutTemplate) {
-    this.ongoingWorkoutService.openModal(template);
+    this.workoutService.startWorkout(template.id!).subscribe((workout) => {
+      this.ongoingWorkoutService.openModal(workout);
+    });
   }
 
   createTemplate() {
@@ -82,11 +84,15 @@ export class StartWorkoutComponent implements OnInit {
   }
 
   onTemplateUpdated(updatedTemplate: WorkoutTemplate) {
-    const index = this.workoutTemplates.findIndex(t => t.id === updatedTemplate.id);
+    const index = this.workoutTemplates.findIndex(
+      (t) => t.id === updatedTemplate.id,
+    );
     if (index !== -1) {
       this.workoutTemplates[index] = updatedTemplate;
     } else {
-      const archivedIndex = this.archivedWorkoutTemplates.findIndex(t => t.id === updatedTemplate.id);
+      const archivedIndex = this.archivedWorkoutTemplates.findIndex(
+        (t) => t.id === updatedTemplate.id,
+      );
       if (archivedIndex !== -1) {
         this.archivedWorkoutTemplates[archivedIndex] = updatedTemplate;
       }
@@ -154,6 +160,9 @@ export class StartWorkoutComponent implements OnInit {
 
   toggleArchivedWorkouts(): void {
     this.showArchivedWorkouts = !this.showArchivedWorkouts;
-    localStorage.setItem('showArchivedWorkouts', JSON.stringify(this.showArchivedWorkouts));
+    localStorage.setItem(
+      'showArchivedWorkouts',
+      JSON.stringify(this.showArchivedWorkouts),
+    );
   }
 }

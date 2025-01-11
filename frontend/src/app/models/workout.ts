@@ -10,16 +10,23 @@ export class Workout {
     public totalSets: number,
     public prReps: number,
     public totalWeight: number,
-    public totalExercises: number,
     public tags: Tag[],
     public exercises: Exercise[],
-  ) {}
+  ) {
+    this.recalculateTotalSets();
+  }
 
   getDuration(): number {
     const duration = Math.abs(
       this.endTime.getTime() - this.startTime.getTime(),
     );
-    // Round to nearest minute
     return Math.round(duration / (1000 * 60));
+  }
+
+  recalculateTotalSets(): void {
+    this.totalSets = this.exercises.reduce(
+      (total, exercise) => total + (exercise.sets?.length || 0),
+      0,
+    );
   }
 }

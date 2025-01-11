@@ -16,6 +16,12 @@ class GlobalExceptionHandler {
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
 
+    @ExceptionHandler(IllegalStateException::class)
+    fun handleIllegalStateException(ex: IllegalStateException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(ex.message ?: "Illegal state exception", HttpStatus.BAD_REQUEST.value())
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
+
     @ExceptionHandler(Exception::class)
     fun handleGenericException(ex: Exception): ResponseEntity<ErrorResponse> {
         ex.printStackTrace()

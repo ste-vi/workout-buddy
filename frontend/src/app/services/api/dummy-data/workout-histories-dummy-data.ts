@@ -112,7 +112,6 @@ export const workout: Workout[] = [
     10,
     10,
     100,
-    10,
     [tags[0], tags[3]], // Strength Training, Core
     generateExercises(10, 'strength'),
   ),
@@ -124,7 +123,6 @@ export const workout: Workout[] = [
     5,
     15,
     0,
-    3,
     [tags[1]], // Cardio
     generateExercises(3, 'cardio'),
   ),
@@ -136,7 +134,6 @@ export const workout: Workout[] = [
     15,
     8,
     500,
-    6,
     [tags[0]], // Strength Training
     generateExercises(6, 'strength'),
   ),
@@ -148,7 +145,6 @@ export const workout: Workout[] = [
     0,
     0,
     0,
-    12,
     [tags[2], tags[4]], // Flexibility, Yoga
     generateExercises(12, 'yoga'),
   ),
@@ -160,7 +156,6 @@ export const workout: Workout[] = [
     8,
     20,
     50,
-    8,
     [tags[1], tags[3]], // Cardio, Core
     generateExercises(8, 'cardio'),
   ),
@@ -172,7 +167,6 @@ export const workout: Workout[] = [
     12,
     12,
     300,
-    5,
     [tags[0]], // Strength Training
     generateExercises(5, 'upperBody'),
   ),
@@ -184,7 +178,6 @@ export const workout: Workout[] = [
     14,
     10,
     450,
-    6,
     [tags[0]], // Strength Training
     generateExercises(6, 'lowerBody'),
   ),
@@ -196,7 +189,6 @@ export const workout: Workout[] = [
     10,
     25,
     20,
-    8,
     [tags[3]], // Core
     generateExercises(8, 'core'),
   ),
@@ -208,7 +200,6 @@ export const workout: Workout[] = [
     0,
     0,
     0,
-    15,
     [tags[2], tags[3]], // Flexibility, Core
     generateExercises(15, 'pilates'),
   ),
@@ -220,7 +211,6 @@ export const workout: Workout[] = [
     5,
     30,
     200,
-    4,
     [tags[0], tags[1]], // Strength Training, Cardio
     generateExercises(4, 'crossfit'),
   ),
@@ -232,7 +222,6 @@ export const workout: Workout[] = [
     0,
     0,
     0,
-    1,
     [tags[1]], // Cardio
     generateExercises(1, 'swimming'),
   ),
@@ -244,7 +233,6 @@ export const workout: Workout[] = [
     18,
     15,
     600,
-    9,
     [tags[0], tags[1], tags[3]], // Strength Training, Cardio, Core
     generateExercises(9, 'strength'),
   ),
@@ -256,7 +244,6 @@ export const workout: Workout[] = [
     18,
     15,
     600,
-    9,
     [tags[0], tags[1], tags[3]], // Strength Training, Cardio, Core
     generateExercises(9, 'strength'),
   ),
@@ -268,7 +255,6 @@ export const workout: Workout[] = [
     18,
     15,
     600,
-    9,
     [tags[0], tags[1], tags[3]], // Strength Training, Cardio, Core
     generateExercises(9, 'strength'),
   ),

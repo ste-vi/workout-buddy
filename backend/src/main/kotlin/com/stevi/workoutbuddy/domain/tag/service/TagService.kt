@@ -2,25 +2,25 @@ package com.stevi.workoutbuddy.domain.tag.service
 
 import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
+import com.stevi.workoutbuddy.domain.workout.service.UserService
 import com.stevi.workoutbuddy.entity.Tag
+import com.stevi.workoutbuddy.entity.User
 import com.stevi.workoutbuddy.repository.TagRepository
-import com.stevi.workoutbuddy.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TagService(
     private val tagRepository: TagRepository,
-    private val userRepository: UserRepository
+    private val userService: UserService
 ) {
 
     @Transactional
-    fun getTagsOrCreate(tagRequests: List<TagRequest>, userId: Long): List<Tag> {
-        val user = userRepository.findById(userId)
-            .orElseThrow { NoSuchElementException("User not found with id: $userId") }
+    fun getTagsOrCreate(tagRequests: List<TagRequest>): List<Tag> {
+        val user = userService.getCurrentUser()
 
         val tagNames = tagRequests.map { it.name }
-        val existingTags = tagRepository.findAllByNameInAndUserId(tagNames, userId)
+        val existingTags = tagRepository.findAllByNameInAndUserId(tagNames, user.id)
         val existingTagNames = existingTags.map { it.name }.toSet()
 
         val newTags = (tagNames - existingTagNames).map { Tag(name = it, user = user) }
@@ -32,5 +32,13 @@ class TagService(
     @Transactional(readOnly = true)
     fun getAllTags(userId: Long): List<TagResponse> {
         return tagRepository.findAllByUserIdOrderByCreatedAtDesc(userId).map { TagResponse.fromEntity(it) }
+    }
+
+    @Transactional
+    fun copyTags(tags: Collection<Tag>, user: User): List<Tag> {
+        val copiedTags = tags.map { tag ->
+            Tag(name = tag.name, user = user)
+        }
+        return tagRepository.saveAll(copiedTags)
     }
 }

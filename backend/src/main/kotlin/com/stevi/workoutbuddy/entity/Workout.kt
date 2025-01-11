@@ -10,30 +10,38 @@ import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import java.time.LocalDateTime
 
 @Entity
-@Table(name = "workout_templates")
-class WorkoutTemplate(
+@Table(name = "workouts")
+class Workout(
 
     @Column(nullable = false)
     var title: String,
 
     @Column
-    var totalSets: Short,
+    var prReps: Short,
 
     @Column
-    var archived: Boolean = false,
+    var totalWeight: Short,
+
+    @Column
+    var endTime: LocalDateTime?,
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "workout_template_tags",
-        joinColumns = [JoinColumn(name = "workout_template_id")],
+        name = "workout_tags",
+        joinColumns = [JoinColumn(name = "workout_id")],
         inverseJoinColumns = [JoinColumn(name = "tag_id")]
     )
     var tags: MutableSet<Tag> = mutableSetOf(),
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_template_id", nullable = false)
+    val template: WorkoutTemplate,
+
     @OneToMany(
-        mappedBy = "workoutTemplate",
+        mappedBy = "workout",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
         fetch = FetchType.LAZY
@@ -42,11 +50,6 @@ class WorkoutTemplate(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
-) : Base() {
-    fun updateExerciseInstances(newInstances: List<ExerciseInstance>) {
-        exerciseInstances.clear()
-        exerciseInstances.addAll(newInstances)
-        newInstances.forEach { it.workoutTemplate = this }
-    }
-}
+    val user: User
+
+) : Base()

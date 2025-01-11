@@ -2,8 +2,8 @@
 <div class="ongoing-workout-container right-modal black-color" *ngIf="isOpen" [@sideModalOpenClose]>
 
   <div class="ongoing-workout-container-header">
-    <app-header-button icon="close" (click)="stopWorkout()"></app-header-button>
-    <div class="timer l-text gray-1-color">00:00</div>
+    <app-header-button icon="close" (click)="cancelWorkout()"></app-header-button>
+    <div class="timer l-text gray-1-color">{{ formattedTime }}</div>
     <app-header-button icon="finish" [active]="progress == 1" (click)="finishWorkout()"></app-header-button>
   </div>
   <app-progress-bar [progress]=progress class="card-padding-top"></app-progress-bar>
@@ -56,7 +56,8 @@
                                  (click)="resetSetDelete()"></app-action-button>
             </div>
             <div class=" lower-section gray-1-color s-text">
-              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}</div>
+              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }}| {{ getCategoryDisplayName(exercise.category) }}
+              </div>
               <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
                 <div>
@@ -135,6 +136,19 @@
     #replaceExerciseConfirmationModal
     [header]="'Replace exercise?'"
     (confirmed)="onReplaceExerciseConfirmed($event)"
+  ></app-confirmation-modal>
+
+
+  <app-confirmation-modal
+    #resetTimerConfirmationModal
+    [header]="'Reset timer?'"
+    (confirmed)="onResetTimerConfirmed($event)"
+  ></app-confirmation-modal>
+
+  <app-confirmation-modal
+    #cancelWorkoutConfirmationModal
+    [header]="'Cancel workout?'"
+    (confirmed)="onCancelWorkoutConfirmed($event)"
   ></app-confirmation-modal>
 
   <app-exercises

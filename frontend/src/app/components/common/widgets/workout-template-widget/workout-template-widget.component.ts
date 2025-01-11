@@ -7,6 +7,7 @@ import { WorkoutTemplateDetailsService } from '../../../../services/communicatio
 import { OngoingWorkoutService } from '../../../../services/communication/ongoing-workout.service';
 import { fadeInOut } from '../../../../animations/fade-in-out';
 import { NgIf } from '@angular/common';
+import { WorkoutService } from '../../../../services/api/workout.service';
 
 @Component({
   selector: 'app-workout-template-widget',
@@ -22,6 +23,7 @@ export class WorkoutTemplateWidgetComponent {
   constructor(
     private workoutTemplateDetailsService: WorkoutTemplateDetailsService,
     private ongoingWorkoutService: OngoingWorkoutService,
+    private workoutService: WorkoutService,
   ) {}
 
   openWorkoutDetails(workoutTemplate: WorkoutTemplate) {
@@ -29,6 +31,10 @@ export class WorkoutTemplateWidgetComponent {
   }
 
   startWorkout(workoutTemplate: WorkoutTemplate) {
-    this.ongoingWorkoutService.openModal(workoutTemplate);
+    this.workoutService
+      .startWorkout(workoutTemplate.id!)
+      .subscribe((workout) => {
+        this.ongoingWorkoutService.openModal(workout);
+      });
   }
 }

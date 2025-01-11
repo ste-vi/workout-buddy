@@ -10,5 +10,8 @@ interface ExerciseInstanceRepository : JpaRepository<ExerciseInstance, Long> {
     fun findAllByWorkoutTemplateId(workoutTemplateId: Long): List<ExerciseInstance>
 
     @EntityGraph(attributePaths = ["exercise", "sets"])
+    fun findAllByWorkoutId(workoutId: Long): List<ExerciseInstance>
+
+    @EntityGraph(attributePaths = ["exercise", "sets"])
     fun findAllByWorkoutTemplateIdIn(workoutTemplateId: List<Long>): List<ExerciseInstance>
 }

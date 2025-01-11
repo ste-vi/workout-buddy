@@ -13,4 +13,5 @@ interface ExerciseRepository : JpaRepository<Exercise, Long>, JpaSpecificationEx
 
     fun findAllByIdIn(map: List<Long>): List<Exercise>
 
+    fun findByIdAndUserId(id: Long, userId: Long): Exercise?
 }

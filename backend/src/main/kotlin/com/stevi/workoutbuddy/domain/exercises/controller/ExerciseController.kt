@@ -31,7 +31,7 @@ class ExerciseController(private val exerciseService: ExerciseService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createExercise(@Valid @RequestBody request: CreateExerciseRequest): ExerciseResponse {
-        return exerciseService.createExercise(request, SecurityUtil.getCurrentUserId())
+        return exerciseService.createExercise(request)
     }
 
     @PutMapping("/{id}")

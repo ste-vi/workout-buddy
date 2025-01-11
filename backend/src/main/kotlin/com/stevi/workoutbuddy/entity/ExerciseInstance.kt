@@ -27,6 +27,10 @@ class ExerciseInstance(
     @Column(name = "workout_template_id", insertable = false, updatable = false)
     var workoutTemplateId: Long?,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_id")
+    var workout: Workout?,
+
     @OneToMany(
         mappedBy = "exerciseInstance",
         cascade = [CascadeType.ALL],
