@@ -21,12 +21,15 @@ class TagService(
 
         val tagNames = tagRequests.map { it.name }
         val existingTags = tagRepository.findAllByNameInAndUserId(tagNames, user.id)
-        val existingTagNames = existingTags.map { it.name }.toSet()
+        val existingTagMap = existingTags.associateBy { it.name }
 
-        val newTags = (tagNames - existingTagNames).map { Tag(name = it, user = user) }
+        val tagsToCreate = tagNames.filter { it !in existingTagMap.keys }
+        val newTags = tagsToCreate.map { Tag(name = it, user = user) }
         val savedNewTags = tagRepository.saveAll(newTags)
 
-        return existingTags + savedNewTags
+        return tagNames.map { name ->
+            existingTagMap[name] ?: savedNewTags.find { it.name == name }!!
+        }
     }
 
     @Transactional(readOnly = true)

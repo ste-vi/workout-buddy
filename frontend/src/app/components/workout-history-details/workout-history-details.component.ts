@@ -26,7 +26,7 @@ import { replaceItemInArray } from '../../utils/array-utils';
 import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
 import { collapse } from '../../animations/collapse';
-import { Workout } from '../../models/workout';
+import {getWorkoutDuration, Workout} from '../../models/workout';
 import { WorkoutTimeSelectorComponent } from '../common/workout-time-selector/workout-time-selector.component';
 
 @Component({
@@ -458,4 +458,5 @@ export class WorkoutHistoryDetailsComponent {
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
   protected readonly getCategoryDisplayName = getCategoryDisplayName;
+    protected readonly getWorkoutDuration = getWorkoutDuration;
 }

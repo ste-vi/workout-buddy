@@ -6,6 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TimeAgoPipe implements PipeTransform {
   transform(date: Date): string {
+    date = new Date(date);
     const now = new Date();
     const diffInMilliseconds = now.getTime() - date.getTime();
     const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
@@ -14,7 +15,7 @@ export class TimeAgoPipe implements PipeTransform {
       return 'Today';
     } else if (diffInDays === 1) {
       return 'Yesterday';
-    } else if (diffInDays < 100) {
+    } else if (diffInDays < 300) {
       return `${diffInDays} days ago`;
     } else {
       return date.toLocaleDateString();

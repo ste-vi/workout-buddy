@@ -6,19 +6,23 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "sets")
 class Sets(
 
-    @Column(nullable = false)
-    var reps: Short,
+    @Column
+    var reps: Short?,
 
-    @Column(nullable = false)
-    var weight: Short,
+    @Column
+    var weight: Double?,
 
     @Column(nullable = false)
     var completed: Boolean,
+
+    @Column
+    var completedAt: LocalDateTime?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_instance_id", nullable = false)

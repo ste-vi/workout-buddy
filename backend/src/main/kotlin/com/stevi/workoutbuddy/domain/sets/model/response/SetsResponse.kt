@@ -4,8 +4,8 @@ import com.stevi.workoutbuddy.entity.Sets
 
 data class SetsResponse(
     val id: Long,
-    val reps: Short,
-    val weight: Short,
+    val reps: Short?,
+    val weight: Double?,
     val completed: Boolean,
 ) {
     companion object {

@@ -4,7 +4,6 @@ import com.stevi.workoutbuddy.domain.exercises.model.response.ExerciseResponse
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
 import com.stevi.workoutbuddy.entity.ExerciseInstance
 import com.stevi.workoutbuddy.entity.Workout
-import com.stevi.workoutbuddy.entity.WorkoutTemplate
 import java.time.LocalDateTime
 
 data class WorkoutResponse(
@@ -25,7 +24,7 @@ data class WorkoutResponse(
                 prReps = entity.prReps,
                 totalWeight = entity.totalWeight,
                 startTime = entity.createdAt,
-                endTime = entity.endTime,
+                endTime = entity.endAt,
                 tags = entity.tags.map { TagResponse.fromEntity(it) },
                 exercises = exerciseInstances.map { ExerciseResponse.fromExerciseInstance(it) }
             )

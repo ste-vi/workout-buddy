@@ -31,6 +31,9 @@ class ExerciseInstance(
     @JoinColumn(name = "workout_id")
     var workout: Workout?,
 
+    @Column(name = "workout_id", insertable = false, updatable = false)
+    var workoutId: Long?,
+
     @OneToMany(
         mappedBy = "exerciseInstance",
         cascade = [CascadeType.ALL],

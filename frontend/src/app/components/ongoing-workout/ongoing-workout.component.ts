@@ -26,8 +26,6 @@ import { WorkoutService } from '../../services/api/workout.service';
 import { Workout } from '../../models/workout';
 import { TagsModalComponent } from '../common/modal/tags-modal/tags-modal.component';
 import { Sets } from '../../models/set';
-import { SetService } from '../../services/api/set-service';
-import { TagService } from '../../services/api/tag.service';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
@@ -35,6 +33,7 @@ import { replaceItemInArray } from '../../utils/array-utils';
 import { ToastComponent } from '../common/toast/toast.component';
 import { ActionButtonComponent } from '../common/action-button/action-button.component';
 import { interval, Subscription } from 'rxjs';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -74,7 +73,7 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   protected isInvalidated: boolean = false;
 
   protected deleteSetModeForExercise: Exercise | undefined = undefined;
-  private setToDelete: any;
+  private setToDelete: Sets | undefined = undefined;
   private exerciseToDelete: any;
   private exerciseToReplace: any;
 
@@ -92,6 +91,9 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
 
   @ViewChild('resetTimerConfirmationModal')
   resetTimerConfirmationModal!: ConfirmationModalComponent;
+
+  @ViewChild('finishWorkoutConfirmationModal')
+  finishWorkoutConfirmationModal!: ConfirmationModalComponent;
 
   @ViewChild('editWorkoutTagsModal')
   editWorkoutTagsModal!: TagsModalComponent;
@@ -112,8 +114,7 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   constructor(
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
-    private setService: SetService,
-    private tagService: TagService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -173,14 +174,18 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
       this.workoutService
         .deleteWorkout(this.ongoingWorkout!.id!)
         .subscribe(() => {
-          this.isOpen = false;
-          this.dragStarted = false;
-          this.isTemplateUpdated = false;
-          this.deleteSetModeForExercise = undefined;
-          this.isInvalidated = false;
-          this.stopTimer();
+          this.close();
         });
     }
+  }
+
+  private close() {
+    this.isOpen = false;
+    this.dragStarted = false;
+    this.isTemplateUpdated = false;
+    this.deleteSetModeForExercise = undefined;
+    this.isInvalidated = false;
+    this.stopTimer();
   }
 
   finishWorkout() {
@@ -194,7 +199,22 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.stopTimer();
+    if (this.progress < 1) {
+      this.finishWorkoutConfirmationModal.show(
+        'Not all of the sets completed, are you sure you want to finish the workout now?',
+      );
+    } else {
+      this.doFinishWorkout();
+    }
+  }
+
+  private doFinishWorkout() {
+    this.workoutService
+      .completeWorkout(this.ongoingWorkout!.id!)
+      .subscribe(() => {
+        this.close();
+        this.router.navigate(['/dashboard']).then(r => {});
+      });
   }
 
   private validateInput() {
@@ -221,11 +241,23 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   drop(event: CdkDragDrop<string[]>) {
     let exercises = this.ongoingWorkout?.exercises!;
     moveItemInArray(exercises, event.previousIndex, event.currentIndex);
+    this.updateExercisesPositions();
+  }
 
-    this.workoutService.updateExercisesPositionForWorkout(
-      this.ongoingWorkout?.id!,
-      exercises.map((e) => e.id!),
-    );
+  private updateExercisesPositions() {
+    this.ongoingWorkout!.exercises!.forEach((exercise, index) => {
+      exercise.position = index;
+    });
+
+    this.workoutService
+      .updateExercisesPositionForWorkout(
+        this.ongoingWorkout?.id!,
+        this.ongoingWorkout!.exercises.map((e) => ({
+          id: e.id!,
+          position: e.position!,
+        })),
+      )
+      .subscribe(() => {});
   }
 
   onDragEnded() {
@@ -304,12 +336,16 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
 
   onAddExercisesSelected(selectedExercises: Exercise[]) {
     if (selectedExercises.length > 0) {
-      this.workoutService.addExerciseToWorkout(
-        this.ongoingWorkout?.id!,
-        selectedExercises.map((e) => e.id!),
-      );
       this.ongoingWorkout?.exercises!.push(...selectedExercises);
-      this.recalculateProgress();
+      this.updateExercisesPositions();
+      this.workoutService
+        .addExerciseToWorkout(
+          this.ongoingWorkout?.id!,
+          selectedExercises.map((e) => ({ id: e.id!, position: e.position! })),
+        )
+        .subscribe(() => {
+          this.recalculateProgress();
+        });
     }
   }
 
@@ -330,59 +366,65 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   }
 
   onReplaceExerciseSelected(exercise: Exercise) {
-    this.workoutService.replaceExercise(
-      this.ongoingWorkout?.id!,
-      this.exerciseToReplace.id!,
-      exercise.id,
-    );
-    replaceItemInArray(
-      this.ongoingWorkout?.exercises!,
-      exercise,
-      (e) => e.id === this.exerciseToReplace.id,
-    );
-    this.exerciseToReplace = undefined;
+    exercise.position = this.exerciseToReplace.position!;
+    this.workoutService
+      .replaceExercise(
+        this.ongoingWorkout?.id!,
+        this.exerciseToReplace.id!,
+        exercise.id,
+      )
+      .subscribe(() => {
+        replaceItemInArray(
+          this.ongoingWorkout?.exercises!,
+          exercise,
+          (e) => e.id === this.exerciseToReplace.id,
+        );
+        this.exerciseToReplace = undefined;
+      });
   }
 
-  completeSet(set: any) {
-    set.completed = !set.completed;
-    this.setService.completeSet(set.id);
-    this.recalculateProgress();
+  completeSet(exercise: Exercise, set: Sets) {
+    this.workoutService
+      .completeSet(this.ongoingWorkout?.id!, exercise.id!, set.id!)
+      .subscribe(() => {
+        set.completed = !set.completed;
+        this.recalculateProgress();
+      });
   }
 
-  updateSetWeight(set: Sets, $event: any) {
+  updateSetWeight(exercise: Exercise, set: Sets, $event: any) {
     const weight = parseInt($event.target.value);
     if (!isNaN(weight)) {
       set.weight = weight;
-      this.setService.updateSetWeight(set.id!, weight);
+      this.workoutService
+        .updateSetWeight(
+          this.ongoingWorkout?.id!,
+          exercise.id!,
+          set.id!,
+          weight,
+        )
+        .subscribe(() => {});
     }
   }
 
-  updateSetReps(set: Sets, $event: any) {
+  updateSetReps(exercise: Exercise, set: Sets, $event: any) {
     const reps = parseInt($event.target.value);
     if (!isNaN(reps)) {
-      set.weight = reps;
-      this.setService.updateSetReps(set.id!, reps);
+      set.reps = reps;
+      this.workoutService
+        .updateSetReps(this.ongoingWorkout?.id!, exercise.id!, set.id!, reps)
+        .subscribe(() => {});
     }
-  }
-
-  private recalculateProgress() {
-    let totalSets = 0;
-    let completedSets = 0;
-
-    this.ongoingWorkout?.exercises?.forEach((exercise) => {
-      totalSets += exercise.sets.length;
-      completedSets += exercise.sets.filter((s) => s.completed).length;
-    });
-
-    this.progress = totalSets > 0 ? completedSets / totalSets : 0;
   }
 
   addSet(exercise: Exercise) {
     let newSet: Sets = { reps: 0, weight: 0, completed: false };
-    this.setService.create(newSet, exercise.id!).subscribe((set) => {
-      exercise.sets.push(set);
-      this.recalculateProgress();
-    });
+    this.workoutService
+      .addSet(this.ongoingWorkout?.id!, exercise.id!, newSet)
+      .subscribe((set) => {
+        exercise.sets.push(set);
+        this.recalculateProgress();
+      });
   }
 
   openDeleteSetsMode(exercise: Exercise) {
@@ -404,16 +446,33 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
 
   onDeleteSetConfirmed(confirmed: boolean) {
     if (confirmed && this.deleteSetModeForExercise && this.setToDelete) {
-      this.setService.deleteSet(this.setToDelete.id);
-      const index = this.deleteSetModeForExercise!.sets.indexOf(
-        this.setToDelete,
-      );
-      if (index > -1) {
-        this.deleteSetModeForExercise!.sets.splice(index, 1);
-      }
-      this.deleteSetModeForExercise = undefined;
+      this.workoutService
+        .deleteSet(this.ongoingWorkout?.id!, this.setToDelete.id!)
+        .subscribe(() => {
+          const index = this.deleteSetModeForExercise!.sets.indexOf(
+            this.setToDelete!,
+          );
+          if (index > -1) {
+            this.deleteSetModeForExercise!.sets.splice(index, 1);
+          }
+          this.recalculateProgress();
+          this.setToDelete = undefined;
+        });
+    } else {
+      this.setToDelete = undefined;
     }
-    this.setToDelete = undefined;
+  }
+
+  private recalculateProgress() {
+    let totalSets = 0;
+    let completedSets = 0;
+
+    this.ongoingWorkout?.exercises?.forEach((exercise) => {
+      totalSets += exercise.sets.length;
+      completedSets += exercise.sets.filter((s) => s.completed).length;
+    });
+
+    this.progress = totalSets > 0 ? completedSets / totalSets : 0;
   }
 
   resetSetDelete() {
@@ -429,18 +488,18 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
 
   onDeleteExerciseConfirmed(confirmed: boolean) {
     if (confirmed && this.exerciseToDelete) {
-      const index = this.ongoingWorkout!.exercises!.indexOf(
-        this.exerciseToDelete,
-      );
-      if (index > -1) {
-        this.ongoingWorkout!.exercises!.splice(index, 1);
-      }
-      this.workoutService.removeExercise(
-        this.exerciseToDelete.id!,
-        this.ongoingWorkout!.id!,
-      );
+      this.workoutService
+        .removeExercise(this.exerciseToDelete.id!, this.ongoingWorkout!.id!)
+        .subscribe(() => {
+          const index = this.ongoingWorkout!.exercises!.indexOf(
+            this.exerciseToDelete,
+          );
+          if (index > -1) {
+            this.ongoingWorkout!.exercises!.splice(index, 1);
+          }
+          this.exerciseToDelete = undefined;
+        });
     }
-    this.exerciseToDelete = undefined;
   }
 
   openTagsModal() {
@@ -448,15 +507,18 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   }
 
   onTagsModalClosed() {
-    this.tagService
-      .updateTags(this.ongoingWorkout!.tags!, this.ongoingWorkout!.id!)
+    this.workoutService
+      .updateTagsForWorkout(
+        this.ongoingWorkout!.id!,
+        this.ongoingWorkout!.tags!,
+      )
       .subscribe((tags) => {
         this.ongoingWorkout!.tags = tags;
       });
   }
 
   resetTimer() {
-    this.resetTimerConfirmationModal.show()
+    this.resetTimerConfirmationModal.show();
   }
 
   onResetTimerConfirmed(confirmed: boolean) {
@@ -471,6 +533,13 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  onFinishWorkoutConfirmed(confirmed: boolean) {
+    if (confirmed) {
+      this.doFinishWorkout();
+    }
+  }
+
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+
   protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

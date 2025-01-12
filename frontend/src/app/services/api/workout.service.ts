@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Workout } from '../../models/workout';
 import { PageResponse } from '../../models/page-response';
-import { workout } from './dummy-data/workout-histories-dummy-data';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
+import { sortExercises } from '../../models/workout-template';
+import { Tag } from '../../models/tag';
+import { Sets } from '../../models/set';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +25,25 @@ export class WorkoutService {
   }
 
   getOngoingWorkout(): Observable<Workout | undefined> {
-    return this.http.get<Workout | undefined>(`${this.apiUrl}/ongoing`);
+    return this.http.get<Workout | undefined>(`${this.apiUrl}/ongoing`).pipe(
+      map((workout) => {
+        if (workout) {
+          workout.exercises = sortExercises(workout.exercises);
+        }
+        return workout;
+      }),
+    );
+  }
+
+  getLastPerformedWorkout(): Observable<Workout | undefined> {
+    return this.http.get<Workout | undefined>(`${this.apiUrl}/latest`).pipe(
+      map((workout) => {
+        if (workout) {
+          workout.exercises = sortExercises(workout.exercises);
+        }
+        return workout;
+      }),
+    );
   }
 
   deleteWorkout(workoutId: number): Observable<void> {
@@ -33,19 +54,98 @@ export class WorkoutService {
     return this.http.delete<Date>(`${this.apiUrl}/ongoing/${workoutId}/timer`);
   }
 
-  removeExercise(exerciseId: number, workoutId: number) {}
+  addExerciseToWorkout(
+    workoutId: number,
+    exercisesPositions: { id: number; position: number }[],
+  ): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/${workoutId}/exercises`,
+      exercisesPositions,
+    );
+  }
 
   replaceExercise(
     workoutId: number,
     exerciseId: number,
     newExerciseId?: number,
-  ) {}
-
-  updateExercisesPositionForWorkout(workoutId: number, exerciseIds: number[]) {
-    // on BE just update order field in workout_exercises table based in the ids positions in list
+  ): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/${workoutId}/exercises/replace?exerciseId=${exerciseId}&newExerciseId=${newExerciseId}`,
+      {},
+    );
   }
 
-  addExerciseToWorkout(workoutId: number, exerciseIds: number[]) {}
+  removeExercise(exerciseId: number, workoutId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${workoutId}/exercises/${exerciseId}`,
+    );
+  }
+
+  updateExercisesPositionForWorkout(
+    workoutId: number,
+    exercisesPositions: { id: number; position: number }[],
+  ): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/${workoutId}/exercises/positions`,
+      exercisesPositions,
+    );
+  }
+
+  updateTagsForWorkout(workoutId: number, tags: Tag[]): Observable<Tag[]> {
+    return this.http.put<Tag[]>(`${this.apiUrl}/${workoutId}/tags`, tags);
+  }
+
+  addSet(workoutId: number, exerciseId: number, set: Sets): Observable<Sets> {
+    return this.http.post<Sets>(
+      `${this.apiUrl}/${workoutId}/exercises/${exerciseId}/sets`,
+      set,
+    );
+  }
+
+  deleteSet(workoutId: number, setId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${workoutId}/exercises/sets/${setId}`,
+    );
+  }
+
+  updateSetWeight(
+    workoutId: number,
+    exerciseId: number,
+    setId: number,
+    weight: number,
+  ): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/${workoutId}/exercises/${exerciseId}/sets/${setId}/weight?weight=${weight}`,
+      {},
+    );
+  }
+
+  updateSetReps(
+    workoutId: number,
+    exerciseId: number,
+    setId: number,
+    reps: number,
+  ): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/${workoutId}/exercises/${exerciseId}/sets/${setId}/reps?reps=${reps}`,
+      {},
+    );
+  }
+
+  completeSet(
+    workoutId: number,
+    exerciseId: number,
+    setId: number,
+  ): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/${workoutId}/exercises/${exerciseId}/sets/${setId}/complete`,
+      {},
+    );
+  }
+
+  completeWorkout(workoutId: number): Observable<Date> {
+    return this.http.post<Date>(`${this.apiUrl}/ongoing/${workoutId}`, {});
+  }
 
   searchWorkoutHistory(
     page: number,
@@ -54,29 +154,22 @@ export class WorkoutService {
     dateTo?: Date,
     searchQuery?: string,
   ): Observable<PageResponse<Workout>> {
-    const filteredWorkoutHistory = workout.filter(
-      (workout) =>
-        (!dateFrom || workout.startTime >= dateFrom) &&
-        (!dateTo || workout.startTime <= dateTo) &&
-        (!searchQuery ||
-          workout.title.toLowerCase().includes(searchQuery.toLowerCase())),
-    );
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
 
-    const totalElements = filteredWorkoutHistory.length;
-    const startIndex = page * size;
-    const endIndex = startIndex + size;
-    const paginatedWorkoutHistory = filteredWorkoutHistory.slice(
-      startIndex,
-      endIndex,
-    );
+    if (dateFrom) {
+      params = params.set('dateFrom', dateFrom.toISOString().slice(0, -1));
+    }
+    if (dateTo) {
+      params = params.set('dateTo', dateTo.toISOString().slice(0, -1));
+    }
+    if (searchQuery) {
+      params = params.set('searchQuery', searchQuery);
+    }
 
-    return of({
-      content: paginatedWorkoutHistory,
-      pageNumber: page,
-      pageSize: size,
-      totalPages: Math.ceil(totalElements / size),
-      totalElements: totalElements,
-      last: (page + 1) * size >= totalElements,
+    return this.http.get<PageResponse<Workout>>(`${this.apiUrl}/history`, {
+      params,
     });
   }
 }

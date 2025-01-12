@@ -10,7 +10,6 @@ import { NetworkStatusComponent } from './components/common/network-status/netwo
 import { OngoingWorkoutComponent } from './components/ongoing-workout/ongoing-workout.component';
 import { WorkoutService } from './services/api/workout.service';
 import { OngoingWorkoutService } from './services/communication/ongoing-workout.service';
-import { workout } from './services/api/dummy-data/workout-histories-dummy-data';
 
 @Component({
   selector: 'app-root',

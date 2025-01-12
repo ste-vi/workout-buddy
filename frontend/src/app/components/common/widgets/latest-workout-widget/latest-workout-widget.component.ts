@@ -6,7 +6,7 @@ import { fadeInOut } from '../../../../animations/fade-in-out';
 import { NgIf } from '@angular/common';
 import { WorkoutHistoryDetailsComponent } from '../../../workout-history-details/workout-history-details.component';
 import { WorkoutHistoryDetailsService } from '../../../../services/communication/workout-history-details.service';
-import {Workout} from "../../../../models/workout";
+import {getWorkoutDuration, Workout} from "../../../../models/workout";
 
 @Component({
   selector: 'app-latest-workout-widget',
@@ -33,4 +33,6 @@ export class LatestWorkoutWidgetComponent {
   openWorkoutHistoryDetails(workout: Workout) {
     this.workoutHistoryDetailsService.openModal(workout);
   }
+
+  protected readonly getWorkoutDuration = getWorkoutDuration;
 }

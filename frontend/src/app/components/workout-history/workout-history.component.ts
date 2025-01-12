@@ -17,14 +17,13 @@ import {
 } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { LatestWorkoutWidgetComponent } from '../common/widgets/latest-workout-widget/latest-workout-widget.component';
-import { SelectionMenuComponent } from '../common/selection-menu/selection-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { collapse } from '../../animations/collapse';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { staggerFadeIn } from '../../animations/stagger-fade-in';
 import { WorkoutService } from '../../services/api/workout.service';
-import {Workout} from "../../models/workout";
+import { Workout } from '../../models/workout';
 
 @Component({
   selector: 'app-workout-history',
@@ -36,7 +35,6 @@ import {Workout} from "../../models/workout";
     NgForOf,
     MatIcon,
     LatestWorkoutWidgetComponent,
-    SelectionMenuComponent,
     ReactiveFormsModule,
     FormsModule,
     KeyValuePipe,
@@ -94,6 +92,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
       this.workout = [];
       this.currentPage = 0;
     }
+    console.log(isSearch)
 
     this.workoutService
       .searchWorkoutHistory(
@@ -121,7 +120,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     const lastDay = new Date(year, month + 1, 0);
 
     this.workoutService
-      .searchWorkoutHistory(0, 100, firstDay, lastDay, undefined)
+      .searchWorkoutHistory(0, this.itemsPerPage, firstDay, lastDay, undefined)
       .subscribe((pageResponse) => {
         this.workout = pageResponse.content;
       });
@@ -146,7 +145,8 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
 
     this.groupedWorkoutHistory.forEach((histories) => {
       histories.sort(
-        (a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
+        (a, b) =>
+          new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
       );
     });
 
@@ -177,12 +177,14 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   private initCurrentDayWorkoutHistory() {
     let date = this.dates[this.currentIndex].getDate();
 
-    this.currentDayWorkoutHistory = this.workout.filter(
-      (history) =>
-        history.startTime.getFullYear() === this.currentMonth.getFullYear() &&
-        history.startTime.getMonth() === this.currentMonth.getMonth() &&
-        history.startTime.getDate() === date,
-    );
+    this.currentDayWorkoutHistory = this.workout.filter((history) => {
+      let startDate = new Date(history.startTime);
+      return (
+        startDate.getFullYear() === this.currentMonth.getFullYear() &&
+        startDate.getMonth() === this.currentMonth.getMonth() &&
+        startDate.getDate() === date
+      );
+    });
   }
 
   private generateDates(): void {

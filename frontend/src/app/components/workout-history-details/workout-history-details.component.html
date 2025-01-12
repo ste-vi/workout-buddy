@@ -26,7 +26,8 @@
         </div>
 
         <div class="s-text gray-1-color">
-          {{ workout.startTime | date:'yyyy MMM dd' }} | {{ workout.exercises.length }} exercises | {{ workout.totalSets }} sets
+          {{ workout.startTime | date:'yyyy MMM dd' }} | {{ workout.exercises.length }} exercises
+          | {{ workout.totalSets }} sets
         </div>
 
         <div class="tags s-text card-padding-top">
@@ -35,7 +36,8 @@
 
         <div class="metrics-container">
           <div class="metric-card card-shadow">
-            <div class="primary-background m-text primary-background-text"><b>{{ workout.getDuration() + ' min' }}</b>
+            <div class="primary-background m-text primary-background-text">
+              <b>{{ getWorkoutDuration(workout.startTime, workout.endTime) + ' min' }}</b>
             </div>
             <div class="gray-1-color s-text">Duration</div>
           </div>
@@ -62,7 +64,9 @@
                   <app-action-button icon='two-dots' iconClasses="xs-svg-icon" class="not-visible"></app-action-button>
                 </div>
                 <div class="lower-section gray-1-color s-text">
-                  <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}</div>
+                  <div>{{ getBodyPartDisplayName(exercise.bodyPart) }}
+                    | {{ getCategoryDisplayName(exercise.category) }}
+                  </div>
                   <div class="pr-set" *ngIf="exercise.prSet">
                     <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
                     <div>
@@ -144,7 +148,8 @@
         </div>
 
         <div class="s-text gray-1-color">
-          {{ workout.startTime | date:'dd-MM-yyyy' }} | {{ workout.getDuration() + ' min' }}
+          {{ workout.startTime | date:'dd-MM-yyyy' }}
+          | {{ getWorkoutDuration(workout.startTime, workout.endTime) + ' min' }}
         </div>
 
         <div class="workout-info">
@@ -182,7 +187,9 @@
                                      (click)="resetSetDelete()"></app-action-button>
                 </div>
                 <div class=" lower-section gray-1-color s-text">
-                  <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}</div>
+                  <div>{{ getBodyPartDisplayName(exercise.bodyPart) }}
+                    | {{ getCategoryDisplayName(exercise.category) }}
+                  </div>
                   <div class="pr-set" *ngIf="exercise.prSet">
                     <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
                     <div>
@@ -234,7 +241,7 @@
                   </div>
                 </div>
               </div>
-              <div class="add-new-set semi-bold" (click)="addSet(exercise)">Add set</div>
+              <div class="add-new-set" (click)="addSet(exercise)">Add set</div>
             </div>
           </div>
 
@@ -278,7 +285,7 @@
 
     <app-workout-time-selector [isOpen]="openedAdjustWorkoutTime"
                                [startTime]="workout.startTime"
-                               [endTime]="workout.endTime"
+                               [endTime]="workout.endTime!"
                                (timeRangeChange)="onWorkoutTimeChange($event)"></app-workout-time-selector>
   </div>
 

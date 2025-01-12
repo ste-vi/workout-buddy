@@ -22,6 +22,9 @@
         <div class="tag" *ngFor="let tag of ongoingWorkout?.tags"
              (click)="openTagsModal()">{{ tag.name }}
         </div>
+        <div *ngIf="!ongoingWorkout?.tags || ongoingWorkout!.tags.length === 0" class="add-tag"
+             (click)="openTagsModal()">Add tags
+        </div>
       </div>
 
       <app-tags-modal
@@ -56,7 +59,7 @@
                                  (click)="resetSetDelete()"></app-action-button>
             </div>
             <div class=" lower-section gray-1-color s-text">
-              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }}| {{ getCategoryDisplayName(exercise.category) }}
+              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}
               </div>
               <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
@@ -90,18 +93,19 @@
             </div>
             <div class="table-cell kg">
               <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
-                     [placeholder]="set.previousWeight ? set.previousWeight : 0"
-                     (blur)="updateSetWeight(set, $event)">
+                     [placeholder]="set.previousWeight ? set.previousWeight : 0" [value]="set.weight"
+                     (blur)="updateSetWeight(exercise, set, $event)">
             </div>
             <div class="table-cell reps">
               <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
-                     [placeholder]="set.previousReps ? set.previousReps : 0"
-                     (blur)="updateSetReps(set, $event)">
+                     [placeholder]="set.previousReps ? set.previousReps : 0" [value]="set.reps"
+                     (blur)="updateSetReps(exercise, set, $event)">
             </div>
             <div class="table-cell action">
               <div *ngIf="deleteSetModeForExercise !== exercise" class="clickable action-icon-container">
                 <mat-icon svgIcon="check" class="gray-1-color action-icon"
-                          [class.complete-set-action-icon]="set.completed" (click)="completeSet(set)"></mat-icon>
+                          [class.complete-set-action-icon]="set.completed"
+                          (click)="completeSet(exercise, set)"></mat-icon>
               </div>
               <div *ngIf="deleteSetModeForExercise === exercise" class="clickable action-icon-container">
                 <mat-icon svgIcon="delete-2" class="gray-1-color action-icon delete-icon"
@@ -109,7 +113,7 @@
               </div>
             </div>
           </div>
-          <div class="add-new-set semi-bold" (click)="addSet(exercise)">Add set</div>
+          <div class="add-new-set" (click)="addSet(exercise)">Add set</div>
         </div>
       </div>
 
@@ -138,7 +142,6 @@
     (confirmed)="onReplaceExerciseConfirmed($event)"
   ></app-confirmation-modal>
 
-
   <app-confirmation-modal
     #resetTimerConfirmationModal
     [header]="'Reset timer?'"
@@ -149,6 +152,12 @@
     #cancelWorkoutConfirmationModal
     [header]="'Cancel workout?'"
     (confirmed)="onCancelWorkoutConfirmed($event)"
+  ></app-confirmation-modal>
+
+  <app-confirmation-modal
+    #finishWorkoutConfirmationModal
+    [header]="'Finish workout?'"
+    (confirmed)="onFinishWorkoutConfirmed($event)"
   ></app-confirmation-modal>
 
   <app-exercises

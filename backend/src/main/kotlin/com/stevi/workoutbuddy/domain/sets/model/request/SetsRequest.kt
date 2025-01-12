@@ -11,12 +11,12 @@ data class SetsRequest(
     @field:NotNull(message = "Reps are required")
     @field:Min(value = 0, message = "Cannot be less then 0")
     @field:Max(value = 10_000, message = "Cannot be more then 10_000")
-    val reps: Short,
+    val reps: Short?,
 
     @field:NotNull(message = "Reps are required")
     @field:Min(value = 0, message = "Cannot be less then 0")
     @field:Max(value = 10_000, message = "Cannot be more then 10_000")
-    val weight: Short,
+    val weight: Double?,
 
     val completed: Boolean = false,
 )

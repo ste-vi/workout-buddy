@@ -1,8 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
-import { workout } from '../../services/api/dummy-data/workout-histories-dummy-data';
-import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
 import { WorkoutTemplateDetailsComponent } from '../workout-template-details/workout-template-details.component';
 import { LatestWorkoutWidgetComponent } from '../common/widgets/latest-workout-widget/latest-workout-widget.component';
 import { WorkoutTemplateWidgetComponent } from '../common/widgets/workout-template-widget/workout-template-widget.component';
@@ -11,7 +9,9 @@ import { fadeInOut } from '../../animations/fade-in-out';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
 import { WorkoutTemplate } from '../../models/workout-template';
-import {NgIf} from "@angular/common";
+import { NgIf } from '@angular/common';
+import { Workout } from '../../models/workout';
+import { WorkoutService } from '../../services/api/workout.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +19,6 @@ import {NgIf} from "@angular/common";
   imports: [
     MatIcon,
     MediumButtonComponent,
-    OngoingWorkoutComponent,
     WorkoutTemplateDetailsComponent,
     LatestWorkoutWidgetComponent,
     WorkoutTemplateWidgetComponent,
@@ -32,7 +31,7 @@ import {NgIf} from "@angular/common";
 })
 export class DashboardComponent {
   protected suggestedWorkoutTemplate: WorkoutTemplate | undefined = undefined;
-  protected readonly latestWorkoutHistory = workout[0];
+  protected latestWorkoutHistory: Workout | undefined = undefined;
 
   @ViewChild('exercisesModal')
   exercisesModal!: SearchExercisesComponent;
@@ -40,12 +39,16 @@ export class DashboardComponent {
   constructor(
     private router: Router,
     private workoutTemplateService: WorkoutTemplateService,
+    private workoutService: WorkoutService,
   ) {
     workoutTemplateService
       .getSuggestedWorkoutTemplate()
       .subscribe((template) => {
         this.suggestedWorkoutTemplate = template;
       });
+    workoutService.getLastPerformedWorkout().subscribe((workout) => {
+      this.latestWorkoutHistory = workout;
+    });
   }
 
   openWorkoutTemplatesPage() {

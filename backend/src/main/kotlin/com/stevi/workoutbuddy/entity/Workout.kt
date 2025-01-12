@@ -26,7 +26,7 @@ class Workout(
     var totalWeight: Short,
 
     @Column
-    var endTime: LocalDateTime?,
+    var endAt: LocalDateTime?,
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
