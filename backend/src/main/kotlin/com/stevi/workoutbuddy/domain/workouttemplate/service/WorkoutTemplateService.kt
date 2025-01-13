@@ -1,8 +1,10 @@
 package com.stevi.workoutbuddy.domain.workouttemplate.service
 
 import com.stevi.workoutbuddy.domain.exercises.service.ExerciseInstanceService
+import com.stevi.workoutbuddy.domain.sets.service.SetsService
 import com.stevi.workoutbuddy.domain.tag.service.TagService
 import com.stevi.workoutbuddy.domain.workout.service.UserService
+import com.stevi.workoutbuddy.domain.workout.service.WorkoutService
 import com.stevi.workoutbuddy.domain.workouttemplate.model.request.WorkoutTemplateRequest
 import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplateResponse
 import com.stevi.workoutbuddy.entity.WorkoutTemplate
@@ -15,7 +17,9 @@ class WorkoutTemplateService(
     private val workoutTemplateRepository: WorkoutTemplateRepository,
     private val exerciseInstanceService: ExerciseInstanceService,
     private val userService: UserService,
-    private val tagService: TagService
+    private val tagService: TagService,
+    private val setsService: SetsService,
+    private val workoutService: WorkoutService
 ) {
 
     @Transactional(readOnly = true)
@@ -24,7 +28,10 @@ class WorkoutTemplateService(
         val template = workoutTemplateRepository.findFirstByUserIdOrderByIdDesc(userId)
         return template?.let {
             val exerciseInstances = exerciseInstanceService.getExercisesForWorkoutTemplate(template.id)
-            WorkoutTemplateResponse.fromEntity(it, exerciseInstances)
+            val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseInstances.map { ex -> ex.exercise.id })
+            val lastPerformedWorkout = workoutService.getLastPerformedWorkoutToTemplateMap(listOf(it.id))[it.id]
+
+            WorkoutTemplateResponse.fromEntity(it, exerciseInstances, prSetForExerciseMap, lastPerformedWorkout)
         }
     }
 
@@ -33,9 +40,18 @@ class WorkoutTemplateService(
         val workoutTemplates = workoutTemplateRepository.findAllByUserIdOrderByIdDesc(userId)
         val workoutTemplateIds = workoutTemplates.map { it.id }
         val exerciseInstancesMap = exerciseInstanceService.getExercisesForWorkoutTemplates(workoutTemplateIds)
+        val prSetForExerciseMap =
+            setsService.getPrSetForExerciseMap(exerciseInstancesMap.values.flatten().map { it.exercise.id })
+        val lastPerformedWorkoutMap = workoutService.getLastPerformedWorkoutToTemplateMap(workoutTemplateIds)
+
 
         return workoutTemplates.map { template ->
-            WorkoutTemplateResponse.fromEntity(template, exerciseInstancesMap[template.id] ?: emptyList())
+            WorkoutTemplateResponse.fromEntity(
+                template,
+                exerciseInstancesMap[template.id] ?: emptyList(),
+                prSetForExerciseMap,
+                lastPerformedWorkoutMap[template.id]
+            )
         }
     }
 
@@ -53,7 +69,9 @@ class WorkoutTemplateService(
         val exInstances = exerciseInstanceService.createExercisesForWorkoutTemplate(request.exercises, savedTemplate)
         savedTemplate.exerciseInstances = exInstances
 
-        return WorkoutTemplateResponse.fromEntity(savedTemplate, exInstances)
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exInstances.map { it.exercise.id })
+
+        return WorkoutTemplateResponse.fromEntity(savedTemplate, exInstances, prSetForExerciseMap, null)
     }
 
     @Transactional
@@ -70,7 +88,17 @@ class WorkoutTemplateService(
         existingTemplate.updateExerciseInstances(exInstances)
 
         val updatedTemplate = workoutTemplateRepository.save(existingTemplate)
-        return WorkoutTemplateResponse.fromEntity(updatedTemplate, exInstances)
+
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exInstances.map { ex -> ex.exercise.id })
+
+        val lastPerformedWorkout = workoutService.getLastPerformedWorkoutToTemplateMap(listOf(id))[id]
+
+        return WorkoutTemplateResponse.fromEntity(
+            updatedTemplate,
+            exInstances,
+            prSetForExerciseMap,
+            lastPerformedWorkout
+        )
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import com.stevi.workoutbuddy.entity.ExerciseInstance
 import com.stevi.workoutbuddy.entity.Sets
 import com.stevi.workoutbuddy.exception.ResourceNotFoundException
 import com.stevi.workoutbuddy.repository.SetsRepository
+import com.stevi.workoutbuddy.repository.projection.PrSetProjection
 import java.time.LocalDateTime
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -54,5 +55,17 @@ class SetsService(private val setsRepository: SetsRepository) {
     private fun getExercise(setId: Long, exerciseId: Long): Sets {
         return setsRepository.findByIdAndExerciseInstanceExerciseId(setId, exerciseId)
             ?: throw ResourceNotFoundException("Set not found in the workout")
+    }
+
+    @Transactional
+    fun updatePersonalRecordSetForExercises(exerciseIds: List<Long>) {
+        setsRepository.updatePersonalRecords(exerciseIds)
+    }
+
+    @Transactional(readOnly = true)
+    fun getPrSetForExerciseMap(exerciseIds: List<Long>): Map<Long, PrSetProjection> {
+        return setsRepository.findPrSetsByExerciseIds(exerciseIds).associateBy {
+            it.exerciseId
+        }
     }
 }

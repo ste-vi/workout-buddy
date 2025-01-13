@@ -92,7 +92,6 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
       this.workout = [];
       this.currentPage = 0;
     }
-    console.log(isSearch)
 
     this.workoutService
       .searchWorkoutHistory(
@@ -105,12 +104,14 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
       .subscribe((pageResponse) => {
         this.workout = isSearch
           ? pageResponse.content
-          : this.workout.concat(pageResponse.content);
+          : this.workout.concat(
+              pageResponse.content.map((wt) => new Workout(wt)),
+            );
 
         this.hasMoreItems = !pageResponse.last;
-      });
 
-    this.groupWorkoutHistory();
+        this.groupWorkoutHistory();
+      });
   }
 
   private fetchWorkoutHistory() {
@@ -122,7 +123,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     this.workoutService
       .searchWorkoutHistory(0, this.itemsPerPage, firstDay, lastDay, undefined)
       .subscribe((pageResponse) => {
-        this.workout = pageResponse.content;
+        this.workout = pageResponse.content.map((wt) => new Workout(wt));
       });
   }
 
@@ -215,7 +216,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   private scrollCarousel(): void {
     if (this.dateCarousel) {
       const container = this.dateCarousel.nativeElement;
-      const index = Math.max(0, this.currentIndex - 1);
+      const index = Math.max(0, this.currentIndex);
       const item = container.children[index] as HTMLElement;
       const containerWidth = container.offsetWidth;
       const itemWidth = item.offsetWidth;
@@ -299,7 +300,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   clearSearch() {
     this.searchQuery = '';
     this.currentPage = 0;
-    this.searchWorkoutHistory();
+    this.searchWorkoutHistory(true);
   }
 
   originalOrder = (

@@ -10,37 +10,37 @@
 
     <div class="workout-template-details">
       <div class="subtitle semi-bold">
-        {{ template.title }}
+        {{ template!.title }}
       </div>
       <div class="s-text gray-1-color details">
         <div>
-          {{ template.exercises.length }} exercises | {{ template.totalSets }} sets
+          {{ template!.exercises.length }} exercises | {{ template!.totalSets }} sets
         </div>
-        <div class="archived caption semi-bold" *ngIf="template.archived">
+        <div class="archived caption semi-bold" *ngIf="template!.archived">
           Archived
         </div>
       </div>
-      <div class="tags s-text card-padding-top" *ngIf="template.tags.length > 0">
-        <div class="tag" *ngFor="let tag of template.tags">{{ tag.name }}</div>
+      <div class="tags s-text card-padding-top" *ngIf="template!.tags.length > 0">
+        <div class="tag" *ngFor="let tag of template!.tags">{{ tag.name }}</div>
       </div>
-      <div class="info-cards s-text" *ngIf="template.lastPerformedWorkout">
-        <div class="info-card card-shadow">
-          <div class="semi-bold">
-            {{ template.lastPerformedWorkout.duration }}
+      <div class="info-cards s-text">
+        <div class="info-card card-shadow" *ngIf="template!.lastPerformedWorkout">
+          <div class="semi-bold primary">
+            {{ template!.lastPerformedWorkout.getDuration() + ' min' }}
           </div>
           <div class="semi-bold">
-            {{ template.lastPerformedWorkout.date | timeAgo }}
+            {{ template!.lastPerformedWorkout.endTime | timeAgo }}
           </div>
           <div class="gray-1-color">
             Last performed
           </div>
         </div>
-        <div class="info-card card-shadow">
+        <div class="info-card card-shadow" *ngIf="template!.volumeTrend">
           <div class="semi-bold success trend-value">
-            <div class="success">{{ template.volumeTrend.percentage }} %</div>
+            <div class="success">{{ template!.volumeTrend!.percentage }} %</div>
           </div>
           <div class="semi-bold success trend-value">
-            <div class="success">{{ template.volumeTrend.value }}</div>
+            <div class="success">{{ template!.volumeTrend!.value }}</div>
           </div>
           <div class="gray-1-color">
             Volume trend
@@ -51,11 +51,11 @@
 
     <div class="exercises-list-container">
       <div class="exercises">
-        <div *ngIf="template.exercises.length === 0" class="s-text gray-1-color">Note: no exercises has been added to
+        <div *ngIf="template!.exercises.length === 0" class="s-text gray-1-color">Note: no exercises has been added to
           the template.<br> You can add exercises
           by editing current template or starting workout and adding new exercises there.
         </div>
-        <div class="exercise" *ngFor="let exercise of template.exercises">
+        <div class="exercise" *ngFor="let exercise of template!.exercises">
           <div class="exercise-header">
             <div class="exercise-image secondary-background"></div>
           </div>
@@ -81,8 +81,8 @@
       </div>
     </div>
 
-    <app-button name="Start Workout" *ngIf="!template.archived" [textClasses]="['white-color', 'semi-bold']" (click)="startWorkout()"></app-button>
-    <div *ngIf="template.archived" class="s-text gray-1-color p-b-4-rm">To <b>start workout</b> from this template, please, unarchive it first in the template menu</div>
+    <app-button name="Start Workout" *ngIf="!template!.archived" [textClasses]="['white-color', 'semi-bold']" (click)="startWorkout()"></app-button>
+    <div *ngIf="template!.archived" class="s-text gray-1-color p-b-4-rm">To <b>start workout</b> from this template, please, unarchive it first in the template menu</div>
   </div>
 
   <app-workout-template-edit #workoutTemplateEditComponent

@@ -19,14 +19,18 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { MatIcon } from '@angular/material/icon';
-import {Exercise, getBodyPartDisplayName, getCategoryDisplayName} from '../../models/exercise';
+import {
+  Exercise,
+  getBodyPartDisplayName,
+  getCategoryDisplayName,
+} from '../../models/exercise';
 import { Sets } from '../../models/set';
 import { ToastComponent } from '../common/toast/toast.component';
 import { replaceItemInArray } from '../../utils/array-utils';
 import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
 import { collapse } from '../../animations/collapse';
-import {getWorkoutDuration, Workout} from '../../models/workout';
+import { Workout } from '../../models/workout';
 import { WorkoutTimeSelectorComponent } from '../common/workout-time-selector/workout-time-selector.component';
 
 @Component({
@@ -103,7 +107,7 @@ export class WorkoutHistoryDetailsComponent {
     private workoutHistoryDetailsService: WorkoutHistoryDetailsService,
   ) {
     this.workoutHistoryDetailsService.modalOpened$.subscribe((wh) => {
-      this.workout = wh;
+      this.workout = new Workout(wh);
       this.isOpen = true;
       this.isEditView = false;
       this.workoutTitle = this.workout.title;
@@ -382,7 +386,12 @@ export class WorkoutHistoryDetailsComponent {
   }
 
   addSet(exercise: Exercise) {
-    let newSet: Sets = { reps: 0, weight: 0, completed: false };
+    let newSet: Sets = {
+      reps: 0,
+      weight: 0,
+      completed: false,
+      personalRecord: false,
+    };
     /*    this.setService.create(newSet, exercise.id).subscribe((set) => {
       exercise.sets.push(set);
       this.recalculateProgress();
@@ -458,5 +467,4 @@ export class WorkoutHistoryDetailsComponent {
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
   protected readonly getCategoryDisplayName = getCategoryDisplayName;
-    protected readonly getWorkoutDuration = getWorkoutDuration;
 }

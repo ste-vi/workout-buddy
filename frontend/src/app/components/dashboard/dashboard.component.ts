@@ -44,10 +44,10 @@ export class DashboardComponent {
     workoutTemplateService
       .getSuggestedWorkoutTemplate()
       .subscribe((template) => {
-        this.suggestedWorkoutTemplate = template;
+        this.suggestedWorkoutTemplate = new WorkoutTemplate(template);
       });
     workoutService.getLastPerformedWorkout().subscribe((workout) => {
-      this.latestWorkoutHistory = workout;
+      this.latestWorkoutHistory = workout ? new Workout(workout) : undefined;
     });
   }
 

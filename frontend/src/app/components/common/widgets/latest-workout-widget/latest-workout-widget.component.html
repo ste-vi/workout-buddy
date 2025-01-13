@@ -7,7 +7,7 @@
       <div>
         <span>{{ workout.prReps }} PRs | </span>
         <span>{{ workout.totalWeight }} kg | </span>
-        <span>{{ getWorkoutDuration(workout.startTime, workout.endTime) + ' min'}}</span>
+        <span>{{ workout.getWorkoutDuration() + ' min'}}</span>
       </div>
     </div>
     <div class="last-workout-time caption">

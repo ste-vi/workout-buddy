@@ -5,4 +5,5 @@ export interface Sets {
   previousReps?: number;
   previousWeight?: number;
   completed: boolean;
+  personalRecord: boolean;
 }

@@ -20,10 +20,7 @@ class Workout(
     var title: String,
 
     @Column
-    var prReps: Short,
-
-    @Column
-    var totalWeight: Short,
+    var totalWeight: Double?,
 
     @Column
     var endAt: LocalDateTime?,

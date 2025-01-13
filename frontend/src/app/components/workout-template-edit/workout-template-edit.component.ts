@@ -206,7 +206,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
   }
 
   addSet(exercise: Exercise) {
-    let newSet: Sets = { reps: 0, weight: 0, completed: false };
+    let newSet: Sets = { reps: 0, weight: 0, completed: false, personalRecord: false };
     exercise.sets.push(newSet);
 
     if (this.template) {

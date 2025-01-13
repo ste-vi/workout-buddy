@@ -9,6 +9,7 @@ import com.stevi.workoutbuddy.domain.sets.service.SetsService
 import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
 import com.stevi.workoutbuddy.domain.tag.service.TagService
+import com.stevi.workoutbuddy.domain.workout.model.response.LastPerformedWorkout
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutResponse
 import com.stevi.workoutbuddy.domain.workout.specification.WorkoutSpecification
 import com.stevi.workoutbuddy.entity.Workout
@@ -34,9 +35,13 @@ class WorkoutService(
     fun findOngoingWorkout(userId: Long): WorkoutResponse? {
         val ongoingWorkout = workoutRepository.findByUserIdAndEndAtIsNull(userId)
         return ongoingWorkout?.let {
+            val exerciseInstances = exerciseInstanceService.getExercisesForWorkout(it.id)
+            val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseInstances.map { ex -> ex.exercise.id })
+
             WorkoutResponse.fromEntity(
                 it,
-                exerciseInstanceService.getExercisesForWorkout(it.id)
+                exerciseInstanceService.getExercisesForWorkout(it.id),
+                prSetForExerciseMap
             )
         }
     }
@@ -45,9 +50,13 @@ class WorkoutService(
     fun findLastPerformedWorkout(userId: Long): WorkoutResponse? {
         val ongoingWorkout = workoutRepository.findFirstByUserIdAndEndAtIsNotNullOrderByEndAtDesc(userId)
         return ongoingWorkout?.let {
+            val exerciseInstances = exerciseInstanceService.getExercisesForWorkout(it.id)
+            val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseInstances.map { ex -> ex.exercise.id })
+
             WorkoutResponse.fromEntity(
                 it,
-                exerciseInstanceService.getExercisesForWorkout(it.id)
+                exerciseInstances,
+                prSetForExerciseMap
             )
         }
     }
@@ -66,12 +75,17 @@ class WorkoutService(
         val workoutPage = workoutRepository.findAll(specification, pageable)
         val workoutIds = workoutPage.content.map { it.id }
         val exerciseInstancesMap = exerciseInstanceService.getExercisesForWorkouts(workoutIds)
+        val prSetForExerciseMap =
+            setsService.getPrSetForExerciseMap(exerciseInstancesMap.values.flatten().map { it.exercise.id })
+        val workoutTagsMap = tagService.getTagsForWorkouts(workoutIds)
 
         return PageResponse(
             content = workoutPage.content.map {
                 WorkoutResponse.fromEntity(
                     it,
-                    exerciseInstancesMap[it.id] ?: emptyList()
+                    workoutTagsMap[it.id] ?: listOf(),
+                    exerciseInstancesMap[it.id] ?: emptyList(),
+                    prSetForExerciseMap
                 )
             },
             pageNumber = workoutPage.number,
@@ -101,8 +115,7 @@ class WorkoutService(
             template = workoutTemplate,
             tags = tags,
             user = user,
-            prReps = 0,
-            totalWeight = 0,
+            totalWeight = null,
             endAt = null
         )
 
@@ -112,7 +125,9 @@ class WorkoutService(
 
         val savedWorkout = workoutRepository.save(workout)
 
-        return WorkoutResponse.fromEntity(savedWorkout, instances)
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(instances.map { it.exercise.id })
+
+        return WorkoutResponse.fromEntity(savedWorkout, instances, prSetForExerciseMap)
     }
 
     @Transactional
@@ -125,10 +140,14 @@ class WorkoutService(
 
 
     @Transactional
-    fun completeWorkout(workoutId: Long, userId: Long): LocalDateTime {
+    fun completeWorkout(workoutId: Long, totalWeight: Double, userId: Long): LocalDateTime {
         val workout = getWorkoutForUser(workoutId, userId)
+        workout.totalWeight = totalWeight
         workout.endAt = LocalDateTime.now()
         workoutRepository.save(workout)
+
+        val exercisesIds = exerciseInstanceService.getExercisesForWorkout(workoutId).map { t -> t.exercise.id }
+        setsService.updatePersonalRecordSetForExercises(exercisesIds)
 
         return workout.endAt!!
     }
@@ -204,6 +223,11 @@ class WorkoutService(
     fun completeSet(workoutId: Long, exerciseId: Long, setId: Long, userId: Long) {
         validateWorkoutExistenceForUser(workoutId, userId)
         setsService.completeSet(setId, exerciseId)
+    }
+
+    @Transactional(readOnly = true)
+    fun getLastPerformedWorkoutToTemplateMap(templateIds: List<Long>): Map<Long, LastPerformedWorkout> {
+        return workoutRepository.findLastPerformedWorkoutsForTemplateIdIn(templateIds).associateBy { it.templateId }
     }
 
     private fun validateWorkoutExistenceForUser(workoutId: Long, userId: Long) {

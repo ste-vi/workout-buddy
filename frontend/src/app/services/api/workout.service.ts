@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Workout } from '../../models/workout';
 import { PageResponse } from '../../models/page-response';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { map } from 'rxjs/operators';
-import { sortExercises } from '../../models/workout-template';
 import { Tag } from '../../models/tag';
 import { Sets } from '../../models/set';
 
@@ -25,25 +23,11 @@ export class WorkoutService {
   }
 
   getOngoingWorkout(): Observable<Workout | undefined> {
-    return this.http.get<Workout | undefined>(`${this.apiUrl}/ongoing`).pipe(
-      map((workout) => {
-        if (workout) {
-          workout.exercises = sortExercises(workout.exercises);
-        }
-        return workout;
-      }),
-    );
+    return this.http.get<Workout | undefined>(`${this.apiUrl}/ongoing`);
   }
 
   getLastPerformedWorkout(): Observable<Workout | undefined> {
-    return this.http.get<Workout | undefined>(`${this.apiUrl}/latest`).pipe(
-      map((workout) => {
-        if (workout) {
-          workout.exercises = sortExercises(workout.exercises);
-        }
-        return workout;
-      }),
-    );
+    return this.http.get<Workout | undefined>(`${this.apiUrl}/latest`);
   }
 
   deleteWorkout(workoutId: number): Observable<void> {
@@ -143,8 +127,12 @@ export class WorkoutService {
     );
   }
 
-  completeWorkout(workoutId: number): Observable<Date> {
-    return this.http.post<Date>(`${this.apiUrl}/ongoing/${workoutId}`, {});
+  completeWorkout(workoutId: number, totalWeight?: number): Observable<Date> {
+    let url = `${this.apiUrl}/ongoing/${workoutId}`;
+    if (totalWeight !== undefined) {
+      url += `?totalWeight=${totalWeight}`;
+    }
+    return this.http.post<Date>(url, {});
   }
 
   searchWorkoutHistory(

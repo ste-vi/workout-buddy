@@ -24,6 +24,9 @@ class Sets(
     @Column
     var completedAt: LocalDateTime?,
 
+    @Column
+    var personalRecord: Boolean = false,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_instance_id", nullable = false)
     var exerciseInstance: ExerciseInstance,

@@ -33,7 +33,7 @@
           <div class="last-workout-time">
             <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
             <div class="caption"
-                 *ngIf="template.lastPerformedWorkout">{{ template.lastPerformedWorkout.date | timeAgo }}
+                 *ngIf="template.lastPerformedWorkout">{{ template.lastPerformedWorkout.endTime | timeAgo }}
             </div>
             <div class="caption" *ngIf="!template.lastPerformedWorkout">New</div>
           </div>
@@ -75,7 +75,7 @@
             <div class="last-workout-time">
               <mat-icon svgIcon="clock" class="last-workout-time-icon"></mat-icon>
               <div class="caption"
-                   *ngIf="template.lastPerformedWorkout">{{ template.lastPerformedWorkout.date | timeAgo }}
+                   *ngIf="template.lastPerformedWorkout">{{ template.lastPerformedWorkout.endTime | timeAgo }}
               </div>
               <div class="caption" *ngIf="!template.lastPerformedWorkout">New</div>
             </div>

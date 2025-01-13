@@ -26,7 +26,7 @@
         </div>
 
         <div class="s-text gray-1-color">
-          {{ workout.startTime | date:'yyyy MMM dd' }} | {{ workout.exercises.length }} exercises
+          {{ workout.startTime | date:'dd MMM yy' }} | {{ workout.exercises.length }} exercises
           | {{ workout.totalSets }} sets
         </div>
 
@@ -37,7 +37,7 @@
         <div class="metrics-container">
           <div class="metric-card card-shadow">
             <div class="primary-background m-text primary-background-text">
-              <b>{{ getWorkoutDuration(workout.startTime, workout.endTime) + ' min' }}</b>
+              <b>{{ workout.getWorkoutDuration() + ' min' }}</b>
             </div>
             <div class="gray-1-color s-text">Duration</div>
           </div>
@@ -149,7 +149,7 @@
 
         <div class="s-text gray-1-color">
           {{ workout.startTime | date:'dd-MM-yyyy' }}
-          | {{ getWorkoutDuration(workout.startTime, workout.endTime) + ' min' }}
+          | {{ workout.getWorkoutDuration() + ' min' }}
         </div>
 
         <div class="workout-info">

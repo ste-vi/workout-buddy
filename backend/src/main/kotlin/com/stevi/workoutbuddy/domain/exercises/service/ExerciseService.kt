@@ -4,11 +4,11 @@ import com.stevi.workoutbuddy.common.model.response.PageResponse
 import com.stevi.workoutbuddy.domain.exercises.model.request.CreateExerciseRequest
 import com.stevi.workoutbuddy.domain.exercises.model.response.ExerciseResponse
 import com.stevi.workoutbuddy.domain.exercises.specification.ExerciseSpecification
+import com.stevi.workoutbuddy.domain.sets.service.SetsService
 import com.stevi.workoutbuddy.domain.workout.service.UserService
 import com.stevi.workoutbuddy.entity.Exercise
 import com.stevi.workoutbuddy.enumeration.BodyPart
 import com.stevi.workoutbuddy.enumeration.ExerciseCategory
-import com.stevi.workoutbuddy.exception.ResourceNotFoundException
 import com.stevi.workoutbuddy.repository.ExerciseRepository
 import com.stevi.workoutbuddy.security.SecurityUtil
 import jakarta.persistence.EntityNotFoundException
@@ -18,7 +18,11 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ExerciseService(private val exerciseRepository: ExerciseRepository, private val userService: UserService) {
+class ExerciseService(
+    private val exerciseRepository: ExerciseRepository,
+    private val userService: UserService,
+    private val setsService: SetsService
+) {
 
     @Transactional(readOnly = true)
     fun searchExercises(
@@ -37,8 +41,12 @@ class ExerciseService(private val exerciseRepository: ExerciseRepository, privat
             excludeExercisesIds
         )
         val result = exerciseRepository.findAll(spec, pageable)
+
+        val exercisesIds = result.content.map { it.id }
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exercisesIds)
+
         return PageResponse(
-            content = result.content.map { ExerciseResponse.fromEntity(it) },
+            content = result.content.map { ExerciseResponse.fromEntity(it, prSetForExerciseMap[it.id]) },
             pageNumber = result.number,
             pageSize = result.size,
             totalPages = result.totalPages,
@@ -57,7 +65,7 @@ class ExerciseService(private val exerciseRepository: ExerciseRepository, privat
             user = userService.getCurrentUser()
         )
         val savedExercise = exerciseRepository.save(exercise)
-        return ExerciseResponse.fromEntity(savedExercise)
+        return ExerciseResponse.fromEntity(savedExercise, null)
     }
 
     @Transactional
@@ -72,7 +80,9 @@ class ExerciseService(private val exerciseRepository: ExerciseRepository, privat
         }
 
         val updatedExercise = exerciseRepository.save(exercise)
-        return ExerciseResponse.fromEntity(updatedExercise)
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(listOf(id))
+
+        return ExerciseResponse.fromEntity(updatedExercise, prSetForExerciseMap[id])
     }
 
     @Transactional

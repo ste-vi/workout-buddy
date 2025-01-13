@@ -1,5 +1,6 @@
 import { Exercise } from './exercise';
 import { Tag } from './tag';
+import {getDuration} from "./workout";
 
 export class WorkoutTemplate {
   id?: number;
@@ -18,7 +19,9 @@ export class WorkoutTemplate {
       this.id = data.id;
       this.title = data.title || '';
       this.totalSets = data.totalSets || 0;
-      this.lastPerformedWorkout = data.lastPerformedWorkout;
+      this.lastPerformedWorkout = data.lastPerformedWorkout
+        ? new LastPerformedWorkout(data.lastPerformedWorkout)
+        : undefined;
       this.tags = data.tags || [];
       this.volumeTrend = data.volumeTrend;
       this.archived = data.archived;
@@ -36,10 +39,20 @@ export class WorkoutTemplate {
   }
 }
 
-interface LastPerformedWorkout {
+export class LastPerformedWorkout {
   id: number;
-  duration: string;
-  date: Date;
+  startTime: Date;
+  endTime: Date;
+
+  constructor(data: Partial<LastPerformedWorkout>) {
+    this.id = data.id!;
+    this.startTime = new Date(data.startTime!);
+    this.endTime = new Date(data.endTime!);
+  }
+
+  public getDuration(): number {
+    return getDuration(this.startTime, this.endTime);
+  }
 }
 
 export interface Trend {

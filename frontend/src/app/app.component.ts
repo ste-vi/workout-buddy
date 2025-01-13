@@ -10,6 +10,7 @@ import { NetworkStatusComponent } from './components/common/network-status/netwo
 import { OngoingWorkoutComponent } from './components/ongoing-workout/ongoing-workout.component';
 import { WorkoutService } from './services/api/workout.service';
 import { OngoingWorkoutService } from './services/communication/ongoing-workout.service';
+import {Workout} from "./models/workout";
 
 @Component({
   selector: 'app-root',
@@ -42,8 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.workoutService.getOngoingWorkout().subscribe((workout) => {
       if (workout) {
-        this.ongoingWorkoutService.openModal(workout);
-      }
+        this.ongoingWorkoutService.openModal(new Workout(workout));  }
     });
   }
 

@@ -59,8 +59,8 @@ class WorkoutController(private val workoutService: WorkoutService) {
 
     @PostMapping("/ongoing/{workoutId}")
     @ResponseStatus(HttpStatus.OK)
-    fun completeWorkout(@PathVariable workoutId: Long): LocalDateTime {
-        return workoutService.completeWorkout(workoutId, SecurityUtil.getCurrentUserId())
+    fun completeWorkout(@PathVariable workoutId: Long, @RequestParam totalWeight: Double): LocalDateTime {
+        return workoutService.completeWorkout(workoutId, totalWeight, SecurityUtil.getCurrentUserId())
     }
 
     @DeleteMapping("/ongoing/{workoutId}/timer")

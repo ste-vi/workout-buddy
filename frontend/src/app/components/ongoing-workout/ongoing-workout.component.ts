@@ -33,7 +33,7 @@ import { replaceItemInArray } from '../../utils/array-utils';
 import { ToastComponent } from '../common/toast/toast.component';
 import { ActionButtonComponent } from '../common/action-button/action-button.component';
 import { interval, Subscription } from 'rxjs';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -114,12 +114,12 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   constructor(
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.ongoingWorkoutService.modalOpened$.subscribe((workout) => {
-      this.ongoingWorkout = workout;
+      this.ongoingWorkout = new Workout(workout);
       this.recalculateProgress();
       this.isInvalidated = false;
       this.startTimer();
@@ -209,11 +209,22 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   }
 
   private doFinishWorkout() {
+    this.ongoingWorkout!.calculateTotalWeight();
+    let totalWeight = this.ongoingWorkout!.totalWeight;
+    if (totalWeight === 0) {
+      totalWeight = undefined;
+    }
     this.workoutService
-      .completeWorkout(this.ongoingWorkout!.id!)
-      .subscribe(() => {
+      .completeWorkout(
+        this.ongoingWorkout!.id!,
+        this.ongoingWorkout!.totalWeight,
+      )
+      .subscribe((date) => {
+        this.ongoingWorkout!.calculateTotalSets();
+        this.ongoingWorkout!.totalWeight = totalWeight;
+        this.ongoingWorkout!.endTime = new Date(date);
         this.close();
-        this.router.navigate(['/dashboard']).then(r => {});
+        this.router.navigate(['/dashboard']).then((r) => {});
       });
   }
 
@@ -418,7 +429,12 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   }
 
   addSet(exercise: Exercise) {
-    let newSet: Sets = { reps: 0, weight: 0, completed: false };
+    let newSet: Sets = {
+      reps: 0,
+      weight: 0,
+      completed: false,
+      personalRecord: false,
+    };
     this.workoutService
       .addSet(this.ongoingWorkout?.id!, exercise.id!, newSet)
       .subscribe((set) => {

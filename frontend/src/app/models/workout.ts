@@ -7,9 +7,9 @@ export class Workout {
   title: string = '';
   startTime: Date = new Date();
   endTime?: Date = undefined;
-  totalSets: number = 0;
-  prReps: number = 0;
-  totalWeight: number = 0;
+  totalSets?: number;
+  prReps?: number;
+  totalWeight?: number;
   tags: Tag[] = [];
   exercises: Exercise[] = [];
 
@@ -19,26 +19,36 @@ export class Workout {
       this.title = data.title || '';
       this.totalSets = data.totalSets || 0;
       this.startTime = data.startTime!;
-      this.endTime = data.startTime!;
-      this.totalSets = data.totalSets!;
-      this.prReps = data.prReps!;
-      this.totalWeight = data.totalWeight!;
+      this.endTime = data.endTime;
       this.tags = data.tags || [];
       this.exercises = sortExercises(data.exercises);
 
-      this.recalculateTotalSets();
-      this.recalculateTotalWeight();
+      if (data.totalWeight) {
+        this.totalWeight = data.totalWeight;
+      } else {
+        this.calculateTotalWeight();
+      }
+
+      this.calculatePrSets();
+      this.calculateTotalSets();
     }
   }
 
-  recalculateTotalSets(): void {
+  public calculatePrSets() {
+    this.prReps = this.exercises.reduce((total, exercise) => {
+      const prSets = exercise.sets.filter((set) => set.personalRecord);
+      return total + prSets.length;
+    }, 0);
+  }
+
+  public calculateTotalSets() {
     this.totalSets = this.exercises.reduce(
       (total, exercise) => total + (exercise.sets?.length || 0),
       0,
     );
   }
 
-  recalculateTotalWeight(): void {
+  public calculateTotalWeight() {
     this.totalWeight = this.exercises.reduce((total, exercise) => {
       return (
         total +
@@ -48,12 +58,16 @@ export class Workout {
       );
     }, 0);
   }
+
+  public getWorkoutDuration(): number {
+    return getDuration(this.startTime, this.endTime);
+  }
 }
 
-export function getWorkoutDuration(startTime?: Date, endTime?: Date): number {
+export function getDuration(startTime?: Date, endTime?: Date): number {
   if (!startTime || !endTime) return 0;
-  startTime = new Date(startTime);
-  endTime = new Date(endTime);
-  const duration = Math.abs(endTime.getTime() - startTime.getTime());
+  const duration = Math.abs(
+    new Date(endTime).getTime() - new Date(startTime).getTime(),
+  );
   return Math.round(duration / (1000 * 60));
 }

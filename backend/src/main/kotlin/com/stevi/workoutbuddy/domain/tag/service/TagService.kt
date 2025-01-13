@@ -44,4 +44,10 @@ class TagService(
         }
         return tagRepository.saveAll(copiedTags)
     }
+
+    @Transactional(readOnly = true)
+    fun getTagsForWorkouts(workoutIds: List<Long>): Map<Long, List<Tag>> {
+        val projections = tagRepository.findTagsForWorkoutIdIn(workoutIds)
+        return projections.groupBy({ it.workoutId }, { it.tag })
+    }
 }

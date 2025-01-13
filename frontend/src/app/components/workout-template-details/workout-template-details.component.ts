@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import { WorkoutTemplateDetailsService } from '../../services/communication/workout-template-details.service';
-import {sortExercises, WorkoutTemplate} from '../../models/workout-template';
+import { WorkoutTemplate } from '../../models/workout-template';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { MatIcon } from '@angular/material/icon';
 import { ButtonComponent } from '../common/button/button.component';
 import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
-import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
 import { sideModalOpenClose } from '../../animations/side-modal-open-close';
 import { fadeInOut } from '../../animations/fade-in-out';
 import { ContextMenuComponent } from '../common/context-menu/context-menu.component';
@@ -17,6 +16,7 @@ import {
   getCategoryDisplayName,
 } from '../../models/exercise';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
+import { WorkoutService } from '../../services/api/workout.service';
 
 @Component({
   selector: 'app-workout-template-details',
@@ -28,7 +28,6 @@ import { WorkoutTemplateService } from '../../services/api/workout-template.serv
     ButtonComponent,
     NgForOf,
     TimeAgoPipe,
-    OngoingWorkoutComponent,
     ContextMenuComponent,
     WorkoutTemplateEditComponent,
   ],
@@ -38,7 +37,7 @@ import { WorkoutTemplateService } from '../../services/api/workout-template.serv
 })
 export class WorkoutTemplateDetailsComponent implements OnInit {
   protected isOpen: boolean = false;
-  protected template: WorkoutTemplate | any = undefined;
+  protected template: WorkoutTemplate | undefined = undefined;
 
   @ViewChild('workoutTemplateEditComponent')
   workoutTemplateEditComponent!: WorkoutTemplateEditComponent;
@@ -49,12 +48,12 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
     private workoutTemplateDetailsService: WorkoutTemplateDetailsService,
     private workoutTemplateService: WorkoutTemplateService,
     private ongoingWorkoutService: OngoingWorkoutService,
+    private workoutService: WorkoutService,
   ) {}
 
   ngOnInit(): void {
     this.workoutTemplateDetailsService.modalOpened$.subscribe((template) => {
-      this.template = template;
-      template.exercises = sortExercises(template.exercises)
+      this.template = new WorkoutTemplate(template);
       this.isOpen = true;
     });
   }
@@ -68,7 +67,11 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
   }
 
   startWorkout() {
-    this.ongoingWorkoutService.openModal(this.template);
+    this.workoutService
+      .startWorkout(this.template!.id!)
+      .subscribe((workout) => {
+        this.ongoingWorkoutService.openModal(workout);
+      });
     this.closeModal();
   }
 
@@ -83,17 +86,17 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
       {
         label: 'Edit template',
         icon: 'settings-2',
-        action: () => this.openEdit(this.template),
+        action: () => this.openEdit(this.template!),
       },
       {
-        label: this.template.archived
+        label: this.template!.archived
           ? 'Unarchive template'
           : 'Archive template',
-        icon: this.template.archived ? 'unarchive' : 'archive',
+        icon: this.template!.archived ? 'unarchive' : 'archive',
         action: () =>
-          this.template.archived
-            ? this.unArchiveTemplate(this.template)
-            : this.archiveTemplate(this.template),
+          this.template!.archived
+            ? this.unArchiveTemplate(this.template!)
+            : this.archiveTemplate(this.template!),
       },
     ];
 
