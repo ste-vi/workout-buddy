@@ -17,6 +17,7 @@ import {
 } from '../../models/exercise';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
 import { WorkoutService } from '../../services/api/workout.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-workout-template-details',
@@ -49,6 +50,7 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
     private workoutTemplateService: WorkoutTemplateService,
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +91,11 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
         action: () => this.openEdit(this.template!),
       },
       {
+        label: 'View workouts history',
+        icon: 'history',
+        action: () => this.openHistory(this.template!),
+      },
+      {
         label: this.template!.archived
           ? 'Unarchive template'
           : 'Archive template',
@@ -110,6 +117,14 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
 
   openEdit(template: WorkoutTemplate) {
     this.workoutTemplateEditComponent.show(template);
+  }
+
+  openHistory(template: WorkoutTemplate) {
+    this.router
+      .navigate(['/workout/history'], {
+        queryParams: { templateId: template.id },
+      })
+      .then((r) => {});
   }
 
   archiveTemplate(template: WorkoutTemplate) {

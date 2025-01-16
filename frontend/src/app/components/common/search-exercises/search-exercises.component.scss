@@ -17,7 +17,7 @@
 
     .actions {
       display: flex;
-      gap: var(--l-size);
+      gap: var(--m-size);
     }
   }
 
@@ -28,7 +28,7 @@
       justify-content: center;
       align-items: center;
       width: 100%;
-      gap: 1rem;
+      gap: 1.1rem;
       border-radius: 16px;
       padding: var(--s-size) var(--m-size);
       margin-bottom: var(--m-size);

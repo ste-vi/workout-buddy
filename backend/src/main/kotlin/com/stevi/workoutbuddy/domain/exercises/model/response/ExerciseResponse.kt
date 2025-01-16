@@ -6,6 +6,7 @@ import com.stevi.workoutbuddy.entity.ExerciseInstance
 import com.stevi.workoutbuddy.enumeration.BodyPart
 import com.stevi.workoutbuddy.enumeration.ExerciseCategory
 import com.stevi.workoutbuddy.repository.projection.PrSetProjection
+import com.stevi.workoutbuddy.repository.projection.SetProjection
 
 data class ExerciseResponse(
     val id: Long,
@@ -28,14 +29,18 @@ data class ExerciseResponse(
             )
         }
 
-        fun fromExerciseInstance(instance: ExerciseInstance, prSet: PrSetProjection?): ExerciseResponse {
+        fun fromExerciseInstance(
+            instance: ExerciseInstance,
+            sets: List<SetProjection>,
+            prSet: PrSetProjection?
+        ): ExerciseResponse {
             return ExerciseResponse(
                 id = instance.exercise.id,
                 name = instance.exercise.name,
                 bodyPart = instance.exercise.bodyPart,
                 category = instance.exercise.category,
                 position = instance.position,
-                sets = instance.sets.map { SetsResponse.fromEntity(it) },
+                sets = sets.map { SetsResponse.fromProjection(it) },
                 prSet = prSet?.let { SetsResponse.fromPrSetProjection(it) },
             )
         }

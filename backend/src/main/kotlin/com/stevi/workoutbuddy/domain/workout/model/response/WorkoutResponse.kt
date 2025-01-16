@@ -6,6 +6,7 @@ import com.stevi.workoutbuddy.entity.ExerciseInstance
 import com.stevi.workoutbuddy.entity.Tag
 import com.stevi.workoutbuddy.entity.Workout
 import com.stevi.workoutbuddy.repository.projection.PrSetProjection
+import com.stevi.workoutbuddy.repository.projection.SetProjection
 import java.time.LocalDateTime
 
 data class WorkoutResponse(
@@ -21,6 +22,7 @@ data class WorkoutResponse(
         fun fromEntity(
             entity: Workout,
             exerciseInstances: List<ExerciseInstance>,
+            sets: List<SetProjection>,
             prSetForExerciseMap: Map<Long, PrSetProjection>
         ): WorkoutResponse {
             return WorkoutResponse(
@@ -33,6 +35,7 @@ data class WorkoutResponse(
                 exercises = exerciseInstances.map {
                     ExerciseResponse.fromExerciseInstance(
                         it,
+                        sets.filter { s -> s.exerciseId == it.exercise.id },
                         prSetForExerciseMap[it.exercise.id]
                     )
                 }
@@ -43,6 +46,7 @@ data class WorkoutResponse(
             entity: Workout,
             tags: List<Tag>,
             exerciseInstances: List<ExerciseInstance>,
+            sets: List<SetProjection>,
             prSetForExerciseMap: Map<Long, PrSetProjection>
         ): WorkoutResponse {
             return WorkoutResponse(
@@ -55,6 +59,7 @@ data class WorkoutResponse(
                 exercises = exerciseInstances.map {
                     ExerciseResponse.fromExerciseInstance(
                         it,
+                        sets.filter { s -> s.exerciseId == it.exercise.id },
                         prSetForExerciseMap[it.exercise.id]
                     )
                 }

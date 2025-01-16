@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Workout } from '../../models/workout';
-import { PageResponse } from '../../models/page-response';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { Tag } from '../../models/tag';
-import { Sets } from '../../models/set';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Workout} from '../../models/workout';
+import {PageResponse} from '../../models/page-response';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {Tag} from '../../models/tag';
+import {Sets} from '../../models/set';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,8 @@ import { Sets } from '../../models/set';
 export class WorkoutService {
   private apiUrl = `${environment.apiUrl}/workouts`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   startWorkout(workoutTemplateId: number): Observable<Workout> {
     return this.http.post<Workout>(
@@ -140,6 +141,7 @@ export class WorkoutService {
     size: number,
     dateFrom?: Date,
     dateTo?: Date,
+    workoutTemplateId?: number,
     searchQuery?: string,
   ): Observable<PageResponse<Workout>> {
     let params = new HttpParams()
@@ -151,6 +153,9 @@ export class WorkoutService {
     }
     if (dateTo) {
       params = params.set('dateTo', dateTo.toISOString().slice(0, -1));
+    }
+    if (workoutTemplateId) {
+      params = params.set('templateId', workoutTemplateId);
     }
     if (searchQuery) {
       params = params.set('searchQuery', searchQuery);

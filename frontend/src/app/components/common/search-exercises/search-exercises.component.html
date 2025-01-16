@@ -20,7 +20,9 @@
     <div class="search card-shadow m-text">
       <mat-icon svgIcon="search" class="gray-2-color l-svg-icon clickable-l-icon" (click)="search()"></mat-icon>
       <input placeholder="Search exercises" [(ngModel)]="searchQuery" (keyup)="search()">
-      <mat-icon svgIcon="options" class="l-svg-icon clickable-l-icon" (click)="openSearchOptions()"></mat-icon>
+      <mat-icon svgIcon="options" class="l-svg-icon clickable-l-icon"
+                [ngClass]="{'primary': category || bodyPart || isSearchOptionsOpen, 'gray-2-color': !isSearchOptionsOpen}"
+                (click)="openSearchOptions()"></mat-icon>
       <mat-icon svgIcon="clear" class="gray-2-color l-svg-icon clickable-l-icon" (click)="clearSearch()"></mat-icon>
     </div>
 
@@ -32,7 +34,6 @@
            [class.search-option-active]='category'>{{ category ? getCategoryDisplayName(category) : 'Any category' }}
       </div>
     </div>
-
   </div>
 
   <div class="exercises-container-body" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
@@ -55,7 +56,7 @@
                       [class.active-add-icon]="selectedExercises.has(exercise)"
                       (click)="replaceExercise(exercise)"></mat-icon>
           </div>
-          <div *ngIf="!isAddModal && !isReplaceModal" >
+          <div *ngIf="!isAddModal && !isReplaceModal">
             <app-action-button icon='two-dots' iconClasses="xs-svg-icon"
                                (click)="showExercisesMenu($event, exercise)"></app-action-button>
           </div>

@@ -3,6 +3,9 @@
      (swiperight)="onSwipeRight()">
   <div class="workout-template-details-container-header">
     <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
+    <div class="archived  s-text gray-1-color  semi-bold" *ngIf="template!.archived">
+      Archived
+    </div>
     <app-header-button icon="two-dots" (click)="openTemplateMenu($event)"></app-header-button>
   </div>
 
@@ -15,9 +18,6 @@
       <div class="s-text gray-1-color details">
         <div>
           {{ template!.exercises.length }} exercises | {{ template!.totalSets }} sets
-        </div>
-        <div class="archived caption semi-bold" *ngIf="template!.archived">
-          Archived
         </div>
       </div>
       <div class="tags s-text card-padding-top" *ngIf="template!.tags.length > 0">

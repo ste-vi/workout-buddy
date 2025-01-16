@@ -4,7 +4,7 @@ import { MediumButtonComponent } from '../../medium-button/medium-button.compone
 import { TimeAgoPipe } from '../../../../pipes/time-ago-pipe';
 import { fadeInOut } from '../../../../animations/fade-in-out';
 import { WorkoutHistoryDetailsService } from '../../../../services/communication/workout-history-details.service';
-import { Workout } from '../../../../models/workout';
+import {getDuration, Workout} from '../../../../models/workout';
 
 @Component({
   selector: 'app-latest-workout-widget',
@@ -25,4 +25,7 @@ export class LatestWorkoutWidgetComponent {
   openWorkoutHistoryDetails(workout: Workout) {
     this.workoutHistoryDetailsService.openModal(workout);
   }
+
+  protected readonly Workout = Workout;
+  protected readonly getDuration = getDuration;
 }

@@ -92,9 +92,9 @@
                   <div class="set-sell">{{ i + 1 }}</div>
                 </div>
                 <div class="table-cell previous" [class.completed-table-cell]="set.completed">
-              <span *ngIf="set.previousReps">{{ set.previousWeight ? set.previousWeight : '0' }}
-                kg * {{ set.previousReps }}</span>
-                  <span *ngIf="!set.previousReps">-</span>
+              <span *ngIf="set.previousSet">{{ set.previousSet.weight ? set.previousSet.weight : '0' }}
+                kg * {{ set.previousSet.reps }}</span>
+                  <span *ngIf="!set.previousSet?.reps">-</span>
                 </div>
                 <div class="table-cell kg" [class.completed-table-cell]="set.completed">
                   {{ set.weight }} kg
@@ -216,18 +216,18 @@
                   <div class="set-sell">{{ i + 1 }}</div>
                 </div>
                 <div class="table-cell previous" [class.completed-table-cell]="set.completed">
-              <span *ngIf="set.previousReps">{{ set.previousWeight ? set.previousWeight : '0' }}
-                kg * {{ set.previousReps }}</span>
-                  <span *ngIf="!set.previousReps">-</span>
+              <span *ngIf="set.previousSet">{{ set.previousSet.weight ? set.previousSet.weight : '0' }}
+                kg * {{ set.previousSet.reps }}</span>
+                  <span *ngIf="!set.previousSet?.reps">-</span>
                 </div>
                 <div class="table-cell kg">
                   <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
-                         [placeholder]="set.previousWeight ? set.previousWeight : 0"
+                         [placeholder]="set.previousSet?.weight ? set.previousSet?.weight : 0"
                          (blur)="updateSetWeight(set, $event)">
                 </div>
                 <div class="table-cell reps">
                   <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
-                         [placeholder]="set.previousReps ? set.previousReps : 0"
+                         [placeholder]="set.previousSet?.reps ? set.previousSet?.reps : 0"
                          (blur)="updateSetReps(set, $event)">
                 </div>
                 <div class="table-cell action">

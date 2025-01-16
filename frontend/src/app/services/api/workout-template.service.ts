@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { WorkoutTemplate } from '../../models/workout-template';
 import {Observable, of} from 'rxjs';
 import { environment } from '../../../environments/environment';
+import {WorkoutTemplatePreview} from "../../models/workout-template-preview";
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,10 @@ export class WorkoutTemplateService {
 
   getWorkoutTemplates(): Observable<WorkoutTemplate[]> {
     return this.http.get<WorkoutTemplate[]>(this.apiUrl);
+  }
+
+  getWorkoutTemplatePreviews(): Observable<WorkoutTemplatePreview[]> {
+    return this.http.get<WorkoutTemplatePreview[]>(`${this.apiUrl}/previews`);
   }
 
   createWorkoutTemplate(workoutTemplate: WorkoutTemplate): Observable<WorkoutTemplate> {

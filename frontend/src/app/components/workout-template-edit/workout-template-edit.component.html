@@ -70,7 +70,8 @@
                                  (click)="openExerciseMenu($event, exercise)"></app-action-button>
             </div>
             <div class="lower-section gray-1-color s-text">
-              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}</div>
+              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }}| {{ getCategoryDisplayName(exercise.category) }}
+              </div>
               <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
                 <div>
@@ -93,10 +94,10 @@
               <div class="set-sell">{{ i + 1 }}</div>
             </div>
             <div class="table-cell previous">
-              <span>{{ set.previousWeight ? set.previousWeight + ' kg' : '-' }}</span>
+              <span>{{ set.previousSet?.weight ? set.previousSet?.weight + ' kg' : '-' }}</span>
             </div>
             <div class="table-cell previous">
-              <span>{{ set.previousReps ? set.previousReps : '-' }}</span>
+              <span>{{ set.previousSet?.reps ? set.previousSet?.reps : '-' }}</span>
             </div>
             <div class="table-cell action">
               <div class="clickable action-icon-container">

@@ -1,6 +1,7 @@
 package com.stevi.workoutbuddy.domain.workouttemplate.controller
 
 import com.stevi.workoutbuddy.domain.workouttemplate.model.request.WorkoutTemplateRequest
+import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplatePreviewResponse
 import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplateResponse
 import com.stevi.workoutbuddy.domain.workouttemplate.service.WorkoutTemplateService
 import com.stevi.workoutbuddy.security.SecurityUtil
@@ -62,5 +63,11 @@ class WorkoutTemplateController(
     @ResponseStatus(HttpStatus.OK)
     fun unArchiveWorkoutTemplate(@PathVariable id: Long) {
         workoutTemplateService.unArchiveWorkoutTemplate(id, SecurityUtil.getCurrentUserId())
+    }
+
+    @GetMapping("/previews")
+    @ResponseStatus(HttpStatus.OK)
+    fun getWorkoutTemplatePreviews(): List<WorkoutTemplatePreviewResponse> {
+        return workoutTemplateService.getWorkoutTemplatePreviews()
     }
 }

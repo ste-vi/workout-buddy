@@ -148,14 +148,14 @@ export class WorkoutTemplateEditComponent implements OnInit {
       this.workoutTemplateService
         .updateWorkoutTemplate(this.template!)
         .subscribe((updatedTemplate) => {
-          this.updatedTemplate.emit(updatedTemplate);
+          this.updatedTemplate.emit(new WorkoutTemplate(updatedTemplate));
           this.close();
         });
     } else {
       this.workoutTemplateService
         .createWorkoutTemplate(this.template!)
         .subscribe((createdTemplate) => {
-          this.createdTemplate.emit(createdTemplate);
+          this.updatedTemplate.emit(new WorkoutTemplate(createdTemplate));
           this.close();
         });
     }

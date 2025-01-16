@@ -39,9 +39,17 @@
         <div class="search card-shadow m-text">
           <mat-icon svgIcon="search" class="gray-2-color clickable-m-icon" (click)="search()"></mat-icon>
           <input placeholder="Search workouts" [(ngModel)]="searchQuery" (keyup)="search()">
-          <mat-icon svgIcon="clear" class="gray-1-color clickable-m-icon" [ngClass]="{'primary': searchQuery !== ''}" (click)="clearSearch()"></mat-icon>
+          <mat-icon svgIcon="options" class="l-svg-icon clickable-l-icon"
+                    [ngClass]="{'primary': workoutTemplatePreview || isSearchOptionsOpen, 'gray-2-color': !isSearchOptionsOpen}"
+                    (click)="openSearchOptions()"></mat-icon>
+          <mat-icon svgIcon="clear" class="gray-1-color clickable-m-icon" [ngClass]="{'primary': searchQuery !== ''}"
+                    (click)="clearSearch()"></mat-icon>
         </div>
-
+        <div class="search-options s-text gray-1-color" *ngIf="isSearchOptionsOpen" [@collapse]>
+          <div class="search-option card-shadow clickable" (click)="openWorkoutTemplateSelectionModal($event)"
+               [class.search-option-active]='workoutTemplatePreview'>{{ workoutTemplatePreview ? workoutTemplatePreview?.title : 'All workout templates' }}
+          </div>
+        </div>
       </div>
 
       <div class="workout-history-list-body" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
@@ -60,4 +68,7 @@
 
     </div>
   </div>
+
+  <app-selection-menu #workoutTemplateSelectionMenu
+                      (selectedItemSelected)="onWorkoutTemplateItemSelected($event)"></app-selection-menu>
 </div>

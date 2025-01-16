@@ -15,7 +15,7 @@
 
   <div class="dashboard-container-body section-padding-top">
 
-    <div class="last-workout-container" *ngIf="suggestedWorkoutTemplate">
+    <div class="last-workout-container" *ngIf="suggestedWorkoutTemplate?.id">
       <div class="last-workout-container-header">
         <div class="m-text semi-bold">Suggested Workout</div>
         <div class="gray-1-color s-text clickable" (click)="openWorkoutTemplatesPage()">See more</div>

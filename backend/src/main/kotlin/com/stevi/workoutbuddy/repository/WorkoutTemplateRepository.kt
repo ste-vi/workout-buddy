@@ -1,5 +1,6 @@
 package com.stevi.workoutbuddy.repository
 
+import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplatePreviewResponse
 import com.stevi.workoutbuddy.entity.WorkoutTemplate
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -15,7 +16,8 @@ interface WorkoutTemplateRepository : JpaRepository<WorkoutTemplate, Long> {
         from WorkoutTemplate wt 
         left join fetch wt.tags 
         where wt.id = :id and wt.user.id = :userId
-    """)
+    """
+    )
     fun findByIdAndUserIdWithTags(@Param("id") id: Long, @Param("userId") userId: Long): WorkoutTemplate?
 
     // temp for now
@@ -31,4 +33,15 @@ interface WorkoutTemplateRepository : JpaRepository<WorkoutTemplate, Long> {
     """
     )
     fun findAllByUserIdOrderByIdDesc(@Param("userId") userId: Long): List<WorkoutTemplate>
+
+    @Query(
+        """
+        select new com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplatePreviewResponse(
+            wt.id, wt.title
+        )
+        from WorkoutTemplate wt
+        order by wt.title asc
+    """
+    )
+    fun findAllPreviewsOrderByTitleAsc(): List<WorkoutTemplatePreviewResponse>
 }

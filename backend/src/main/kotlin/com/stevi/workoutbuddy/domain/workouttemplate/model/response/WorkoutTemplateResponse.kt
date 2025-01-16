@@ -6,6 +6,7 @@ import com.stevi.workoutbuddy.domain.workout.model.response.LastPerformedWorkout
 import com.stevi.workoutbuddy.entity.ExerciseInstance
 import com.stevi.workoutbuddy.entity.WorkoutTemplate
 import com.stevi.workoutbuddy.repository.projection.PrSetProjection
+import com.stevi.workoutbuddy.repository.projection.SetProjection
 
 data class WorkoutTemplateResponse(
     val id: Long,
@@ -20,6 +21,7 @@ data class WorkoutTemplateResponse(
         fun fromEntity(
             entity: WorkoutTemplate,
             exerciseInstances: List<ExerciseInstance>,
+            sets: List<SetProjection>,
             prSetForExerciseMap: Map<Long, PrSetProjection>,
             lastPerformedWorkout: LastPerformedWorkout?
         ): WorkoutTemplateResponse {
@@ -32,7 +34,8 @@ data class WorkoutTemplateResponse(
                 exercises = exerciseInstances.map {
                     ExerciseResponse.fromExerciseInstance(
                         it,
-                        prSetForExerciseMap[it.exercise.id]
+                        sets.filter { s -> s.exerciseId == it.exercise.id },
+                        prSetForExerciseMap[it.exercise.id],
                     )
                 },
                 lastPerformedWorkout = lastPerformedWorkout

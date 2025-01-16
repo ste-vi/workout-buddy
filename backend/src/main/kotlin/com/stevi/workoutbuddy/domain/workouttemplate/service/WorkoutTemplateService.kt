@@ -6,6 +6,7 @@ import com.stevi.workoutbuddy.domain.tag.service.TagService
 import com.stevi.workoutbuddy.domain.workout.service.UserService
 import com.stevi.workoutbuddy.domain.workout.service.WorkoutService
 import com.stevi.workoutbuddy.domain.workouttemplate.model.request.WorkoutTemplateRequest
+import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplatePreviewResponse
 import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplateResponse
 import com.stevi.workoutbuddy.entity.WorkoutTemplate
 import com.stevi.workoutbuddy.repository.WorkoutTemplateRepository
@@ -28,10 +29,17 @@ class WorkoutTemplateService(
         val template = workoutTemplateRepository.findFirstByUserIdOrderByIdDesc(userId)
         return template?.let {
             val exerciseInstances = exerciseInstanceService.getExercisesForWorkoutTemplate(template.id)
-            val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseInstances.map { ex -> ex.exercise.id })
+            val exerciseIds = exerciseInstances.map { ex -> ex.exercise.id }
+            val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
             val lastPerformedWorkout = workoutService.getLastPerformedWorkoutToTemplateMap(listOf(it.id))[it.id]
-
-            WorkoutTemplateResponse.fromEntity(it, exerciseInstances, prSetForExerciseMap, lastPerformedWorkout)
+            val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, listOf(template.id))
+            WorkoutTemplateResponse.fromEntity(
+                it,
+                exerciseInstances,
+                setProjections,
+                prSetForExerciseMap,
+                lastPerformedWorkout
+            )
         }
     }
 
@@ -40,15 +48,17 @@ class WorkoutTemplateService(
         val workoutTemplates = workoutTemplateRepository.findAllByUserIdOrderByIdDesc(userId)
         val workoutTemplateIds = workoutTemplates.map { it.id }
         val exerciseInstancesMap = exerciseInstanceService.getExercisesForWorkoutTemplates(workoutTemplateIds)
+        val exerciseIds = exerciseInstancesMap.values.flatten().map { it.exercise.id }
+        val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, workoutTemplateIds)
         val prSetForExerciseMap =
-            setsService.getPrSetForExerciseMap(exerciseInstancesMap.values.flatten().map { it.exercise.id })
+            setsService.getPrSetForExerciseMap(exerciseIds)
         val lastPerformedWorkoutMap = workoutService.getLastPerformedWorkoutToTemplateMap(workoutTemplateIds)
-
 
         return workoutTemplates.map { template ->
             WorkoutTemplateResponse.fromEntity(
                 template,
                 exerciseInstancesMap[template.id] ?: emptyList(),
+                setProjections,
                 prSetForExerciseMap,
                 lastPerformedWorkoutMap[template.id]
             )
@@ -69,9 +79,13 @@ class WorkoutTemplateService(
         val exInstances = exerciseInstanceService.createExercisesForWorkoutTemplate(request.exercises, savedTemplate)
         savedTemplate.exerciseInstances = exInstances
 
-        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exInstances.map { it.exercise.id })
+        setsService.recalculatePositionsForExerciseInstance(exInstances.map { it.id })
 
-        return WorkoutTemplateResponse.fromEntity(savedTemplate, exInstances, prSetForExerciseMap, null)
+        val exerciseIds = exInstances.map { it.exercise.id }
+        val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, listOf(template.id))
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
+
+        return WorkoutTemplateResponse.fromEntity(savedTemplate, exInstances, setProjections, prSetForExerciseMap, null)
     }
 
     @Transactional
@@ -89,13 +103,18 @@ class WorkoutTemplateService(
 
         val updatedTemplate = workoutTemplateRepository.save(existingTemplate)
 
-        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exInstances.map { ex -> ex.exercise.id })
+        setsService.recalculatePositionsForExerciseInstance(exInstances.map { it.id })
+
+        val exerciseIds = exInstances.map { ex -> ex.exercise.id }
+        val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, listOf(id))
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
 
         val lastPerformedWorkout = workoutService.getLastPerformedWorkoutToTemplateMap(listOf(id))[id]
 
         return WorkoutTemplateResponse.fromEntity(
             updatedTemplate,
             exInstances,
+            setProjections,
             prSetForExerciseMap,
             lastPerformedWorkout
         )
@@ -115,5 +134,10 @@ class WorkoutTemplateService(
             ?: throw NoSuchElementException("Workout template not found with id: $id")
         existingTemplate.archived = false
         workoutTemplateRepository.save(existingTemplate)
+    }
+
+    @Transactional(readOnly = true)
+    fun getWorkoutTemplatePreviews(): List<WorkoutTemplatePreviewResponse> {
+        return workoutTemplateRepository.findAllPreviewsOrderByTitleAsc()
     }
 }

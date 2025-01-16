@@ -45,10 +45,11 @@ class WorkoutController(private val workoutService: WorkoutService) {
         @RequestParam size: Int,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateFrom: LocalDateTime?,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateTo: LocalDateTime?,
+        @RequestParam templateId: Long?,
         @RequestParam searchQuery: String?
     ): PageResponse<WorkoutResponse> {
         val userId = SecurityUtil.getCurrentUserId()
-        return workoutService.searchWorkoutHistory(userId, page, size, dateFrom, dateTo, searchQuery)
+        return workoutService.searchWorkoutHistory(userId, page, size, dateFrom, dateTo, templateId, searchQuery)
     }
 
     @PostMapping("/start/{workoutTemplateId}")

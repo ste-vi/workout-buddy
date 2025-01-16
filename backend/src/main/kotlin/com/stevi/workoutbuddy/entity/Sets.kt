@@ -27,6 +27,9 @@ class Sets(
     @Column
     var personalRecord: Boolean = false,
 
+    @Column
+    val position: Short = 0,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_instance_id", nullable = false)
     var exerciseInstance: ExerciseInstance,

@@ -24,6 +24,14 @@ import { fadeInOut } from '../../animations/fade-in-out';
 import { staggerFadeIn } from '../../animations/stagger-fade-in';
 import { WorkoutService } from '../../services/api/workout.service';
 import { Workout } from '../../models/workout';
+import { ActivatedRoute } from '@angular/router';
+import { BodyPart, getBodyPartDisplayName } from '../../models/exercise';
+import {
+  SelectionItem,
+  SelectionMenuComponent,
+} from '../common/selection-menu/selection-menu.component';
+import { WorkoutTemplatePreview } from '../../models/workout-template-preview';
+import { WorkoutTemplateService } from '../../services/api/workout-template.service';
 
 @Component({
   selector: 'app-workout-history',
@@ -40,13 +48,18 @@ import { Workout } from '../../models/workout';
     KeyValuePipe,
     InfiniteScrollDirective,
     NgClass,
+    SelectionMenuComponent,
   ],
   templateUrl: './workout-history.component.html',
   styleUrl: './workout-history.component.scss',
   animations: [collapse, fadeInOut, staggerFadeIn],
 })
 export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
-  @ViewChild('dateCarousel') private dateCarousel!: ElementRef<HTMLElement>;
+  @ViewChild('dateCarousel')
+  private dateCarousel!: ElementRef<HTMLElement>;
+
+  @ViewChild('workoutTemplateSelectionMenu')
+  private workoutTemplateIdsSelectionMenu!: SelectionMenuComponent;
 
   protected isListView = false;
 
@@ -58,31 +71,63 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   protected groupedWorkoutHistory: Map<string, Workout[]> = new Map();
   protected currentDayWorkoutHistory: Workout[] = [];
 
+  protected isSearchOptionsOpen: boolean = false;
+
   protected currentPage: number = 0;
   protected itemsPerPage: number = 30;
   protected hasMoreItems: boolean = true;
   protected searchQuery: string = '';
 
+  private workoutTemplatePreviews: WorkoutTemplatePreview[] = [];
+  workoutTemplatePreview: WorkoutTemplatePreview | undefined = undefined;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private workoutService: WorkoutService,
+    private workoutTemplateService: WorkoutTemplateService,
+    private route: ActivatedRoute,
   ) {
     this.currentMonth = new Date();
   }
 
   ngOnInit(): void {
-    if (this.isListView) {
-      this.searchWorkoutHistory();
-    } else {
-      this.fetchWorkoutHistory();
-    }
+    this.route.queryParamMap.subscribe((params) => {
+      const workoutTemplateIdParam = params.get('templateId');
+      if (workoutTemplateIdParam) {
+        const parsedId = parseInt(workoutTemplateIdParam, 10);
+        this.workoutTemplatePreview = { id: parsedId, title: '' };
+        this.isListView = true;
+      } else {
+        this.workoutTemplatePreview = undefined;
+        this.isListView = false;
+      }
 
+      if (this.isListView) {
+        this.initWorkoutTemplatePreviews();
+        this.searchWorkoutHistory();
+      } else {
+        this.fetchWorkoutHistory();
+      }
+    });
     this.generateDates();
+  }
+
+  private initWorkoutTemplatePreviews() {
+    this.workoutTemplateService
+      .getWorkoutTemplatePreviews()
+      .subscribe((wtp) => {
+        this.workoutTemplatePreviews = wtp;
+        this.workoutTemplatePreview = wtp.find(
+          (w) => w.id === this.workoutTemplatePreview!.id,
+        );
+      });
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.initCarouselView();
+      if (!this.isListView) {
+        this.initCarouselView();
+      }
       this.cdr.detectChanges();
     });
   }
@@ -99,11 +144,12 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
         this.itemsPerPage,
         undefined,
         undefined,
+        this.workoutTemplatePreview?.id,
         this.searchQuery,
       )
       .subscribe((pageResponse) => {
         this.workout = isSearch
-          ? pageResponse.content
+          ? pageResponse.content.map((wt) => new Workout(wt))
           : this.workout.concat(
               pageResponse.content.map((wt) => new Workout(wt)),
             );
@@ -121,7 +167,14 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     const lastDay = new Date(year, month + 1, 0);
 
     this.workoutService
-      .searchWorkoutHistory(0, this.itemsPerPage, firstDay, lastDay, undefined)
+      .searchWorkoutHistory(
+        0,
+        this.itemsPerPage,
+        firstDay,
+        lastDay,
+        undefined,
+        undefined,
+      )
       .subscribe((pageResponse) => {
         this.workout = pageResponse.content.map((wt) => new Workout(wt));
       });
@@ -277,6 +330,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
     this.isListView = !this.isListView;
     this.workout = [];
     if (this.isListView) {
+      this.initWorkoutTemplatePreviews();
       this.searchWorkoutHistory();
     } else {
       setTimeout(() => {
@@ -300,6 +354,7 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   clearSearch() {
     this.searchQuery = '';
     this.currentPage = 0;
+    this.workoutTemplatePreview = undefined;
     this.searchWorkoutHistory(true);
   }
 
@@ -309,4 +364,43 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
   ): number => {
     return 0;
   };
+
+  openSearchOptions() {
+    this.isSearchOptionsOpen = !this.isSearchOptionsOpen;
+  }
+
+  openWorkoutTemplateSelectionModal($event: MouseEvent) {
+    let position = {
+      x: $event.clientX,
+      y: $event.clientY,
+      xOffset: 50,
+      yOffset: 0,
+    };
+
+    let allItem: SelectionItem<WorkoutTemplatePreview | null> = {
+      label: 'All',
+      value: null,
+    };
+
+    let selectionItems = [
+      allItem,
+      ...this.workoutTemplatePreviews.map((preview) => ({
+        label: preview.title,
+        value: preview,
+      })),
+    ];
+
+    this.workoutTemplateIdsSelectionMenu.show(position, selectionItems);
+  }
+
+  onWorkoutTemplateItemSelected(
+    selectionItem: SelectionItem<WorkoutTemplatePreview>,
+  ) {
+    if (selectionItem.value) {
+      this.workoutTemplatePreview = selectionItem.value;
+    } else {
+      this.workoutTemplatePreview = undefined;
+    }
+    this.searchWorkoutHistory(true);
+  }
 }

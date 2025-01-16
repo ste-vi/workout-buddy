@@ -51,20 +51,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private initSvgIcons() {
     this.matIconRegistry
-      .addSvgIcon(
-        'slider-vertical',
-        this.setIconPath(`${this.iconsPath}/slider-vertical.svg`),
-      )
-      .addSvgIcon(
-        'dumbbell-1',
-        this.setIconPath(`${this.iconsPath}/dumbbell-1.svg`),
-      )
+      .addSvgIcon('slider-vertical', this.setIconPath(`${this.iconsPath}/slider-vertical.svg`),)
+      .addSvgIcon('dumbbell-1', this.setIconPath(`${this.iconsPath}/dumbbell-1.svg`),)
       .addSvgIcon('text', this.setIconPath(`${this.iconsPath}/text.svg`))
+      .addSvgIcon('history', this.setIconPath(`${this.iconsPath}/history.svg`))
       .addSvgIcon('medal', this.setIconPath(`${this.iconsPath}/medal.svg`))
-      .addSvgIcon(
-        'course-up',
-        this.setIconPath(`${this.iconsPath}/course-up.svg`),
-      )
+      .addSvgIcon('course-up', this.setIconPath(`${this.iconsPath}/course-up.svg`),)
       .addSvgIcon('clear', this.setIconPath(`${this.iconsPath}/clear.svg`))
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('warning', this.setIconPath(`${this.iconsPath}/warning.svg`))

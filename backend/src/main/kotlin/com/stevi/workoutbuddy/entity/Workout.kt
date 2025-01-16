@@ -37,6 +37,9 @@ class Workout(
     @JoinColumn(name = "workout_template_id", nullable = false)
     val template: WorkoutTemplate,
 
+    @Column(name = "workout_template_id", insertable = false, updatable = false)
+    val templateId: Long,
+
     @OneToMany(
         mappedBy = "workout",
         cascade = [CascadeType.ALL],

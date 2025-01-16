@@ -204,4 +204,13 @@ class ExerciseInstanceService(
         return exerciseInstanceRepository.findByWorkoutIdAndExerciseId(workoutId, exerciseId)
             ?: throw ResourceNotFoundException("Exercise $exerciseId not found in the workout")
     }
+
+    @Transactional(readOnly = true)
+    fun getExerciseInstanceBySetId(
+        workoutId: Long,
+        setId: Long
+    ): ExerciseInstance {
+        return exerciseInstanceRepository.findByWorkoutIdAndSetId(workoutId, setId)
+            ?: throw ResourceNotFoundException("Set $setId not found in the workout")
+    }
 }

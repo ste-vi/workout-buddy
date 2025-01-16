@@ -11,7 +11,10 @@ import java.time.LocalDateTime
 import org.springframework.data.jpa.domain.Specification
 
 class WorkoutSpecification(
-    private val dateFrom: LocalDateTime?, private val dateTo: LocalDateTime?, private val searchQuery: String?
+    private val dateFrom: LocalDateTime?,
+    private val dateTo: LocalDateTime?,
+    private val templateId: Long?,
+    private val searchQuery: String?
 ) : Specification<Workout> {
 
     override fun toPredicate(
@@ -29,6 +32,10 @@ class WorkoutSpecification(
 
         dateTo?.let {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("endAt"), it))
+        }
+
+        templateId?.let {
+            predicates.add(criteriaBuilder.equal(root.get<Long>("templateId"), it))
         }
 
         searchQuery?.let {
