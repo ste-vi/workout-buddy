@@ -18,6 +18,7 @@ import {
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
 import { WorkoutService } from '../../services/api/workout.service';
 import { Router } from '@angular/router';
+import {WorkoutHistoryDetailsService} from "../../services/communication/workout-history-details.service";
 
 @Component({
   selector: 'app-workout-template-details',
@@ -47,6 +48,7 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
 
   constructor(
     private workoutTemplateDetailsService: WorkoutTemplateDetailsService,
+    private workoutHistoryDetailsService: WorkoutHistoryDetailsService,
     private workoutTemplateService: WorkoutTemplateService,
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
@@ -141,6 +143,12 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
       .subscribe(() => {
         template.archived = false;
       });
+  }
+
+  openLastPerformedWorkoutDetails(id: number) {
+    this.workoutService.getWorkoutById(id).subscribe((workout) => {
+      this.workoutHistoryDetailsService.openModal(workout);
+    })
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;

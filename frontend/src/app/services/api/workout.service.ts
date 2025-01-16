@@ -16,6 +16,8 @@ export class WorkoutService {
   constructor(private http: HttpClient) {
   }
 
+  // todo: add update triggers
+
   startWorkout(workoutTemplateId: number): Observable<Workout> {
     return this.http.post<Workout>(
       `${this.apiUrl}/start/${workoutTemplateId}`,
@@ -25,6 +27,10 @@ export class WorkoutService {
 
   getOngoingWorkout(): Observable<Workout | undefined> {
     return this.http.get<Workout | undefined>(`${this.apiUrl}/ongoing`);
+  }
+
+  getWorkoutById(workoutId: number): Observable<Workout> {
+    return this.http.get<Workout>(`${this.apiUrl}/${workoutId}`);
   }
 
   getLastPerformedWorkout(): Observable<Workout | undefined> {

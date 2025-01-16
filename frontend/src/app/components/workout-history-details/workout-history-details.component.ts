@@ -32,6 +32,7 @@ import { SearchExercisesComponent } from '../common/search-exercises/search-exer
 import { collapse } from '../../animations/collapse';
 import { Workout } from '../../models/workout';
 import { WorkoutTimeSelectorComponent } from '../common/workout-time-selector/workout-time-selector.component';
+import { WorkoutService } from '../../services/api/workout.service';
 
 @Component({
   selector: 'app-workout-history-details',
@@ -93,6 +94,9 @@ export class WorkoutHistoryDetailsComponent {
   @ViewChild('replaceExerciseConfirmationModal')
   replaceExerciseConfirmationModal!: ConfirmationModalComponent;
 
+  @ViewChild('deleteWorkoutConfirmationModal')
+  deleteWorkoutConfirmationModal!: ConfirmationModalComponent;
+
   @ViewChild('exerciseMenu') exerciseMenu!: ContextMenuComponent;
 
   @ViewChild('workoutMenu') workoutMenu!: ContextMenuComponent;
@@ -105,6 +109,7 @@ export class WorkoutHistoryDetailsComponent {
 
   constructor(
     private workoutHistoryDetailsService: WorkoutHistoryDetailsService,
+    private workoutService: WorkoutService,
   ) {
     this.workoutHistoryDetailsService.modalOpened$.subscribe((wh) => {
       this.workout = new Workout(wh);
@@ -150,8 +155,6 @@ export class WorkoutHistoryDetailsComponent {
       yOffset: -30,
     });
   }
-
-  private deleteWorkout(workout: Workout) {}
 
   private openEdit(workout: Workout) {
     this.switchView();
@@ -465,6 +468,21 @@ export class WorkoutHistoryDetailsComponent {
     this.openedAdjustWorkoutTime = false;
   }
 
+  private deleteWorkout(workout: Workout) {
+    this.deleteWorkoutConfirmationModal.show(
+      'Are you sure you want to delete this workout? All data will be lost and cannot be reverted.',
+    );
+  }
+
+  onDeleteWorkoutConfirmed(confirmed: boolean) {
+    if (confirmed) {
+      this.workoutService.deleteWorkout(this.workout.id!).subscribe(() => {
+        this.closeModal();
+      });
+    }
+  }
+
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+
   protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

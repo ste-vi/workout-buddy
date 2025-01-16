@@ -51,6 +51,23 @@ class WorkoutService(
     }
 
     @Transactional(readOnly = true)
+    fun getWorkout(id: Long, userId: Long): WorkoutResponse? {
+        val workout = getWorkoutForUser(id, userId)
+        val exerciseInstances = exerciseInstanceService.getExercisesForWorkout(workout.id)
+        val exerciseIds = exerciseInstances.map { ex -> ex.exercise.id }
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
+        val setProjections =
+            setsService.getSetProjections(exerciseIds, workout.template.id, workout.id)
+
+        return WorkoutResponse.fromEntity(
+            workout,
+            exerciseInstanceService.getExercisesForWorkout(workout.id),
+            setProjections,
+            prSetForExerciseMap
+        )
+    }
+
+    @Transactional(readOnly = true)
     fun findLastPerformedWorkout(userId: Long): WorkoutResponse? {
         val ongoingWorkout = workoutRepository.findFirstByUserIdAndEndAtIsNotNullOrderByEndAtDesc(userId)
         return ongoingWorkout?.let {

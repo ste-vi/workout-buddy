@@ -26,6 +26,4 @@ export class LatestWorkoutWidgetComponent {
     this.workoutHistoryDetailsService.openModal(workout);
   }
 
-  protected readonly Workout = Workout;
-  protected readonly getDuration = getDuration;
 }

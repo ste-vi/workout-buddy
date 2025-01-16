@@ -24,7 +24,8 @@
         <div class="tag" *ngFor="let tag of template!.tags">{{ tag.name }}</div>
       </div>
       <div class="info-cards s-text">
-        <div class="info-card card-shadow" *ngIf="template!.lastPerformedWorkout">
+        <div class="info-card card-shadow" *ngIf="template!.lastPerformedWorkout"
+             (click)="openLastPerformedWorkoutDetails(template!.lastPerformedWorkout!.id)">
           <div class="semi-bold primary">
             {{ template!.lastPerformedWorkout.getDuration() + ' min' }}
           </div>
@@ -81,8 +82,11 @@
       </div>
     </div>
 
-    <app-button name="Start Workout" *ngIf="!template!.archived" [textClasses]="['white-color', 'semi-bold']" (click)="startWorkout()"></app-button>
-    <div *ngIf="template!.archived" class="s-text gray-1-color p-b-4-rm">To <b>start workout</b> from this template, please, unarchive it first in the template menu</div>
+    <app-button name="Start Workout" *ngIf="!template!.archived" [textClasses]="['white-color', 'semi-bold']"
+                (click)="startWorkout()"></app-button>
+    <div *ngIf="template!.archived" class="s-text gray-1-color p-b-4-rm">To <b>start workout</b> from this template,
+      please, unarchive it first in the template menu
+    </div>
   </div>
 
   <app-workout-template-edit #workoutTemplateEditComponent

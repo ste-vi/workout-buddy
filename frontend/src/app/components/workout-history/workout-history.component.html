@@ -47,7 +47,7 @@
         </div>
         <div class="search-options s-text gray-1-color" *ngIf="isSearchOptionsOpen" [@collapse]>
           <div class="search-option card-shadow clickable" (click)="openWorkoutTemplateSelectionModal($event)"
-               [class.search-option-active]='workoutTemplatePreview'>{{ workoutTemplatePreview ? workoutTemplatePreview?.title : 'All workout templates' }}
+               [class.search-option-active]='workoutTemplatePreview'>{{ workoutTemplatePreview ? workoutTemplatePreview.title : 'All workout templates' }}
           </div>
         </div>
       </div>

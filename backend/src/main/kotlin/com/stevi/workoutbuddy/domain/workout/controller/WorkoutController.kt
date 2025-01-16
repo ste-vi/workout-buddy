@@ -39,6 +39,12 @@ class WorkoutController(private val workoutService: WorkoutService) {
         return workoutService.findLastPerformedWorkout(SecurityUtil.getCurrentUserId())
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getLastPerformedWorkout(@PathVariable id: Long): WorkoutResponse? {
+        return workoutService.getWorkout(id, SecurityUtil.getCurrentUserId())
+    }
+
     @GetMapping("/history")
     fun searchWorkoutHistory(
         @RequestParam page: Int,
