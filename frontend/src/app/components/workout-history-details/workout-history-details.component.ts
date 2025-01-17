@@ -26,7 +26,6 @@ import {
 } from '../../models/exercise';
 import { Sets } from '../../models/set';
 import { ToastComponent } from '../common/toast/toast.component';
-import { replaceItemInArray } from '../../utils/array-utils';
 import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
 import { SearchExercisesComponent } from '../common/search-exercises/search-exercises.component';
 import { collapse } from '../../animations/collapse';
@@ -79,6 +78,8 @@ export class WorkoutHistoryDetailsComponent {
   protected workoutTitle: string = '';
   protected isTitleEditable: boolean = false;
 
+  private beforeUnloadListener: any;
+
   @ViewChild('workoutContainerMenu')
   workoutContainerMenu!: ContextMenuComponent;
 
@@ -124,12 +125,23 @@ export class WorkoutHistoryDetailsComponent {
   }
 
   closeModal() {
+    if (this.isEditView) {
+      this.removeBeforeUnloadListener();
+    }
     this.isOpen = false;
     this.isEditView = false;
   }
 
   switchView() {
+    if (this.isEditView) {
+      this.removeBeforeUnloadListener();
+    }
+
     this.isEditView = !this.isEditView;
+
+    if (this.isEditView) {
+      this.setupBeforeUnloadListener();
+    }
   }
 
   workoutContainerMenuItems: any = [];
@@ -157,11 +169,26 @@ export class WorkoutHistoryDetailsComponent {
   }
 
   private openEdit(workout: Workout) {
+    this.workout = workout;
     this.switchView();
   }
 
   save() {
-    this.switchView();
+    let errorMessages: string[] = this.validateInput();
+
+    let isValid = errorMessages.length === 0;
+    this.isInvalidated = !isValid;
+    if (!isValid) {
+      this.errorToast.open('Error', errorMessages, 'danger');
+      return;
+    }
+
+    this.workout.calculateTotalWeight();
+
+    this.workoutService.updateWorkout(this.workout!).subscribe((workout) => {
+      this.workout = new Workout(workout);
+      this.switchView();
+    });
   }
 
   calculateIsPR(set: Sets, exercise: Exercise): boolean {
@@ -217,10 +244,9 @@ export class WorkoutHistoryDetailsComponent {
     let exercises = this.workout?.exercises!;
     moveItemInArray(exercises, event.previousIndex, event.currentIndex);
 
-    /*    this.workoutService.updateExercisesPositionForWorkout(
-      this.workout?.id!,
-      exercises.map((e) => e.id!),
-    );*/
+    exercises.forEach((exercise, index) => {
+      exercise.position = index;
+    });
   }
 
   onDragEnded() {
@@ -317,10 +343,10 @@ export class WorkoutHistoryDetailsComponent {
 
   onAddExercisesSelected(selectedExercises: Exercise[]) {
     if (selectedExercises.length > 0) {
-      /* this.workoutService.addExerciseToWorkout(
-        this.workout?.id!,
-        selectedExercises.map((e) => e.id),
-      );*/
+      const startPosition = this.workout?.exercises?.length || 0;
+      selectedExercises.forEach((exercise, index) => {
+        exercise.position = startPosition + index;
+      });
       this.workout?.exercises!.push(...selectedExercises);
       this.recalculateProgress();
     }
@@ -343,22 +369,19 @@ export class WorkoutHistoryDetailsComponent {
   }
 
   onReplaceExerciseSelected(exercise: Exercise) {
-    /*this.workoutService.replaceExercise(
-      this.workout?.id!,
-      this.exerciseToReplace.id!,
-      exercise.id,
-    );*/
-    replaceItemInArray(
-      this.workout?.exercises!,
-      exercise,
+    const index = this.workout?.exercises!.findIndex(
       (e) => e.id === this.exerciseToReplace.id,
     );
+    if (index && index !== -1) {
+      exercise.position = this.workout?.exercises![index].position;
+      this.workout?.exercises!.splice(index, 1, exercise);
+    }
+
     this.exerciseToReplace = undefined;
   }
 
   completeSet(set: any) {
     set.completed = !set.completed;
-    //this.setService.completeSet(set.id);
     this.recalculateProgress();
   }
 
@@ -366,15 +389,13 @@ export class WorkoutHistoryDetailsComponent {
     const weight = parseInt($event.target.value);
     if (!isNaN(weight)) {
       set.weight = weight;
-      //this.setService.updateSetWeight(set.id!, weight);
     }
   }
 
   updateSetReps(set: Sets, $event: any) {
     const reps = parseInt($event.target.value);
     if (!isNaN(reps)) {
-      set.weight = reps;
-      //this.setService.updateSetReps(set.id!, reps);
+      set.reps = reps;
     }
   }
 
@@ -395,10 +416,6 @@ export class WorkoutHistoryDetailsComponent {
       completed: false,
       personalRecord: false,
     };
-    /*    this.setService.create(newSet, exercise.id).subscribe((set) => {
-      exercise.sets.push(set);
-      this.recalculateProgress();
-    });*/
     exercise.sets.push(newSet);
   }
 
@@ -421,7 +438,6 @@ export class WorkoutHistoryDetailsComponent {
 
   onDeleteSetConfirmed(confirmed: boolean) {
     if (confirmed && this.deleteSetModeForExercise && this.setToDelete) {
-      //this.setService.deleteSet(this.setToDelete.id);
       const index = this.deleteSetModeForExercise!.sets.indexOf(
         this.setToDelete,
       );
@@ -449,11 +465,12 @@ export class WorkoutHistoryDetailsComponent {
       const index = this.workout!.exercises!.indexOf(this.exerciseToDelete);
       if (index > -1) {
         this.workout!.exercises!.splice(index, 1);
+        this.workout!.exercises!.forEach((exercise, i) => {
+          if (i >= index) {
+            exercise.position = i;
+          }
+        });
       }
-      /*      this.workoutService.removeExercise(
-        this.exerciseToDelete.id!,
-        this.workout!.id!,
-      );*/
     }
     this.exerciseToDelete = undefined;
   }
@@ -482,7 +499,17 @@ export class WorkoutHistoryDetailsComponent {
     }
   }
 
-  protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
+  private setupBeforeUnloadListener(): void {
+    this.beforeUnloadListener = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+    window.addEventListener('beforeunload', this.beforeUnloadListener);
+  }
 
+  private removeBeforeUnloadListener(): void {
+    window.removeEventListener('beforeunload', this.beforeUnloadListener);
+  }
+
+  protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
   protected readonly getCategoryDisplayName = getCategoryDisplayName;
 }

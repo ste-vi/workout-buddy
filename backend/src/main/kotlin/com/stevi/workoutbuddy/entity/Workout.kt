@@ -52,4 +52,10 @@ class Workout(
     @JoinColumn(name = "user_id", nullable = false)
     val user: User
 
-) : Base()
+) : Base() {
+    fun updateExerciseInstances(newInstances: List<ExerciseInstance>) {
+        exerciseInstances.clear()
+        exerciseInstances.addAll(newInstances)
+        newInstances.forEach { it.workout = this }
+    }
+}

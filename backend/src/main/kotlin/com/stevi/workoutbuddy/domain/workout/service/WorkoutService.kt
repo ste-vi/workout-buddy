@@ -9,6 +9,7 @@ import com.stevi.workoutbuddy.domain.sets.service.SetsService
 import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
 import com.stevi.workoutbuddy.domain.tag.service.TagService
+import com.stevi.workoutbuddy.domain.workout.model.request.WorkoutUpdateRequest
 import com.stevi.workoutbuddy.domain.workout.model.response.LastPerformedWorkout
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutResponse
 import com.stevi.workoutbuddy.domain.workout.specification.WorkoutSpecification
@@ -260,6 +261,33 @@ class WorkoutService(
     @Transactional(readOnly = true)
     fun getLastPerformedWorkoutToTemplateMap(templateIds: List<Long>): Map<Long, LastPerformedWorkout> {
         return workoutRepository.findLastPerformedWorkoutsForTemplateIdIn(templateIds).associateBy { it.templateId }
+    }
+
+    @Transactional
+    fun updateWorkout(userId: Long, id: Long, request: WorkoutUpdateRequest): WorkoutResponse {
+        if (request.endTime.isBefore(request.startTime)) {
+            throw IllegalArgumentException("End time cannot be before start time")
+        }
+
+        val workout = getWorkoutForUser(id, userId)
+
+        val instances = exerciseInstanceService.updateExercisesForWorkout(request.exercises, workout)
+
+        workout.title = request.title
+        workout.totalWeight = request.totalWeight
+        workout.tags = tagService.getTagsOrCreate(request.tags).toMutableSet()
+        workout.updateExerciseInstances(instances)
+
+        val savedWorkout = workoutRepository.save(workout)
+
+        setsService.updatePersonalRecordSetForExercises(instances.map { it.exercise.id })
+        setsService.recalculatePositionsForExerciseInstance(instances.map { it.id })
+
+        val exerciseIds = instances.map { it.exercise.id }
+        val setProjections = setsService.getSetProjections(exerciseIds, workout.templateId, savedWorkout.id)
+        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
+
+        return WorkoutResponse.fromEntity(savedWorkout, instances, setProjections, prSetForExerciseMap)
     }
 
     private fun validateWorkoutExistenceForUser(workoutId: Long, userId: Long) {

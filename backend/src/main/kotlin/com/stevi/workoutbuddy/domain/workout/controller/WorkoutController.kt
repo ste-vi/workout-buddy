@@ -6,9 +6,11 @@ import com.stevi.workoutbuddy.domain.sets.model.request.SetsRequest
 import com.stevi.workoutbuddy.domain.sets.model.response.SetsResponse
 import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
+import com.stevi.workoutbuddy.domain.workout.model.request.WorkoutUpdateRequest
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutResponse
 import com.stevi.workoutbuddy.domain.workout.service.WorkoutService
 import com.stevi.workoutbuddy.security.SecurityUtil
+import jakarta.validation.Valid
 import java.time.LocalDateTime
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -170,6 +172,16 @@ class WorkoutController(private val workoutService: WorkoutService) {
     @ResponseStatus(HttpStatus.OK)
     fun completeSet(@PathVariable workoutId: Long, @PathVariable exerciseId: Long, @PathVariable setId: Long) {
         workoutService.completeSet(workoutId, exerciseId, setId, SecurityUtil.getCurrentUserId())
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateWorkout(
+        @PathVariable id: Long,
+        @Valid @RequestBody request: WorkoutUpdateRequest
+    ): WorkoutResponse {
+        val userId = SecurityUtil.getCurrentUserId()
+        return workoutService.updateWorkout(userId, id, request)
     }
 
 }

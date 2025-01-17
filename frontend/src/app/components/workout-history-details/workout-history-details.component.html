@@ -228,12 +228,12 @@
                 </div>
                 <div class="table-cell kg">
                   <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
-                         [placeholder]="set.previousSet?.weight ? set.previousSet?.weight : 0"
+                         [placeholder]="set.previousSet?.weight ? set.previousSet?.weight : 0" [value]="set.weight"
                          (blur)="updateSetWeight(set, $event)">
                 </div>
                 <div class="table-cell reps">
                   <input inputmode="numeric" type="number" pattern="\d*" [class.complete-set-input]="set.completed"
-                         [placeholder]="set.previousSet?.reps ? set.previousSet?.reps : 0"
+                         [placeholder]="set.previousSet?.reps ? set.previousSet?.reps : 0" [value]="set.reps"
                          (blur)="updateSetReps(set, $event)">
                 </div>
                 <div class="table-cell action">

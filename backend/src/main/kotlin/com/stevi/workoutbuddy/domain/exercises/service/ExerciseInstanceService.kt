@@ -111,6 +111,42 @@ class ExerciseInstanceService(
     }
 
     @Transactional
+    fun updateExercisesForWorkout(
+        exerciseRequests: List<WorkoutExerciseRequest>,
+        workout: Workout
+    ): MutableList<ExerciseInstance> {
+        val existingInstances = workout.exerciseInstances.associateBy { it.exercise.id }
+        val exercises = exerciseRepository.findAllByIdIn(exerciseRequests.map { it.id }).associateBy { it.id }
+
+        val updatedInstances = exerciseRequests.map { request ->
+            val exercise = exercises[request.id] ?: throw IllegalArgumentException("Exercise not found: ${request.id}")
+            val instance = existingInstances[request.id] ?: ExerciseInstance(
+                exercise = exercise,
+                position = request.position,
+                workoutTemplate = null,
+                workoutTemplateId = null,
+                workout = workout,
+                workoutId = workout.id
+            )
+
+            instance.apply {
+                position = request.position
+                updateSets(request.sets.map { setRequest ->
+                    Sets(
+                        reps = setRequest.reps,
+                        weight = setRequest.weight,
+                        completed = setRequest.completed,
+                        completedAt = if (setRequest.completed) LocalDateTime.now() else null,
+                        exerciseInstance = this
+                    )
+                })
+            }
+        }
+
+        return updatedInstances.toMutableList()
+    }
+
+    @Transactional
     fun createWorkoutExerciseInstancesFromWorkoutTemplate(
         workoutTemplateId: Long,
         workout: Workout

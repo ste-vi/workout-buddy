@@ -6,6 +6,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Tag} from '../../models/tag';
 import {Sets} from '../../models/set';
+import {WorkoutTemplate} from "../../models/workout-template";
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,10 @@ export class WorkoutService {
 
   getLastPerformedWorkout(): Observable<Workout | undefined> {
     return this.http.get<Workout | undefined>(`${this.apiUrl}/latest`);
+  }
+
+  updateWorkout(workout: Workout): Observable<Workout> {
+    return this.http.put<Workout>(`${this.apiUrl}/${workout.id}`, workout);
   }
 
   deleteWorkout(workoutId: number): Observable<void> {
