@@ -7,6 +7,7 @@ import {environment} from '../../../environments/environment';
 import {Tag} from '../../models/tag';
 import {Sets} from '../../models/set';
 import {WorkoutTemplate} from "../../models/workout-template";
+import {WorkoutCompletionResponse} from "../../models/workout-completion-response";
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,7 @@ import {WorkoutTemplate} from "../../models/workout-template";
 export class WorkoutService {
   private apiUrl = `${environment.apiUrl}/workouts`;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   // todo: add update triggers
 
@@ -139,12 +139,15 @@ export class WorkoutService {
     );
   }
 
-  completeWorkout(workoutId: number, totalWeight?: number): Observable<Date> {
+  completeWorkout(
+    workoutId: number,
+    totalWeight?: number,
+  ): Observable<WorkoutCompletionResponse> {
     let url = `${this.apiUrl}/ongoing/${workoutId}`;
     if (totalWeight !== undefined) {
       url += `?totalWeight=${totalWeight}`;
     }
-    return this.http.post<Date>(url, {});
+    return this.http.post<WorkoutCompletionResponse>(url, {});
   }
 
   searchWorkoutHistory(

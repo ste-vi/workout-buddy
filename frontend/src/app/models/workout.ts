@@ -8,6 +8,7 @@ export class Workout {
   startTime: Date = new Date();
   endTime?: Date = undefined;
   totalSets?: number;
+  completedSets?: number;
   prReps?: number;
   totalWeight?: number;
   tags: Tag[] = [];
@@ -18,8 +19,8 @@ export class Workout {
       this.id = data.id;
       this.title = data.title || '';
       this.totalSets = data.totalSets || 0;
-      this.startTime = data.startTime!;
-      this.endTime = data.endTime;
+      this.startTime = new Date(data.startTime!);
+      this.endTime = data.endTime ?  new Date(data.endTime!) : undefined;
       this.tags = data.tags || [];
       this.exercises = sortExercises(data.exercises);
 
@@ -42,10 +43,16 @@ export class Workout {
   }
 
   public calculateTotalSets() {
-    this.totalSets = this.exercises.reduce(
-      (total, exercise) => total + (exercise.sets?.length || 0),
-      0,
-    );
+    let totalSets = 0;
+    let completedSets = 0;
+
+    this.exercises.forEach(exercise => {
+      totalSets += exercise.sets?.length || 0;
+      completedSets += exercise.sets?.filter(set => set.completed).length || 0;
+    });
+
+    this.totalSets = totalSets;
+    this.completedSets = completedSets;
   }
 
   public calculateTotalWeight() {

@@ -53,6 +53,16 @@ class WorkoutTemplateController(
         return workoutTemplateService.updateWorkoutTemplate(userId, id, request)
     }
 
+    @PutMapping("/{id}/workout")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateWorkoutTemplateFromWorkout(
+        @PathVariable id: Long,
+        @RequestBody request: WorkoutTemplateRequest
+    ) {
+        val userId = SecurityUtil.getCurrentUserId()
+        workoutTemplateService.updateWorkoutTemplateFromTemplate(userId, id, request)
+    }
+
     @DeleteMapping("/{id}/archive")
     @ResponseStatus(HttpStatus.OK)
     fun archiveWorkoutTemplate(@PathVariable id: Long) {

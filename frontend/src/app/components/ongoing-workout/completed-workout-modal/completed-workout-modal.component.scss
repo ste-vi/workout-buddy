@@ -1,0 +1,26 @@
+.completed-workout-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 22rem;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+
+  z-index: 100;
+  gap: var(--m-size);
+  padding: var(--m-size) var(--l-size);
+
+  .completed-workout-modal-header {
+    text-align: center;
+  }
+
+  .completed-workout-modal-footer {
+    width: 100%;
+    display: flex;
+    gap: var(--m-size);
+    flex-direction: column;
+  }
+}

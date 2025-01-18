@@ -121,6 +121,27 @@ class WorkoutTemplateService(
     }
 
     @Transactional
+    fun updateWorkoutTemplateFromTemplate(
+        userId: Long,
+        id: Long,
+        request: WorkoutTemplateRequest
+    ) {
+        val existingTemplate = workoutTemplateRepository.findByIdAndUserId(id, userId)
+            ?: throw NoSuchElementException("Workout template not found with id: $id")
+
+        val totalSets = request.exercises.sumOf { it.sets.size }
+        val exInstances = exerciseInstanceService.updateExercisesForWorkoutTemplateFromWorkout(request.exercises, existingTemplate)
+
+        existingTemplate.totalSets = totalSets.toShort()
+        existingTemplate.updateExerciseInstances(exInstances)
+
+        workoutTemplateRepository.save(existingTemplate)
+
+        setsService.recalculatePositionsForExerciseInstance(exInstances.map { it.id })
+    }
+
+
+    @Transactional
     fun archiveWorkoutTemplate(id: Long, userId: Long) {
         val existingTemplate = workoutTemplateRepository.findByIdAndUserId(id, userId)
             ?: throw NoSuchElementException("Workout template not found with id: $id")

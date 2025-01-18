@@ -35,4 +35,6 @@ interface WorkoutRepository : JpaRepository<Workout, Long>, JpaSpecificationExec
         )
     """)
     fun findLastPerformedWorkoutsForTemplateIdIn(@Param("templateIds") templateIds: List<Long>): List<LastPerformedWorkout>
+
+    fun countByUserId(userId: Long): Long
 }

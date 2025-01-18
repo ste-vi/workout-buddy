@@ -1,0 +1,58 @@
+<div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="completed-workout-modal black-color" *ngIf="isOpen" [@dialogOpenClose]>
+  <div class="completed-workout-modal-header l-text semi-bold">
+    <div>Great job!</div>
+    <div class="s-text gray-1-color">That is your <span class="primary">{{ workoutNumber }}th </span>workout</div>
+  </div>
+  <div>
+    <div class="s-text">
+      <span class="gray-1-color">Completed at: </span>
+      <span class="black-color semi-bold">{{ workout?.endTime | date:'HH:mm, MMMM dd yyyy' }}</span>
+    </div>
+    <div class="s-text">
+      <span class="gray-1-color">Duration: </span>
+      <span class="black-color semi-bold">{{ workout?.getWorkoutDuration() + ' min' }}</span>
+    </div>
+    <div class="s-text">
+      <span class="gray-1-color">Exercises performed: </span>
+      <span class="black-color semi-bold">{{ workout?.exercises!.length }}</span>
+    </div>
+    <div class="s-text">
+      <span class="gray-1-color">Sets completed: </span>
+      <span class="black-color semi-bold">{{ workout?.completedSets }}</span>
+    </div>
+    <div class="s-text">
+      <span class="gray-1-color">Total weight lifted: </span>
+      <span class="black-color semi-bold">{{ workout?.totalWeight }}</span>
+    </div>
+    <div class="s-text" *ngIf="workout && workout?.prReps! > 0">
+      <span class="gray-1-color">Personal records: </span>
+      <span class="black-color semi-bold">{{ workout.prReps }}</span>
+    </div>
+  </div>
+
+  <div class="completed-workout-modal-footer">
+    <ng-container *ngIf="isTemplateChanged">
+      <div class="caption gray-1-color">During the workout you have modified exercises and sets. Do you want to apply
+        these changes on the template too?
+      </div>
+
+      <app-medium-button name="Update template"
+                         [classes]="['primary-background', 'black-color']"
+                         [textClasses]="['white-color', 'semi-bold']"
+                         (click)="updateTemplate()"></app-medium-button>
+      <app-medium-button name="Dismiss and finish"
+                         [classes]="['white-background', 'black-color']"
+                         [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                         (click)="close()"></app-medium-button>
+    </ng-container>
+    <ng-container *ngIf="!isTemplateChanged">
+      <app-medium-button name="Finish"
+                         [classes]="['white-background', 'black-color']"
+                         [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                         (click)="close()"></app-medium-button>
+    </ng-container>
+
+  </div>
+
+</div>

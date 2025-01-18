@@ -111,6 +111,44 @@ class ExerciseInstanceService(
     }
 
     @Transactional
+    fun updateExercisesForWorkoutTemplateFromWorkout(
+        exerciseRequests: List<WorkoutExerciseRequest>,
+        workoutTemplate: WorkoutTemplate
+    ): MutableList<ExerciseInstance> {
+        val existingInstances = workoutTemplate.exerciseInstances.associateBy { it.exercise.id }
+        val exercises = exerciseRepository.findAllByIdIn(exerciseRequests.map { it.id }).associateBy { it.id }
+
+        val updatedInstances = exerciseRequests.mapNotNull { request ->
+            val exercise = exercises[request.id] ?: return@mapNotNull null
+            val instance = existingInstances[request.id] ?: ExerciseInstance(
+                exercise = exercise,
+                position = request.position,
+                workoutTemplate = workoutTemplate,
+                workoutTemplateId = workoutTemplate.id,
+                workout = null,
+                workoutId = null
+            )
+
+            instance.apply {
+                position = request.position
+                updateSets(request.sets.map { setRequest ->
+                    Sets(
+                        reps = setRequest.reps,
+                        weight = setRequest.weight,
+                        completed = false,
+                        completedAt = null,
+                        exerciseInstance = this
+                    )
+                })
+            }
+        }
+
+        val exercisesToRemove = existingInstances.values.filter { it.exercise.id !in exerciseRequests.map { req -> req.id } }
+        exerciseInstanceRepository.deleteAll(exercisesToRemove)
+
+        return exerciseInstanceRepository.saveAll(updatedInstances).toMutableList()
+    }
+    @Transactional
     fun updateExercisesForWorkout(
         exerciseRequests: List<WorkoutExerciseRequest>,
         workout: Workout
@@ -248,5 +286,10 @@ class ExerciseInstanceService(
     ): ExerciseInstance {
         return exerciseInstanceRepository.findByWorkoutIdAndSetId(workoutId, setId)
             ?: throw ResourceNotFoundException("Set $setId not found in the workout")
+    }
+
+    @Transactional(readOnly = true)
+    fun checkIfExercisesDifferentForWorkoutAndItsTemplate(workoutId: Long): Boolean {
+        return exerciseInstanceRepository.areExerciseInstancesDifferentForWorkoutAndItsTemplate(workoutId)
     }
 }

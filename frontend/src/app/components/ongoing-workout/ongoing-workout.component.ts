@@ -34,6 +34,8 @@ import { ToastComponent } from '../common/toast/toast.component';
 import { ActionButtonComponent } from '../common/action-button/action-button.component';
 import { interval, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { CompletedWorkoutModalComponent } from './completed-workout-modal/completed-workout-modal.component';
+import { CompletedWorkoutModalService } from '../../services/communication/completed-workout-modal.service';
 
 @Component({
   selector: 'app-ongoing-workout',
@@ -101,6 +103,9 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   @ViewChild('exercisesModal')
   exercisesModal!: SearchExercisesComponent;
 
+  @ViewChild('completedWorkoutModal')
+  completedWorkoutModal!: CompletedWorkoutModalComponent;
+
   @ViewChild('workoutMenu') workoutMenu!: ContextMenuComponent;
 
   @ViewChild('exerciseMenu') exerciseMenu!: ContextMenuComponent;
@@ -114,6 +119,7 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   constructor(
     private ongoingWorkoutService: OngoingWorkoutService,
     private workoutService: WorkoutService,
+    private completedWorkoutModalService: CompletedWorkoutModalService,
     private router: Router,
   ) {}
 
@@ -213,7 +219,8 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
 
   private doFinishWorkout() {
     this.ongoingWorkout!.calculateTotalWeight();
-    let totalWeight = this.ongoingWorkout!.totalWeight;
+
+   let totalWeight = this.ongoingWorkout!.totalWeight;
     if (totalWeight === 0) {
       totalWeight = undefined;
     }
@@ -222,12 +229,17 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
         this.ongoingWorkout!.id!,
         this.ongoingWorkout!.totalWeight,
       )
-      .subscribe((date) => {
+      .subscribe((completionResponse) => {
         this.ongoingWorkout!.calculateTotalSets();
         this.ongoingWorkout!.totalWeight = totalWeight;
-        this.ongoingWorkout!.endTime = new Date(date);
-        this.close();
-        this.router.navigate(['/dashboard']).then((r) => {});
+        this.ongoingWorkout!.endTime = completionResponse.endTime;
+
+        this.completedWorkoutModalService.openModal(this.ongoingWorkout!, completionResponse);
+
+        setTimeout(() => {
+          this.close();
+          this.router.navigate(['/dashboard']).then((r) => {});
+        }, 3000);
       });
   }
 

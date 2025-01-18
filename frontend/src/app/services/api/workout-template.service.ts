@@ -33,6 +33,10 @@ export class WorkoutTemplateService {
     return this.http.put<WorkoutTemplate>(`${this.apiUrl}/${workoutTemplate.id}`, workoutTemplate);
   }
 
+  updateWorkoutTemplateFromWorkout(workoutTemplate: WorkoutTemplate): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${workoutTemplate.id}/workout`, workoutTemplate);
+  }
+
   archiveWorkoutTemplate(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}/archive`);
   }

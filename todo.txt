@@ -1,12 +1,11 @@
-- Implement workout update
 - Add update workout template from workout by the finish
+- Add cardio sets
 - Fix CUD operations are not displaying without page reloading
 - Add offline access to workout & templates operations
 - Add login
 - Add auth
 - Init user profile
 - Add CRU for user metrics
-- Add cardio sets
 - Add notes to exercises
 - Add db migrations
 - Add calendar widget

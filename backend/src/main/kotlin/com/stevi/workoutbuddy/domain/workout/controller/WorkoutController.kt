@@ -7,6 +7,7 @@ import com.stevi.workoutbuddy.domain.sets.model.response.SetsResponse
 import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
 import com.stevi.workoutbuddy.domain.workout.model.request.WorkoutUpdateRequest
+import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutCompletionResponse
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutResponse
 import com.stevi.workoutbuddy.domain.workout.service.WorkoutService
 import com.stevi.workoutbuddy.security.SecurityUtil
@@ -68,7 +69,7 @@ class WorkoutController(private val workoutService: WorkoutService) {
 
     @PostMapping("/ongoing/{workoutId}")
     @ResponseStatus(HttpStatus.OK)
-    fun completeWorkout(@PathVariable workoutId: Long, @RequestParam totalWeight: Double): LocalDateTime {
+    fun completeWorkout(@PathVariable workoutId: Long, @RequestParam totalWeight: Double): WorkoutCompletionResponse {
         return workoutService.completeWorkout(workoutId, totalWeight, SecurityUtil.getCurrentUserId())
     }
 

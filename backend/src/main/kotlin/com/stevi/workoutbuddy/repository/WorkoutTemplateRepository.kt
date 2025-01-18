@@ -44,4 +44,6 @@ interface WorkoutTemplateRepository : JpaRepository<WorkoutTemplate, Long> {
     """
     )
     fun findAllPreviewsOrderByTitleAsc(): List<WorkoutTemplatePreviewResponse>
+
+
 }

@@ -11,6 +11,7 @@ import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
 import com.stevi.workoutbuddy.domain.tag.service.TagService
 import com.stevi.workoutbuddy.domain.workout.model.request.WorkoutUpdateRequest
 import com.stevi.workoutbuddy.domain.workout.model.response.LastPerformedWorkout
+import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutCompletionResponse
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutResponse
 import com.stevi.workoutbuddy.domain.workout.specification.WorkoutSpecification
 import com.stevi.workoutbuddy.entity.Workout
@@ -172,7 +173,7 @@ class WorkoutService(
 
 
     @Transactional
-    fun completeWorkout(workoutId: Long, totalWeight: Double, userId: Long): LocalDateTime {
+    fun completeWorkout(workoutId: Long, totalWeight: Double, userId: Long): WorkoutCompletionResponse {
         val workout = getWorkoutForUser(workoutId, userId)
         workout.totalWeight = totalWeight
         workout.endAt = LocalDateTime.now()
@@ -181,7 +182,11 @@ class WorkoutService(
         val exercisesIds = exerciseInstanceService.getExercisesForWorkout(workoutId).map { t -> t.exercise.id }
         setsService.updatePersonalRecordSetForExercises(exercisesIds)
 
-        return workout.endAt!!
+        val workoutsCount = workoutRepository.countByUserId(userId)
+        val updateTemplate =
+            exerciseInstanceService.checkIfExercisesDifferentForWorkoutAndItsTemplate(workoutId)
+
+        return WorkoutCompletionResponse(workout.endAt!!, workoutsCount, updateTemplate, workout.templateId)
     }
 
     @Transactional
@@ -275,6 +280,8 @@ class WorkoutService(
 
         workout.title = request.title
         workout.totalWeight = request.totalWeight
+        workout.createdAt = request.startTime
+        workout.endAt = request.endTime
         workout.tags = tagService.getTagsOrCreate(request.tags).toMutableSet()
         workout.updateExerciseInstances(instances)
 
