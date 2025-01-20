@@ -15,8 +15,15 @@
     align-items: center;
     justify-content: space-between;
 
-    .timer {
-      width: 2.2rem;
+    .timer-container {
+      flex-grow: 1;
+      text-align: center;
+
+      .timer {
+        display: inline-block;
+        min-width: 120px;
+        text-align: center;
+      }
     }
   }
 

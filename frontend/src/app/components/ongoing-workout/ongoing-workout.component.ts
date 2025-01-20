@@ -140,11 +140,11 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   startTimer() {
     const serverStartTime = new Date(this.ongoingWorkout!.startTime);
     const clientStartTime = new Date();
-    const timeDifference = clientStartTime.getTime() - serverStartTime.getTime();
+    const timezoneOffset = clientStartTime.getTimezoneOffset() * 60000;
 
     this.timerSubscription = interval(1000).subscribe(() => {
       const now = new Date().getTime();
-      const duration = now - clientStartTime.getTime() + timeDifference;
+      const duration = now - serverStartTime.getTime() + timezoneOffset;
       this.formattedTime = this.formatDuration(Math.max(0, duration));
     });
   }

@@ -3,7 +3,9 @@
 
   <div class="ongoing-workout-container-header">
     <app-header-button icon="close" (click)="cancelWorkout()"></app-header-button>
-    <div class="timer l-text gray-1-color">{{ formattedTime }}</div>
+    <div class="timer-container">
+      <div class="timer l-text gray-1-color">{{ formattedTime }}</div>
+    </div>
     <app-header-button icon="finish" [active]="progress == 1" (click)="finishWorkout()"></app-header-button>
   </div>
   <app-progress-bar [progress]=progress class="card-padding-top"></app-progress-bar>
