@@ -32,7 +32,7 @@ class WorkoutTemplateService(
             val exerciseIds = exerciseInstances.map { ex -> ex.exercise.id }
             val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
             val lastPerformedWorkout = workoutService.getLastPerformedWorkoutToTemplateMap(listOf(it.id))[it.id]
-            val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, listOf(template.id))
+            val setProjections = setsService.getSetProjectionsForWorkoutTemplate(exerciseIds, template.id)
             WorkoutTemplateResponse.fromEntity(
                 it,
                 exerciseInstances,
@@ -49,7 +49,6 @@ class WorkoutTemplateService(
         val workoutTemplateIds = workoutTemplates.map { it.id }
         val exerciseInstancesMap = exerciseInstanceService.getExercisesForWorkoutTemplates(workoutTemplateIds)
         val exerciseIds = exerciseInstancesMap.values.flatten().map { it.exercise.id }
-        val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, workoutTemplateIds)
         val prSetForExerciseMap =
             setsService.getPrSetForExerciseMap(exerciseIds)
         val lastPerformedWorkoutMap = workoutService.getLastPerformedWorkoutToTemplateMap(workoutTemplateIds)
@@ -58,7 +57,7 @@ class WorkoutTemplateService(
             WorkoutTemplateResponse.fromEntity(
                 template,
                 exerciseInstancesMap[template.id] ?: emptyList(),
-                setProjections,
+                setsService.getSetProjectionsForWorkoutTemplate(exerciseIds, template.id),
                 prSetForExerciseMap,
                 lastPerformedWorkoutMap[template.id]
             )
@@ -66,7 +65,7 @@ class WorkoutTemplateService(
     }
 
     @Transactional
-    fun createWorkoutTemplate(request: WorkoutTemplateRequest): WorkoutTemplateResponse {
+    fun createWorkoutTemplate(request: WorkoutTemplateRequest) {
         val template = WorkoutTemplate(
             title = request.title,
             totalSets = request.exercises.sumOf { it.sets.size }.toShort(),
@@ -80,16 +79,10 @@ class WorkoutTemplateService(
         savedTemplate.exerciseInstances = exInstances
 
         setsService.recalculatePositionsForExerciseInstance(exInstances.map { it.id })
-
-        val exerciseIds = exInstances.map { it.exercise.id }
-        val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, listOf(template.id))
-        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
-
-        return WorkoutTemplateResponse.fromEntity(savedTemplate, exInstances, setProjections, prSetForExerciseMap, null)
     }
 
     @Transactional
-    fun updateWorkoutTemplate(userId: Long, id: Long, request: WorkoutTemplateRequest): WorkoutTemplateResponse {
+    fun updateWorkoutTemplate(userId: Long, id: Long, request: WorkoutTemplateRequest) {
         val existingTemplate = workoutTemplateRepository.findByIdAndUserId(id, userId)
             ?: throw NoSuchElementException("Workout template not found with id: $id")
 
@@ -101,23 +94,9 @@ class WorkoutTemplateService(
         existingTemplate.tags = tagService.getTagsOrCreate(request.tags).toMutableSet()
         existingTemplate.updateExerciseInstances(exInstances)
 
-        val updatedTemplate = workoutTemplateRepository.save(existingTemplate)
+        workoutTemplateRepository.save(existingTemplate)
 
         setsService.recalculatePositionsForExerciseInstance(exInstances.map { it.id })
-
-        val exerciseIds = exInstances.map { ex -> ex.exercise.id }
-        val setProjections = setsService.getSetProjectionsForWorkoutTemplates(exerciseIds, listOf(id))
-        val prSetForExerciseMap = setsService.getPrSetForExerciseMap(exerciseIds)
-
-        val lastPerformedWorkout = workoutService.getLastPerformedWorkoutToTemplateMap(listOf(id))[id]
-
-        return WorkoutTemplateResponse.fromEntity(
-            updatedTemplate,
-            exInstances,
-            setProjections,
-            prSetForExerciseMap,
-            lastPerformedWorkout
-        )
     }
 
     @Transactional
@@ -130,7 +109,8 @@ class WorkoutTemplateService(
             ?: throw NoSuchElementException("Workout template not found with id: $id")
 
         val totalSets = request.exercises.sumOf { it.sets.size }
-        val exInstances = exerciseInstanceService.updateExercisesForWorkoutTemplateFromWorkout(request.exercises, existingTemplate)
+        val exInstances =
+            exerciseInstanceService.updateExercisesForWorkoutTemplateFromWorkout(request.exercises, existingTemplate)
 
         existingTemplate.totalSets = totalSets.toShort()
         existingTemplate.updateExerciseInstances(exInstances)

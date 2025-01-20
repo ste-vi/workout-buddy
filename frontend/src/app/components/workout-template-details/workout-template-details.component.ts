@@ -79,10 +79,6 @@ export class WorkoutTemplateDetailsComponent implements OnInit {
     this.closeModal();
   }
 
-  onTemplateUpdated(template: WorkoutTemplate) {
-    this.template = template;
-  }
-
   templateMenuItems: any = [];
 
   openTemplateMenu($event: MouseEvent): void {

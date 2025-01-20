@@ -18,21 +18,20 @@ interface SetsRepository : JpaRepository<Sets, Long> {
     @Query(
         """
         update Sets s 
-        set s.personalRecord = (s.id in (
-            select s2.id
+        set s.personalRecord = true
+        where s.exerciseInstance.id in :exerciseInstanceIds
+        and s.completed = true
+        and not exists (
+            select 1
             from Sets s2
-            where s2.exerciseInstance.exercise.id in :exerciseIds
-            and (s2.exerciseInstance.exercise.id, s2.weight * s2.reps) in (
-                select s3.exerciseInstance.exercise.id, max(s3.weight * s3.reps)
-                from Sets s3
-                where s3.exerciseInstance.exercise.id in :exerciseIds
-                group by s3.exerciseInstance.exercise.id
-            )
-        ))
-        where s.exerciseInstance.exercise.id in :exerciseIds and s.completed = true
+            where s2.exerciseInstance.exercise.id = s.exerciseInstance.exercise.id
+            and (s2.weight * s2.reps > s.weight * s.reps
+                 or (s2.weight * s2.reps = s.weight * s.reps and s2.id < s.id))
+            and (s2.personalRecord = true or s2.exerciseInstance.id in :exerciseInstanceIds)
+        )
         """
     )
-    fun updatePersonalRecords(@Param("exerciseIds") exerciseIds: List<Long>): Int
+    fun updatePersonalRecords(@Param("exerciseInstanceIds") exerciseInstanceIds: List<Long>)
 
     @Modifying
     @Query("""
@@ -45,7 +44,7 @@ interface SetsRepository : JpaRepository<Sets, Long> {
     )
     where s.exerciseInstance.id in :exerciseInstanceIds
 """)
-    fun recalculateSetsPositionForExerciseInstances(@Param("exerciseInstanceIds") exerciseInstanceIds: List<Long>): Int
+    fun recalculateSetsPositionForExerciseInstances(@Param("exerciseInstanceIds") exerciseInstanceIds: List<Long>)
 
     @Query(
         """
@@ -126,6 +125,6 @@ interface SetsRepository : JpaRepository<Sets, Long> {
     """)
     fun findSetProjectionsWithPreviousForWorkoutTemplates(
         @Param("exerciseIds") exerciseIds: List<Long>,
-        @Param("workoutTemplateIds") workoutTemplateIds: List<Long>
+        @Param("workoutTemplateIds") workoutTemplateId: Long
     ): List<SetProjection>
 }

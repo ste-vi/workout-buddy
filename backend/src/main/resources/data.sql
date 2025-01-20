@@ -3,10 +3,10 @@ INSERT INTO users (username, email, created_at, updated_at)
 VALUES ('testuser', 'test@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (username) DO NOTHING;
 
-INSERT INTO body_weight_measures (weight, date, user_id) VALUES
-                                                             (80.5, '2023-06-01 07:00:00', 1),
-                                                             (80.2, '2023-06-02 07:00:00', 1),
-                                                             (79.8, '2023-06-03 07:00:00', 1);
+INSERT INTO body_weight_measures (weight, date, user_id)
+VALUES (80.5, '2023-06-01 07:00:00', 1),
+       (80.2, '2023-06-02 07:00:00', 1),
+       (79.8, '2023-06-03 07:00:00', 1);
 -- Get the user_id
 WITH user_id AS (SELECT id FROM users WHERE username = 'testuser')
 

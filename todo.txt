@@ -1,4 +1,3 @@
-- Add update workout template from workout by the finish
 - Add cardio sets
 - Fix CUD operations are not displaying without page reloading
 - Add offline access to workout & templates operations

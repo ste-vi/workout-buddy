@@ -179,8 +179,8 @@ class WorkoutService(
         workout.endAt = LocalDateTime.now()
         workoutRepository.save(workout)
 
-        val exercisesIds = exerciseInstanceService.getExercisesForWorkout(workoutId).map { t -> t.exercise.id }
-        setsService.updatePersonalRecordSetForExercises(exercisesIds)
+        val exerciseInstanceIds = exerciseInstanceService.getExercisesForWorkout(workoutId).map { t -> t.id }
+        setsService.updatePersonalRecordSetForExercises(exerciseInstanceIds)
 
         val workoutsCount = workoutRepository.countByUserId(userId)
         val updateTemplate =
@@ -287,8 +287,9 @@ class WorkoutService(
 
         val savedWorkout = workoutRepository.save(workout)
 
-        setsService.updatePersonalRecordSetForExercises(instances.map { it.exercise.id })
-        setsService.recalculatePositionsForExerciseInstance(instances.map { it.id })
+        val exerciseInstanceIds = instances.map { it.id }
+        setsService.updatePersonalRecordSetForExercises(exerciseInstanceIds)
+        setsService.recalculatePositionsForExerciseInstance(exerciseInstanceIds)
 
         val exerciseIds = instances.map { it.exercise.id }
         val setProjections = setsService.getSetProjections(exerciseIds, workout.templateId, savedWorkout.id)

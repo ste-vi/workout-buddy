@@ -64,8 +64,8 @@ class SetsService(private val setsRepository: SetsRepository) {
     }
 
     @Transactional
-    fun updatePersonalRecordSetForExercises(exerciseIds: List<Long>) {
-        setsRepository.updatePersonalRecords(exerciseIds)
+    fun updatePersonalRecordSetForExercises(exerciseInstanceIds: List<Long>) {
+        setsRepository.updatePersonalRecords(exerciseInstanceIds)
     }
 
     @Transactional
@@ -90,10 +90,10 @@ class SetsService(private val setsRepository: SetsRepository) {
     }
 
     @Transactional(readOnly = true)
-    fun getSetProjectionsForWorkoutTemplates(
+    fun getSetProjectionsForWorkoutTemplate(
         exerciseIds: List<Long>,
-        workoutTemplateIds: List<Long>
+        workoutTemplateId: Long
     ): List<SetProjection> {
-        return setsRepository.findSetProjectionsWithPreviousForWorkoutTemplates(exerciseIds, workoutTemplateIds)
+        return setsRepository.findSetProjectionsWithPreviousForWorkoutTemplates(exerciseIds, workoutTemplateId)
     }
 }

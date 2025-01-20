@@ -117,9 +117,11 @@ export class WorkoutHistoryComponent implements OnInit, AfterViewInit {
       .getWorkoutTemplatePreviews()
       .subscribe((wtp) => {
         this.workoutTemplatePreviews = wtp;
-        this.workoutTemplatePreview = wtp.find(
-          (w) => w.id === this.workoutTemplatePreview!.id,
-        );
+        if (this.workoutTemplatePreview) {
+          this.workoutTemplatePreview = wtp.find(
+            (w) => w.id === this.workoutTemplatePreview!.id,
+          );
+        }
       });
   }
 

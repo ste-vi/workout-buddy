@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { MediumButtonComponent } from '../common/medium-button/medium-button.component';
 import { MatIcon } from '@angular/material/icon';
 import { WorkoutTemplateService } from '../../services/api/workout-template.service';
@@ -8,7 +7,6 @@ import { NgForOf, NgIf } from '@angular/common';
 import { TimeAgoPipe } from '../../pipes/time-ago-pipe';
 import { WorkoutTemplateDetailsService } from '../../services/communication/workout-template-details.service';
 import { OngoingWorkoutService } from '../../services/communication/ongoing-workout.service';
-import { OngoingWorkoutComponent } from '../ongoing-workout/ongoing-workout.component';
 import { WorkoutTemplateDetailsComponent } from '../workout-template-details/workout-template-details.component';
 import { WorkoutTemplateEditComponent } from '../workout-template-edit/workout-template-edit.component';
 import { ContextMenuComponent } from '../common/context-menu/context-menu.component';
@@ -20,13 +18,11 @@ import { WorkoutService } from '../../services/api/workout.service';
   selector: 'app-start-workout',
   standalone: true,
   imports: [
-    HeaderButtonComponent,
     MediumButtonComponent,
     MatIcon,
     NgIf,
     TimeAgoPipe,
     NgForOf,
-    OngoingWorkoutComponent,
     WorkoutTemplateDetailsComponent,
     WorkoutTemplateEditComponent,
     ContextMenuComponent,
@@ -81,26 +77,6 @@ export class StartWorkoutComponent implements OnInit {
 
   createTemplate() {
     this.workoutTemplateEditComponent.show();
-  }
-
-  onTemplateUpdated(updatedTemplate: WorkoutTemplate) {
-    const index = this.workoutTemplates.findIndex(
-      (t) => t.id === updatedTemplate.id,
-    );
-    if (index !== -1) {
-      this.workoutTemplates[index] = updatedTemplate;
-    } else {
-      const archivedIndex = this.archivedWorkoutTemplates.findIndex(
-        (t) => t.id === updatedTemplate.id,
-      );
-      if (archivedIndex !== -1) {
-        this.archivedWorkoutTemplates[archivedIndex] = updatedTemplate;
-      }
-    }
-  }
-
-  onTemplateCreated(createdTemplate: WorkoutTemplate) {
-    this.workoutTemplates.push(createdTemplate);
   }
 
   templateMenuItems: any = [];

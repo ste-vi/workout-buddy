@@ -195,17 +195,17 @@ export class WorkoutHistoryDetailsComponent {
     return exercise.prSet?.id === set.id;
   }
 
-  isSetBetter(set: any): boolean {
+  isSetBetter(set: Sets): boolean {
     return (
-      (set?.weight ?? 0) > (set?.previousWeight ?? 0) ||
-      (set?.reps ?? 0) > (set?.previousReps ?? 0)
+      (set?.weight ?? 0) > (set?.previousSet?.weight ?? 0) ||
+      (set?.reps ?? 0) > (set?.previousSet?.reps ?? 0)
     );
   }
 
-  isSetWorse(set: any): boolean {
+  isSetWorse(set: Sets): boolean {
     return (
-      (set?.weight ?? 0) < (set?.previousWeight ?? 0) ||
-      (set?.reps ?? 0) < (set?.previousReps ?? 0)
+      (set?.weight ?? 0) < (set?.previousSet?.weight ?? 0) ||
+      (set?.reps ?? 0) < (set?.previousSet?.reps ?? 0)
     );
   }
 

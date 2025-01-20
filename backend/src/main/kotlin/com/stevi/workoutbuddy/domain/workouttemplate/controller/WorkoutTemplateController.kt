@@ -39,8 +39,8 @@ class WorkoutTemplateController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createWorkoutTemplate(@Valid @RequestBody request: WorkoutTemplateRequest): WorkoutTemplateResponse {
-        return workoutTemplateService.createWorkoutTemplate(request)
+    fun createWorkoutTemplate(@Valid @RequestBody request: WorkoutTemplateRequest) {
+        workoutTemplateService.createWorkoutTemplate(request)
     }
 
     @PutMapping("/{id}")
@@ -48,9 +48,9 @@ class WorkoutTemplateController(
     fun updateWorkoutTemplate(
         @PathVariable id: Long,
         @Valid @RequestBody request: WorkoutTemplateRequest
-    ): WorkoutTemplateResponse {
+    ) {
         val userId = SecurityUtil.getCurrentUserId()
-        return workoutTemplateService.updateWorkoutTemplate(userId, id, request)
+        workoutTemplateService.updateWorkoutTemplate(userId, id, request)
     }
 
     @PutMapping("/{id}/workout")

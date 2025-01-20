@@ -67,9 +67,6 @@ export class WorkoutTemplateEditComponent implements OnInit {
 
   protected template: WorkoutTemplate | undefined;
 
-  @Output() createdTemplate: any = new EventEmitter<WorkoutTemplate>();
-  @Output() updatedTemplate: any = new EventEmitter<WorkoutTemplate>();
-
   protected dragStarted: boolean = false;
   protected setsAnimationEnabled: boolean = false;
 
@@ -147,15 +144,13 @@ export class WorkoutTemplateEditComponent implements OnInit {
     if (this.isEdit) {
       this.workoutTemplateService
         .updateWorkoutTemplate(this.template!)
-        .subscribe((updatedTemplate) => {
-          this.updatedTemplate.emit(new WorkoutTemplate(updatedTemplate));
+        .subscribe(() => {
           this.close();
         });
     } else {
       this.workoutTemplateService
         .createWorkoutTemplate(this.template!)
-        .subscribe((createdTemplate) => {
-          this.updatedTemplate.emit(new WorkoutTemplate(createdTemplate));
+        .subscribe(() => {
           this.close();
         });
     }
