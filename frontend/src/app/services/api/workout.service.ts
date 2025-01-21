@@ -1,29 +1,39 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Workout} from '../../models/workout';
-import {PageResponse} from '../../models/page-response';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {Tag} from '../../models/tag';
-import {Sets} from '../../models/set';
-import {WorkoutTemplate} from "../../models/workout-template";
-import {WorkoutCompletionResponse} from "../../models/workout-completion-response";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Workout } from '../../models/workout';
+import { PageResponse } from '../../models/page-response';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Tag } from '../../models/tag';
+import { Sets } from '../../models/set';
+import { WorkoutTemplate } from '../../models/workout-template';
+import { WorkoutCompletionResponse } from '../../models/workout-completion-response';
+import { WorkoutTemplatePreview } from '../../models/workout-template-preview';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkoutService {
   private apiUrl = `${environment.apiUrl}/workouts`;
+  private lastPerformedWorkoutSubject = new BehaviorSubject<Workout | undefined>(undefined);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.refreshData();
+  }
 
-  // todo: add update triggers
+  private refreshData() {
+    this.getWorkoutTemplatesFromApi().subscribe();
+  }
 
-  startWorkout(workoutTemplateId: number): Observable<Workout> {
-    return this.http.post<Workout>(
-      `${this.apiUrl}/start/${workoutTemplateId}`,
-      {},
-    );
+  getLastPerformedWorkout(): Observable<Workout | undefined> {
+    return this.lastPerformedWorkoutSubject.asObservable();
+  }
+
+  private getWorkoutTemplatesFromApi(): Observable<Workout | undefined> {
+    return this.http
+      .get<Workout | undefined>(`${this.apiUrl}/latest`)
+      .pipe(tap((workout) => this.lastPerformedWorkoutSubject.next(workout)));
   }
 
   getOngoingWorkout(): Observable<Workout | undefined> {
@@ -34,16 +44,62 @@ export class WorkoutService {
     return this.http.get<Workout>(`${this.apiUrl}/${workoutId}`);
   }
 
-  getLastPerformedWorkout(): Observable<Workout | undefined> {
-    return this.http.get<Workout | undefined>(`${this.apiUrl}/latest`);
-  }
-
   updateWorkout(workout: Workout): Observable<Workout> {
     return this.http.put<Workout>(`${this.apiUrl}/${workout.id}`, workout);
   }
 
   deleteWorkout(workoutId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${workoutId}`);
+  }
+
+  startWorkout(workoutTemplateId: number): Observable<Workout> {
+    return this.http.post<Workout>(
+      `${this.apiUrl}/start/${workoutTemplateId}`,
+      {},
+    );
+  }
+
+  completeWorkout(
+    workoutId: number,
+    totalWeight?: number,
+  ): Observable<WorkoutCompletionResponse> {
+    let url = `${this.apiUrl}/ongoing/${workoutId}`;
+    if (totalWeight !== undefined) {
+      url += `?totalWeight=${totalWeight}`;
+    }
+    return this.http
+      .post<WorkoutCompletionResponse>(url, {})
+      .pipe(tap(() => this.refreshData()));
+  }
+
+  searchWorkoutHistory(
+    page: number,
+    size: number,
+    dateFrom?: Date,
+    dateTo?: Date,
+    workoutTemplateId?: number,
+    searchQuery?: string,
+  ): Observable<PageResponse<Workout>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (dateFrom) {
+      params = params.set('dateFrom', dateFrom.toISOString().slice(0, -1));
+    }
+    if (dateTo) {
+      params = params.set('dateTo', dateTo.toISOString().slice(0, -1));
+    }
+    if (workoutTemplateId) {
+      params = params.set('templateId', workoutTemplateId);
+    }
+    if (searchQuery) {
+      params = params.set('searchQuery', searchQuery);
+    }
+
+    return this.http.get<PageResponse<Workout>>(`${this.apiUrl}/history`, {
+      params,
+    });
   }
 
   resetTimer(workoutId: number): Observable<Date> {
@@ -139,44 +195,12 @@ export class WorkoutService {
     );
   }
 
-  completeWorkout(
-    workoutId: number,
-    totalWeight?: number,
-  ): Observable<WorkoutCompletionResponse> {
-    let url = `${this.apiUrl}/ongoing/${workoutId}`;
-    if (totalWeight !== undefined) {
-      url += `?totalWeight=${totalWeight}`;
+  updateNotesForExercise(workoutId: number, exerciseId: number, notes: string | null): Observable<void> {
+    const url = `${this.apiUrl}/${workoutId}/exercises/${exerciseId}/notes`;
+    let params = new HttpParams();
+    if (notes !== null) {
+      params = params.set('notes', notes);
     }
-    return this.http.post<WorkoutCompletionResponse>(url, {});
-  }
-
-  searchWorkoutHistory(
-    page: number,
-    size: number,
-    dateFrom?: Date,
-    dateTo?: Date,
-    workoutTemplateId?: number,
-    searchQuery?: string,
-  ): Observable<PageResponse<Workout>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (dateFrom) {
-      params = params.set('dateFrom', dateFrom.toISOString().slice(0, -1));
-    }
-    if (dateTo) {
-      params = params.set('dateTo', dateTo.toISOString().slice(0, -1));
-    }
-    if (workoutTemplateId) {
-      params = params.set('templateId', workoutTemplateId);
-    }
-    if (searchQuery) {
-      params = params.set('searchQuery', searchQuery);
-    }
-
-    return this.http.get<PageResponse<Workout>>(`${this.apiUrl}/history`, {
-      params,
-    });
+    return this.http.put<void>(url, null, { params });
   }
 }

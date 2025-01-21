@@ -175,6 +175,16 @@ class WorkoutController(private val workoutService: WorkoutService) {
         workoutService.completeSet(workoutId, exerciseId, setId, SecurityUtil.getCurrentUserId())
     }
 
+    @PutMapping("/{workoutId}/exercises/{exerciseId}/notes")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateNotesForExercise(
+        @PathVariable workoutId: Long,
+        @PathVariable exerciseId: Long,
+        @RequestParam(required = false) notes: String?
+    ) {
+        workoutService.updateNotesForExercise(workoutId, exerciseId, notes, SecurityUtil.getCurrentUserId())
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun updateWorkout(

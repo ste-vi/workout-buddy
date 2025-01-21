@@ -74,6 +74,7 @@ export class WorkoutHistoryDetailsComponent {
   private setToDelete: any;
   private exerciseToDelete: any;
   private exerciseToReplace: any;
+  private exerciseToEditNotes: any;
 
   protected workoutTitle: string = '';
   protected isTitleEditable: boolean = false;
@@ -317,6 +318,20 @@ export class WorkoutHistoryDetailsComponent {
         icon: 'delete',
         action: () => this.openDeleteSetsMode(exercise),
       },
+      {
+        label: exercise.notes ? 'Edit note' : 'Add note',
+        icon: 'edit',
+        action: () => this.editNotes(exercise),
+      },
+      ...(exercise.notes
+        ? [
+          {
+            label: 'Delete note',
+            icon: 'clipboard-remove',
+            action: () => this.deleteNotes(exercise),
+          },
+        ]
+        : []),
     ];
 
     this.exerciseMenu.show({
@@ -508,6 +523,28 @@ export class WorkoutHistoryDetailsComponent {
 
   private removeBeforeUnloadListener(): void {
     window.removeEventListener('beforeunload', this.beforeUnloadListener);
+  }
+
+  editNotes(exercise: Exercise) {
+    this.exerciseToEditNotes = exercise.id;
+  }
+
+  saveNotes(exercise: Exercise, newNotes: string) {
+    exercise.notes = newNotes;
+    this.exerciseToEditNotes = null;
+  }
+
+  cancelEditNotes() {
+    this.exerciseToEditNotes = null;
+  }
+
+  isEditingNotes(exercise: Exercise): boolean {
+    return this.exerciseToEditNotes === exercise.id;
+  }
+
+  private deleteNotes(exercise: Exercise) {
+    exercise.notes = undefined;
+    this.exerciseToEditNotes = null;
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;

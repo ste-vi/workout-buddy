@@ -74,6 +74,7 @@ export class WorkoutTemplateEditComponent implements OnInit {
   private setToDelete: any;
   private exerciseToDelete: any;
   private exerciseToReplace: any;
+  private exerciseToEditNotes: any;
 
   protected templateTitle: string = '';
   protected isTitleEditable: boolean = false;
@@ -201,7 +202,12 @@ export class WorkoutTemplateEditComponent implements OnInit {
   }
 
   addSet(exercise: Exercise) {
-    let newSet: Sets = { reps: 0, weight: 0, completed: false, personalRecord: false };
+    let newSet: Sets = {
+      reps: 0,
+      weight: 0,
+      completed: false,
+      personalRecord: false,
+    };
     exercise.sets.push(newSet);
 
     if (this.template) {
@@ -247,6 +253,20 @@ export class WorkoutTemplateEditComponent implements OnInit {
         icon: 'delete',
         action: () => this.removeExercise(exercise),
       },
+      {
+        label: exercise.notes ? 'Edit note' : 'Add note',
+        icon: 'edit',
+        action: () => this.editNotes(exercise),
+      },
+      ...(exercise.notes
+        ? [
+            {
+              label: 'Delete note',
+              icon: 'clipboard-remove',
+              action: () => this.deleteNotes(exercise),
+            },
+          ]
+        : []),
     ];
 
     this.exerciseMenu.show({
@@ -383,6 +403,28 @@ export class WorkoutTemplateEditComponent implements OnInit {
 
   private removeBeforeUnloadListener(): void {
     window.removeEventListener('beforeunload', this.beforeUnloadListener);
+  }
+
+  editNotes(exercise: Exercise) {
+    this.exerciseToEditNotes = exercise.id;
+  }
+
+  saveNotes(exercise: Exercise, newNotes: string) {
+    exercise.notes = newNotes;
+    this.exerciseToEditNotes = null;
+  }
+
+  cancelEditNotes() {
+    this.exerciseToEditNotes = null;
+  }
+
+  isEditingNotes(exercise: Exercise): boolean {
+    return this.exerciseToEditNotes === exercise.id;
+  }
+
+  private deleteNotes(exercise: Exercise) {
+    exercise.notes = undefined;
+    this.exerciseToEditNotes = null;
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;

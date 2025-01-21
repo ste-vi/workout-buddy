@@ -56,7 +56,8 @@ class ExerciseInstanceService(
                 workoutTemplate = workoutTemplate,
                 workoutTemplateId = workoutTemplate.id,
                 workout = null,
-                workoutId = null
+                workoutId = null,
+                notes = null,
             ).apply {
                 sets = request.sets.map { setRequest ->
                     Sets(
@@ -90,10 +91,12 @@ class ExerciseInstanceService(
                 workoutTemplate = workoutTemplate,
                 workoutTemplateId = workoutTemplate.id,
                 workout = null,
-                workoutId = null
+                workoutId = null,
+                notes = null,
             )
 
             instance.apply {
+                notes = request.notes
                 position = request.position
                 updateSets(request.sets.map { setRequest ->
                     Sets(
@@ -126,11 +129,13 @@ class ExerciseInstanceService(
                 workoutTemplate = workoutTemplate,
                 workoutTemplateId = workoutTemplate.id,
                 workout = null,
-                workoutId = null
+                workoutId = null,
+                notes = null
             )
 
             instance.apply {
                 position = request.position
+                notes = request.notes
                 updateSets(request.sets.map { setRequest ->
                     Sets(
                         reps = setRequest.reps,
@@ -143,11 +148,13 @@ class ExerciseInstanceService(
             }
         }
 
-        val exercisesToRemove = existingInstances.values.filter { it.exercise.id !in exerciseRequests.map { req -> req.id } }
+        val exercisesToRemove =
+            existingInstances.values.filter { it.exercise.id !in exerciseRequests.map { req -> req.id } }
         exerciseInstanceRepository.deleteAll(exercisesToRemove)
 
         return exerciseInstanceRepository.saveAll(updatedInstances).toMutableList()
     }
+
     @Transactional
     fun updateExercisesForWorkout(
         exerciseRequests: List<WorkoutExerciseRequest>,
@@ -164,10 +171,12 @@ class ExerciseInstanceService(
                 workoutTemplate = null,
                 workoutTemplateId = null,
                 workout = workout,
-                workoutId = workout.id
+                workoutId = workout.id,
+                notes = null
             )
 
             instance.apply {
+                notes = request.notes
                 position = request.position
                 updateSets(request.sets.map { setRequest ->
                     Sets(
@@ -198,7 +207,8 @@ class ExerciseInstanceService(
                 workoutTemplate = null,
                 workoutTemplateId = null,
                 workout = workout,
-                workoutId = null
+                workoutId = null,
+                notes = instance.notes
             ).apply {
                 sets = instance.sets.map { set ->
                     Sets(
@@ -231,7 +241,8 @@ class ExerciseInstanceService(
                 workoutTemplate = null,
                 workoutTemplateId = null,
                 workout = workout,
-                workoutId = null
+                workoutId = null,
+                notes = null
             )
         }
 
@@ -291,5 +302,15 @@ class ExerciseInstanceService(
     @Transactional(readOnly = true)
     fun checkIfExercisesDifferentForWorkoutAndItsTemplate(workoutId: Long): Boolean {
         return exerciseInstanceRepository.areExerciseInstancesDifferentForWorkoutAndItsTemplate(workoutId)
+    }
+
+    @Transactional
+    fun updateNoteForExercise(workoutId: Long, exerciseId: Long, note: String?) {
+        val exerciseInstance = (exerciseInstanceRepository.findByWorkoutIdAndExerciseIdPlain(workoutId, exerciseId)
+            ?: throw ResourceNotFoundException("Exercise $exerciseId not found in the workout"))
+
+        exerciseInstance.notes = if (note.isNullOrEmpty()) null else note.trim()
+
+        exerciseInstanceRepository.save(exerciseInstance)
     }
 }

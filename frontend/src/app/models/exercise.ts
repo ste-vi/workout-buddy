@@ -9,6 +9,7 @@ export interface Exercise {
   category: ExerciseCategory;
   synced?: boolean;
   position?: number;
+  notes?: string;
 }
 
 export enum BodyPart {

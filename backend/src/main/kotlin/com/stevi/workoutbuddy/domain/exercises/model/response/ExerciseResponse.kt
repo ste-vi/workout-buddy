@@ -15,7 +15,8 @@ data class ExerciseResponse(
     val category: ExerciseCategory,
     var sets: List<SetsResponse> = emptyList(),
     var prSet: SetsResponse?,
-    var position: Short?
+    var position: Short?,
+    var notes: String?
 ) {
     companion object {
         fun fromEntity(entity: Exercise, prSet: PrSetProjection?): ExerciseResponse {
@@ -25,6 +26,7 @@ data class ExerciseResponse(
                 bodyPart = entity.bodyPart,
                 category = entity.category,
                 position = null,
+                notes = null,
                 prSet = prSet?.let { SetsResponse.fromPrSetProjection(it) },
             )
         }
@@ -40,6 +42,7 @@ data class ExerciseResponse(
                 bodyPart = instance.exercise.bodyPart,
                 category = instance.exercise.category,
                 position = instance.position,
+                notes = instance.notes,
                 sets = sets.map { SetsResponse.fromProjection(it) },
                 prSet = prSet?.let { SetsResponse.fromPrSetProjection(it) },
             )

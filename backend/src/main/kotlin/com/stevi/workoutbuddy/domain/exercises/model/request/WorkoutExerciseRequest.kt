@@ -15,6 +15,8 @@ data class WorkoutExerciseRequest(
     @NotNull(message = "Position is required")
     val position: Short,
 
+    val notes: String?,
+
     @field:Size(min = 1, message = "Sets list size must be at least 1")
     val sets: List<SetsRequest> = emptyList()
 )

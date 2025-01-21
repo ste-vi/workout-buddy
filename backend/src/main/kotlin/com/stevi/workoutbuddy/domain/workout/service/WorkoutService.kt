@@ -298,6 +298,12 @@ class WorkoutService(
         return WorkoutResponse.fromEntity(savedWorkout, instances, setProjections, prSetForExerciseMap)
     }
 
+    @Transactional
+    fun updateNotesForExercise(workoutId: Long, exerciseId: Long, note: String?, userId: Long) {
+        validateWorkoutExistenceForUser(workoutId, userId)
+        exerciseInstanceService.updateNoteForExercise(workoutId, exerciseId, note)
+    }
+
     private fun validateWorkoutExistenceForUser(workoutId: Long, userId: Long) {
         if (!workoutRepository.existsByIdAndUserId(workoutId, userId)) {
             throw ResourceNotFoundException("Workout not found")

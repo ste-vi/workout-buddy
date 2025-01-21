@@ -17,6 +17,9 @@ interface ExerciseInstanceRepository : JpaRepository<ExerciseInstance, Long> {
     @EntityGraph(attributePaths = ["exercise"])
     fun findByWorkoutIdAndExerciseId(workoutId: Long, exerciseId: Long): ExerciseInstance?
 
+    @Query("select ei from ExerciseInstance ei where ei.workout.id = :workoutId and ei.exercise.id = :exerciseId")
+    fun findByWorkoutIdAndExerciseIdPlain(workoutId: Long, exerciseId: Long): ExerciseInstance?
+
     @Query("select ei from ExerciseInstance ei join ei.sets s where ei.workout.id = :workoutId and s.id = :setId")
     fun findByWorkoutIdAndSetId(@Param("workoutId") workoutId: Long, @Param("setId") setId: Long): ExerciseInstance?
 
@@ -29,8 +32,7 @@ interface ExerciseInstanceRepository : JpaRepository<ExerciseInstance, Long> {
     @EntityGraph(attributePaths = ["exercise"])
     fun findAllByWorkoutIdIn(workoutId: List<Long>): List<ExerciseInstance>
 
-    @Query(
-        """
+    @Query("""
     select case 
         when count(w) != count(t) then true
         when exists (
@@ -49,7 +51,8 @@ interface ExerciseInstanceRepository : JpaRepository<ExerciseInstance, Long> {
                 and w.position = t.position 
                 and t.workoutTemplate.id = w.workout.templateId
             where w.workout.id = :workoutId
-                and (select count(ws) from w.sets ws) != (select count(ts) from t.sets ts)
+                and ((select count(ws) from w.sets ws) != (select count(ts) from t.sets ts)
+                    or coalesce(w.notes, '') != coalesce(t.notes, ''))
         ) then true
         else false
     end
@@ -58,5 +61,4 @@ interface ExerciseInstanceRepository : JpaRepository<ExerciseInstance, Long> {
     where w.workout.id = :workoutId
     """
     )
-    fun areExerciseInstancesDifferentForWorkoutAndItsTemplate(@Param("workoutId") workoutId: Long): Boolean
-}
+    fun areExerciseInstancesDifferentForWorkoutAndItsTemplate(@Param("workoutId") workoutId: Long): Boolean}

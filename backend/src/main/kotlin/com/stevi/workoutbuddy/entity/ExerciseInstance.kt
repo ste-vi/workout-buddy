@@ -20,6 +20,9 @@ class ExerciseInstance(
     @JoinColumn(name = "exercise_id")
     var exercise: Exercise,
 
+    @Column(columnDefinition = "text")
+    var notes: String?,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_template_id")
     var workoutTemplate: WorkoutTemplate?,

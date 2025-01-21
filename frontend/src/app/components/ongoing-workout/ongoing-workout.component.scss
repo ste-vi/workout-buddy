@@ -53,6 +53,49 @@
       overflow-y: hidden;
       overflow-x: hidden;
 
+      .exercise-note {
+        width: 100%;
+
+        .formatted-notes {
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          font-family: 'Poppins', sans-serif;
+        }
+
+        .edit-notes-container {
+          display: flex;
+          width: 100%;
+          flex-direction: row;
+          align-items: center;
+          gap: var(--m-size);
+          justify-content: end;
+
+          textarea {
+            width: 100%;
+            max-width: 100%;
+            resize: none;
+            font-size: var(--input-font-size);
+            font-family: 'Poppins', sans-serif;
+            border: 1px solid var(--gray-3);
+            outline: none;
+            padding: 0.4rem;
+            border-radius: 10px;
+            color: var(--gray-1);
+            flex-grow: 1;
+          }
+
+          .notes-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0.6rem;
+          }
+        }
+      }
+
       .exercise-sets {
         width: 100%;
         display: flex;
@@ -62,7 +105,7 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          padding-top: 0.28rem;
+          //padding-top: 0.28rem;
           padding-bottom: 0.28rem;
           animation: completed var(--animation-duration) cubic-bezier(0.35, 0, 0.25, 1);
 

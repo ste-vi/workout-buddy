@@ -70,7 +70,7 @@
                                  (click)="openExerciseMenu($event, exercise)"></app-action-button>
             </div>
             <div class="lower-section gray-1-color s-text">
-              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }}| {{ getCategoryDisplayName(exercise.category) }}
+              <div>{{ getBodyPartDisplayName(exercise.bodyPart) }} | {{ getCategoryDisplayName(exercise.category) }}
               </div>
               <div class="pr-set" *ngIf="exercise.prSet">
                 <mat-icon svgIcon="cup" class="pr-set-icon"></mat-icon>
@@ -78,6 +78,19 @@
                   {{ exercise.prSet.weight }} kg * {{ exercise.prSet.reps }}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exercise-note s-text gray-1-color" *ngIf="exercise.notes || isEditingNotes(exercise)">
+          <ng-container *ngIf="!isEditingNotes(exercise)">
+            <pre *ngIf="exercise.notes" class="formatted-notes">{{ exercise.notes }}</pre>
+          </ng-container>
+          <div *ngIf="isEditingNotes(exercise)" class="edit-notes-container">
+            <textarea #notesInput [value]="exercise.notes || ''" class="notes-textarea s-text" rows="3"></textarea>
+            <div class="notes-actions">
+              <app-header-button icon="check" [iconClasses]="['s-svg-icon-important']" (click)="saveNotes(exercise, notesInput.value)"></app-header-button>
+              <app-header-button icon="close" (click)="cancelEditNotes()"></app-header-button>
             </div>
           </div>
         </div>

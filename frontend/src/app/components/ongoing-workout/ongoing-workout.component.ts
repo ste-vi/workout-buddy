@@ -78,6 +78,7 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   private setToDelete: Sets | undefined = undefined;
   private exerciseToDelete: any;
   private exerciseToReplace: any;
+  private exerciseToEditNotes: any;
 
   @ViewChild('deleteSetConfirmationModal')
   deleteSetConfirmationModal!: ConfirmationModalComponent;
@@ -220,7 +221,7 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
   private doFinishWorkout() {
     this.ongoingWorkout!.calculateTotalWeight();
 
-   let totalWeight = this.ongoingWorkout!.totalWeight;
+    let totalWeight = this.ongoingWorkout!.totalWeight;
     if (totalWeight === 0) {
       totalWeight = undefined;
     }
@@ -234,7 +235,10 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
         this.ongoingWorkout!.totalWeight = totalWeight;
         this.ongoingWorkout!.endTime = completionResponse.endTime;
 
-        this.completedWorkoutModalService.openModal(this.ongoingWorkout!, completionResponse);
+        this.completedWorkoutModalService.openModal(
+          this.ongoingWorkout!,
+          completionResponse,
+        );
 
         setTimeout(() => {
           this.close();
@@ -336,6 +340,20 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
         icon: 'delete',
         action: () => this.openDeleteSetsMode(exercise),
       },
+      {
+        label: exercise.notes ? 'Edit note' : 'Add note',
+        icon: 'edit',
+        action: () => this.editNotes(exercise),
+      },
+      ...(exercise.notes
+        ? [
+            {
+              label: 'Delete note',
+              icon: 'clipboard-remove',
+              action: () => this.deleteNotes(exercise),
+            },
+          ]
+        : []),
     ];
 
     this.exerciseMenu.show({
@@ -568,6 +586,40 @@ export class OngoingWorkoutComponent implements OnInit, OnDestroy {
     if (confirmed) {
       this.doFinishWorkout();
     }
+  }
+
+  editNotes(exercise: Exercise) {
+    this.exerciseToEditNotes = exercise.id;
+  }
+
+  saveNotes(exercise: Exercise, newNotes: string) {
+    exercise.notes = newNotes;
+    this.workoutService
+      .updateNotesForExercise(
+        this.ongoingWorkout!.id!,
+        exercise.id!,
+        exercise.notes,
+      )
+      .subscribe(() => {
+        this.exerciseToEditNotes = null;
+      });
+  }
+
+  cancelEditNotes() {
+    this.exerciseToEditNotes = null;
+  }
+
+  isEditingNotes(exercise: Exercise): boolean {
+    return this.exerciseToEditNotes === exercise.id;
+  }
+
+  private deleteNotes(exercise: Exercise) {
+    this.workoutService
+      .updateNotesForExercise(this.ongoingWorkout!.id!, exercise.id!, null)
+      .subscribe(() => {
+        this.exerciseToEditNotes = null;
+        exercise.notes = undefined;
+      });
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;
