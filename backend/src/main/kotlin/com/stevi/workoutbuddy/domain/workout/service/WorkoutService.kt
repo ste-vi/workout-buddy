@@ -12,6 +12,7 @@ import com.stevi.workoutbuddy.domain.tag.service.TagService
 import com.stevi.workoutbuddy.domain.workout.model.request.WorkoutUpdateRequest
 import com.stevi.workoutbuddy.domain.workout.model.response.LastPerformedWorkout
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutCompletionResponse
+import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutHistoryPreview
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutResponse
 import com.stevi.workoutbuddy.domain.workout.specification.WorkoutSpecification
 import com.stevi.workoutbuddy.entity.Workout
@@ -302,6 +303,10 @@ class WorkoutService(
     fun updateNotesForExercise(workoutId: Long, exerciseId: Long, note: String?, userId: Long) {
         validateWorkoutExistenceForUser(workoutId, userId)
         exerciseInstanceService.updateNoteForExercise(workoutId, exerciseId, note)
+    }
+
+    fun getWorkoutHistoryPreviews(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<WorkoutHistoryPreview> {
+        return workoutRepository.findWorkoutHistoryPreviewsByUserIdAndDateRange(userId, startDate, endDate)
     }
 
     private fun validateWorkoutExistenceForUser(workoutId: Long, userId: Long) {

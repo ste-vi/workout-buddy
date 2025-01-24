@@ -10,6 +10,7 @@ import { WorkoutTemplate } from '../../models/workout-template';
 import { WorkoutCompletionResponse } from '../../models/workout-completion-response';
 import { WorkoutTemplatePreview } from '../../models/workout-template-preview';
 import { tap } from 'rxjs/operators';
+import {WorkoutHistoryPreview} from "../../models/workout-history-preview";
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +46,8 @@ export class WorkoutService {
   }
 
   updateWorkout(workout: Workout): Observable<Workout> {
-    return this.http.put<Workout>(`${this.apiUrl}/${workout.id}`, workout);
+    return this.http.put<Workout>(`${this.apiUrl}/${workout.id}`, workout)
+      .pipe(tap(() => this.refreshData()));
   }
 
   deleteWorkout(workoutId: number): Observable<void> {
@@ -202,5 +204,13 @@ export class WorkoutService {
       params = params.set('notes', notes);
     }
     return this.http.put<void>(url, null, { params });
+  }
+
+  getWorkoutHistoryPreviews(startDate: Date, endDate: Date): Observable<WorkoutHistoryPreview[]> {
+    const params = new HttpParams()
+      .set('startDate', startDate.toISOString())
+      .set('endDate', endDate.toISOString());
+
+    return this.http.get<WorkoutHistoryPreview[]>(`${this.apiUrl}/history-previews`, { params });
   }
 }

@@ -21,7 +21,7 @@ interface WorkoutTemplateRepository : JpaRepository<WorkoutTemplate, Long> {
     fun findByIdAndUserIdWithTags(@Param("id") id: Long, @Param("userId") userId: Long): WorkoutTemplate?
 
     // temp for now
-    fun findFirstByUserIdOrderByIdDesc(userId: Long): WorkoutTemplate?
+    fun findFirstByUserIdAndArchivedIsFalseOrderByIdDesc(userId: Long): WorkoutTemplate?
 
     @Query(
         """

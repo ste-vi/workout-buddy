@@ -1,0 +1,40 @@
+<div class="modal-overlay" (click)="close()" *ngIf="isOpen" [@fadeInOut]></div>
+<div class="workout-history-preview-modal black-color" *ngIf="isOpen" [@dialogOpenClose]>
+  <div class="workout-history-preview-modal-header l-text semi-bold">
+    Workouts of {{ day | date:'MMMM dd' }}
+  </div>
+  <div class="workout-history-preview-modal-body s-text">
+    <div class="workout-history-preview blue-shadow primary-background" *ngFor="let preview of workoutHistoryPreviews">
+      <div class="workout-history-preview-header">
+        <div class="m-text semi-bold white-color">{{ preview.title }}</div>
+      </div>
+      <div class="workout-history-preview-body s-text white-color">
+        <div class="workout-details">
+          <div>
+            <span>{{ preview.getWorkoutDuration() + ' min' }} | </span>
+            <span>{{ preview.totalWeight }} kg | </span>
+            <span>{{ preview.prReps }} PRs</span>
+          </div>
+        </div>
+        <div class="workout-details-time caption">
+          <mat-icon svgIcon="clock" class="workout-details-icon"></mat-icon>
+          <div> {{ preview.startTime | date: 'hh:mm' }} - {{ preview.endTime | date: 'hh:mm' }}</div>
+        </div>
+      </div>
+      <div class="workout-history-preview-footer">
+        <app-medium-button [classes]="['white-background', 'black-color']"
+                           [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                           name="View details"
+                           (click)="openWorkoutHistoryDetails(preview)"></app-medium-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="workout-history-preview-modal-footer">
+    <app-medium-button [classes]="['white-background', 'black-color']"
+                       [textClasses]="['primary-background', 'primary-background-text', 'semi-bold']"
+                       name="Close"
+                       (click)="close()"></app-medium-button>
+  </div>
+
+</div>

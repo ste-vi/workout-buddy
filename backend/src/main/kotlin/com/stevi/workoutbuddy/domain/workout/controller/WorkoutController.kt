@@ -8,6 +8,7 @@ import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
 import com.stevi.workoutbuddy.domain.workout.model.request.WorkoutUpdateRequest
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutCompletionResponse
+import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutHistoryPreview
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutResponse
 import com.stevi.workoutbuddy.domain.workout.service.WorkoutService
 import com.stevi.workoutbuddy.security.SecurityUtil
@@ -193,6 +194,15 @@ class WorkoutController(private val workoutService: WorkoutService) {
     ): WorkoutResponse {
         val userId = SecurityUtil.getCurrentUserId()
         return workoutService.updateWorkout(userId, id, request)
+    }
+
+    @GetMapping("/history-previews")
+    @ResponseStatus(HttpStatus.OK)
+    fun getWorkoutHistoryPreviews(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) startDate: LocalDateTime,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) endDate: LocalDateTime
+    ): List<WorkoutHistoryPreview> {
+        return workoutService.getWorkoutHistoryPreviews(SecurityUtil.getCurrentUserId(), startDate, endDate)
     }
 
 }

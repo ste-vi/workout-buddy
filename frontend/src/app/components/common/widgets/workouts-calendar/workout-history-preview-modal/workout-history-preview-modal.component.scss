@@ -1,0 +1,120 @@
+.workout-history-preview-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  max-width: 30rem;
+  max-height: 90vh;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+
+  .workout-history-preview-modal-header {
+    text-align: center;
+    padding: var(--m-size);
+    padding-bottom: 0;
+  }
+
+  .workout-history-preview-modal-footer {
+    padding: var(--m-size);
+  }
+
+  .workout-history-preview-modal-body {
+    width: 100%;
+    padding: var(--m-size);
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .workout-history-preview {
+      display: flex;
+      flex-direction: column;
+      margin-top: var(--m-size);
+      padding: var(--m-size);
+      border-radius: 20px;
+
+      .workout-history-preview-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .workout-history-preview-body {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+
+        .workout-details {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          justify-content: space-between;
+        }
+
+        .workout-details-time {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: start;
+          width: 100%;
+          margin-left: -5px;
+
+          .workout-details-icon {
+            scale: 0.59;
+          }
+        }
+      }
+
+      .workout-history-preview-footer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: end;
+        gap: 1rem;
+        padding-top: 0.5rem;
+        flex-wrap: wrap;
+
+        app-medium-button {
+          width: 7.2rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .workout-history-preview-modal {
+    width: 95%;
+
+    .workout-history-preview-modal-body {
+      .workout-history-preview {
+        padding: 0.8rem;
+
+        .workout-history-preview-footer {
+          justify-content: center;
+
+          app-medium-button {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

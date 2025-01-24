@@ -5,9 +5,9 @@
   <div class="workout-history-widget-body s-text white-color">
     <div class="last-workout-details">
       <div>
-        <span>{{ workout.prReps }} PRs | </span>
+        <span>{{ workout.getWorkoutDuration() + ' min'}} | </span>
         <span>{{ workout.totalWeight }} kg | </span>
-        <span>{{ workout.getWorkoutDuration() + ' min'}}</span>
+        <span>{{ workout.prReps }} PRs</span>
       </div>
     </div>
     <div class="last-workout-time caption">

@@ -10,6 +10,8 @@
     </ng-container>
     <ng-container *ngIf="!isEditView">
       <app-header-button icon="left-arrow" (click)="closeModal()"></app-header-button>
+      <div>{{ workout.startTime | date:'hh:mm' }}
+        - {{ workout.endTime | date:'hh:mm' }}</div>
       <app-header-button icon="two-dots" (click)="openWorkoutContainerMenu($event)"></app-header-button>
     </ng-container>
   </div>
@@ -78,7 +80,7 @@
             </div>
 
             <div class="exercise-note s-text gray-1-color" *ngIf="exercise.notes">
-                <pre *ngIf="exercise.notes" class="formatted-notes">{{ exercise.notes }}</pre>
+              <pre *ngIf="exercise.notes" class="formatted-notes">{{ exercise.notes }}</pre>
             </div>
 
             <div class="exercise-sets s-text">
@@ -217,7 +219,8 @@
               <div *ngIf="isEditingNotes(exercise)" class="edit-notes-container">
                 <textarea #notesInput [value]="exercise.notes || ''" class="notes-textarea s-text" rows="3"></textarea>
                 <div class="notes-actions">
-                  <app-header-button icon="check" [iconClasses]="['s-svg-icon-important']" (click)="saveNotes(exercise, notesInput.value)"></app-header-button>
+                  <app-header-button icon="check" [iconClasses]="['s-svg-icon-important']"
+                                     (click)="saveNotes(exercise, notesInput.value)"></app-header-button>
                   <app-header-button icon="close" (click)="cancelEditNotes()"></app-header-button>
                 </div>
               </div>

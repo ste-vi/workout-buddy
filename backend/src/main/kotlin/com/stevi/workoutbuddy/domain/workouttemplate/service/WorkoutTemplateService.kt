@@ -26,7 +26,7 @@ class WorkoutTemplateService(
     @Transactional(readOnly = true)
     fun getSuggestedWorkoutTemplate(userId: Long): WorkoutTemplateResponse? {
         // todo: implement recommendation logic
-        val template = workoutTemplateRepository.findFirstByUserIdOrderByIdDesc(userId)
+        val template = workoutTemplateRepository.findFirstByUserIdAndArchivedIsFalseOrderByIdDesc(userId)
         return template?.let {
             val exerciseInstances = exerciseInstanceService.getExercisesForWorkoutTemplate(template.id)
             val exerciseIds = exerciseInstances.map { ex -> ex.exercise.id }

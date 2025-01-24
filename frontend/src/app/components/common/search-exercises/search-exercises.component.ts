@@ -1,7 +1,7 @@
 import {
   Component,
   EventEmitter,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -32,6 +32,7 @@ import { collapseEnter } from '../../../animations/collapse-enter';
 import { ConfirmationModalComponent } from '../modal/confirmation-modal/confirmation-modal.component';
 import { CreateExerciseModalComponent } from '../modal/create-exercise-modal/create-exercise-modal.component';
 import { ActionButtonComponent } from '../action-button/action-button.component';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-exercises',
@@ -54,7 +55,7 @@ import { ActionButtonComponent } from '../action-button/action-button.component'
   styleUrl: './search-exercises.component.scss',
   animations: [fadeInOut, sideModalOpenClose, collapse, collapseEnter],
 })
-export class SearchExercisesComponent implements OnInit {
+export class SearchExercisesComponent implements OnInit, OnDestroy {
   protected isOpen: boolean = false;
 
   protected isAddModal: boolean = false;
@@ -79,6 +80,8 @@ export class SearchExercisesComponent implements OnInit {
 
   private exerciseToDelete: Exercise | undefined = undefined;
 
+  private subscriptions: Subscription[] = [];
+
   @ViewChild('bodyPartSelectionMenu')
   bodyPartSelectionMenu!: SelectionMenuComponent;
 
@@ -97,9 +100,10 @@ export class SearchExercisesComponent implements OnInit {
   constructor(private exerciseService: ExerciseService) {}
 
   ngOnInit(): void {
-    this.exerciseService.dataChanged$.subscribe(() => {
+    let subscription = this.exerciseService.dataChanged$.subscribe(() => {
       this.loadExercises(true);
     });
+    this.subscriptions.push(subscription);
   }
 
   show(
@@ -318,6 +322,10 @@ export class SearchExercisesComponent implements OnInit {
         });
     }
     this.exerciseToDelete = undefined;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   protected readonly getBodyPartDisplayName = getBodyPartDisplayName;

@@ -1,0 +1,28 @@
+<div class="card-shadow workout-calendar-card">
+  <div class="workout-calendar-card-header">
+    <div class="m-text semi-bold">
+      {{ currentMonth | date:'MMMM yyyy' }}
+    </div>
+    <div class="actions m-text gray-1-color">
+      <app-action-button icon='left-arrow-2' iconClasses="s-svg-icon primary"
+                         title="Previous month" (click)="prevMonth()"></app-action-button>
+      <app-action-button icon='right-arrow' iconClasses="s-svg-icon primary"
+                         title="Next Month" (click)="nextMonth()"></app-action-button>
+    </div>
+  </div>
+  <div class="workout-calendar-card-body">
+    <div class="workout-calendar s-text">
+      <div class="calendar-grid">
+        <div *ngFor="let day of daysOfWeek" class="day-header semi-bold gray-1-color">{{ day }}</div>
+        <div *ngFor="let day of calendarDays" class="day-cell"
+             [class.workout-day]="hasWorkout(day)"
+             [class.current-month]="day.getMonth() === currentMonth.getMonth()"
+             [class.current-day]="isCurrentDay(day)" (click)="openViewModal(day)">
+          {{ day.getDate() }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-workout-history-preview-modal #workoutHistoryPreviewModal></app-workout-history-preview-modal>
+</div>

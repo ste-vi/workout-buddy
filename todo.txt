@@ -5,7 +5,6 @@
 - Init user profile
 - Add CRU for user metrics
 - Add db migrations
-- Add calendar widget
 
 // far
 implement DB backups

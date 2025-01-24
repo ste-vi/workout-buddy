@@ -1,12 +1,13 @@
 <div class="card-shadow weight-card">
   <div class="weight-card-header">
     <div class="current-weight m-text">
-      <b>Body Weight : </b>
+      <span class="semi-bold">Body Weight: </span>
       <span class="semi-bold primary">{{ currentWeightMeasure?.value + ' kg' }}</span>
     </div>
     <div class="actions m-text gray-1-color">
-      <div class="clickable primary-2" (click)="track()">Track</div>
-      <div class="clickable" (click)="openBodyWeightMeasuresPage()">History</div>
+      <mat-icon svgIcon="add-circle" class="clickable primary m-svg-icon" (click)="track()" title="Track"></mat-icon>
+      <mat-icon svgIcon="library" class="clickable primary m-svg-icon" (click)="openBodyWeightMeasuresPage()"
+                title="History"></mat-icon>
     </div>
   </div>
   <div class="weight-trend-area-chart" *ngIf="series.length > 1">

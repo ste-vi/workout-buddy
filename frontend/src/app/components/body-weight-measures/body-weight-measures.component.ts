@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HeaderButtonComponent } from '../common/header-button/header-button.component';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { BodyWeightMeasuresService } from '../../services/communication/body-weight-measures.service';
@@ -20,8 +20,8 @@ import * as shape from 'd3-shape';
 import { ChartDataSet } from '../common/widgets/body-weight-trend-widget/body-weight-trend-widget.component';
 import { UpdateWeightModalComponent } from '../common/modal/update-weight-modal/update-weight-modal.component';
 import { ConfirmationModalComponent } from '../common/modal/confirmation-modal/confirmation-modal.component';
-import {interval, startWith, Subscription} from "rxjs";
-import {switchMap} from "rxjs/operators";
+import { interval, startWith, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-body-weight-measures',
@@ -41,7 +41,7 @@ import {switchMap} from "rxjs/operators";
   styleUrl: './body-weight-measures.component.scss',
   animations: [fadeInOut, sideModalOpenClose, collapseEnter],
 })
-export class BodyWeightMeasuresComponent implements OnInit {
+export class BodyWeightMeasuresComponent implements OnInit, OnDestroy {
   protected isOpen: boolean = false;
 
   protected measures: BodyWeightMeasure[] = [];
@@ -53,6 +53,8 @@ export class BodyWeightMeasuresComponent implements OnInit {
   protected sortOrder: SortOrder = SortOrder.DESC;
 
   protected readonly SortOrder = SortOrder;
+
+  private subscriptions: Subscription[] = [];
 
   readonly curve = shape.curveBasis;
   dataset: ChartDataSet[] = [];
@@ -69,20 +71,24 @@ export class BodyWeightMeasuresComponent implements OnInit {
     private bodyWeightMeasuresService: BodyWeightMeasuresService,
     private bodyWeightService: BodyWeightService,
   ) {
-    this.bodyWeightService.dataChanged$.subscribe(() => {
-      this.loadMeasures();
-    });
+    this.subscriptions.push(
+      this.bodyWeightService.dataChanged$.subscribe(() => {
+        this.loadMeasures();
+      }),
+    );
   }
 
   ngOnInit(): void {
-    this.bodyWeightMeasuresService.modalOpened$.subscribe(() => {
-      this.currentPage = 0;
-      this.measures = [];
+    this.subscriptions.push(
+      this.bodyWeightMeasuresService.modalOpened$.subscribe(() => {
+        this.currentPage = 0;
+        this.measures = [];
 
-      this.loadMeasures();
+        this.loadMeasures();
 
-      this.isOpen = true;
-    });
+        this.isOpen = true;
+      }),
+    );
   }
 
   onSwipeRight() {
@@ -98,7 +104,7 @@ export class BodyWeightMeasuresComponent implements OnInit {
       .searchBodyWeightMeasures(
         this.currentPage,
         this.itemsPerPage,
-        this.sortOrder
+        this.sortOrder,
       )
       .subscribe((pageResponse) => {
         if (search) {
@@ -193,5 +199,9 @@ export class BodyWeightMeasuresComponent implements OnInit {
   delete(measure: BodyWeightMeasure) {
     this.measureToDelete = measure;
     this.deleteWeightConfirmationModal.show('This action cannot be undone');
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

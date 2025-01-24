@@ -90,7 +90,7 @@ body {
 }
 
 .black-color {
-  color: var(--black-color);
+  color: var(--black);
 }
 
 .white-color {
@@ -463,5 +463,16 @@ input:focus::placeholder {
   50% {
     transform: scale(1.05);
     opacity: 0.9;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }

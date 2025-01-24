@@ -75,6 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('warning', this.setIconPath(`${this.iconsPath}/warning.svg`))
       .addSvgIcon('clipboard-remove', this.setIconPath(`${this.iconsPath}/clipboard-remove.svg`))
+      .addSvgIcon('library', this.setIconPath(`${this.iconsPath}/library.svg`))
       .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`))
       .addSvgIcon('edit', this.setIconPath(`${this.iconsPath}/edit.svg`))
       .addSvgIcon('search', this.setIconPath(`${this.iconsPath}/search.svg`))

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   AreaChartModule,
   Color,
@@ -8,11 +8,12 @@ import {
 import * as shape from 'd3-shape';
 import { BodyWeightService } from '../../../../services/api/body-weight.service';
 import { BodyWeightMeasuresService } from '../../../../services/communication/body-weight-measures.service';
-import {BodyWeightMeasuresComponent} from "../../../body-weight-measures/body-weight-measures.component";
-import {NgIf} from "@angular/common";
-import {BodyWeightMeasure} from "../../../../models/body-weight-measure";
-import {UpdateWeightModalComponent} from "../../modal/update-weight-modal/update-weight-modal.component";
-import {TagsModalComponent} from "../../modal/tags-modal/tags-modal.component";
+import { BodyWeightMeasuresComponent } from '../../../body-weight-measures/body-weight-measures.component';
+import { NgIf } from '@angular/common';
+import { BodyWeightMeasure } from '../../../../models/body-weight-measure';
+import { UpdateWeightModalComponent } from '../../modal/update-weight-modal/update-weight-modal.component';
+import { MatIcon } from '@angular/material/icon';
+import {Subscription} from "rxjs";
 
 export interface ChartDataSet {
   name: string;
@@ -27,16 +28,18 @@ export interface ChartDataSet {
     BodyWeightMeasuresComponent,
     NgIf,
     UpdateWeightModalComponent,
+    MatIcon,
   ],
   templateUrl: './body-weight-trend-widget.component.html',
   styleUrl: './body-weight-trend-widget.component.scss',
 })
-export class BodyWeightTrendWidgetComponent implements OnInit {
+export class BodyWeightTrendWidgetComponent implements OnInit, OnDestroy {
   protected readonly curve = shape.curveBasis;
   protected dataset: ChartDataSet[] = [];
   protected series: DataItem[] = [];
   protected minYValue = 40;
   protected currentWeightMeasure: BodyWeightMeasure | undefined;
+  private subscriptions: Subscription[] = [];
 
   @ViewChild('updateWeightModal')
   updateWeightModal!: UpdateWeightModalComponent;
@@ -44,17 +47,19 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
   constructor(
     private bodyWeightService: BodyWeightService,
     private bodyWeightMeasuresService: BodyWeightMeasuresService,
-  ) {}
+  ) {
+    let subscription = this.bodyWeightService.dataChanged$.subscribe(() => {
+      this.loadLast5Measures();
+    });
+    this.subscriptions.push(subscription);
+  }
 
   ngOnInit(): void {
     this.loadLast5Measures();
-    this.bodyWeightService.dataChanged$.subscribe(() => {
-      this.loadLast5Measures();
-    });
   }
 
   private loadLast5Measures() {
-    this.bodyWeightService
+    let subscription = this.bodyWeightService
       .getLast5BodyWeightMeasures()
       .subscribe((measures) => {
         if (measures.length === 0) {
@@ -65,6 +70,7 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
         this.currentWeightMeasure = measures[0];
         this.updateChartData(measures);
       });
+    this.subscriptions.push(subscription);
   }
 
   private updateChartData(measures: BodyWeightMeasure[]): void {
@@ -112,5 +118,9 @@ export class BodyWeightTrendWidgetComponent implements OnInit {
 
   track() {
     this.updateWeightModal.show(undefined, this.currentWeightMeasure?.value);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
