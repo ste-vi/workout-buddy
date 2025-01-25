@@ -1,0 +1,12 @@
+<div class="input-container m-text">
+  <div class="icon-left-container">
+    <mat-icon *ngIf="leftIcon"
+              class="icon-left m-svg-icon"
+              [ngClass]="{'gray-1-color': !hasInput, 'filled-icon': hasInput}"
+              [svgIcon]="leftIcon"></mat-icon>
+  </div>
+  <input [type]="type" [placeholder]="placeholder" [autocomplete]="autocomplete" [value]="value"
+         (input)="onInput($event)">
+  <mat-icon *ngIf="rightIcon" class="icon-right gray-1-color" [svgIcon]="rightIcon"
+            (click)="onRightIconClick()"></mat-icon>
+</div>

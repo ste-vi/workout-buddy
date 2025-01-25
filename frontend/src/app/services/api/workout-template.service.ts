@@ -16,7 +16,6 @@ export class WorkoutTemplateService {
   private suggestedWorkoutTemplateSubject = new BehaviorSubject<WorkoutTemplate | undefined>(undefined);
 
   constructor(private http: HttpClient) {
-    this.refreshData();
   }
 
   private refreshData() {

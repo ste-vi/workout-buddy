@@ -1,0 +1,46 @@
+<div class="login-container  black-color">
+  <div class="login-container-header">
+    <div class="m-text">Hey there,</div>
+    <h4>Welcome back</h4>
+  </div>
+
+  <form [formGroup]="loginForm" #loginFormElement class="login-container-body">
+    <app-icon-input leftIcon="email" placeholder="Email"
+                    [formControlName]="'email'">
+    </app-icon-input>
+    <div *ngIf="isSubmitted && loginForm.get('email')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Email is invalid
+    </div>
+    <app-icon-input leftIcon="password"
+                    [rightIcon]="passwordVisibilityIcon"
+                    placeholder="Password"
+                    [type]="passwordInputType"
+                    [formControlName]="'password'"
+                    autocomplete="current-password"
+                    (rightIconClick)="togglePasswordVisibility()">
+    </app-icon-input>
+    <div *ngIf="isSubmitted && loginForm.get('password')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Password is required
+    </div>
+
+    <div class="s-text underline gray-1-color clickable" (click)="forgotPassword()">Forgot your password?</div>
+
+    <app-toast #errorToast></app-toast>
+  </form>
+  <div class="login-container-footer">
+    <app-button type="submit" name="Login" iconBefore="login"
+                [textClasses]="['white-color', 'semi-bold']"
+                (click)="login()">
+    </app-button>
+    <div class="divider s-text">Or</div>
+    <div class="social" (click)="googleLogin()">
+      <app-social-button icon="google"></app-social-button>
+    </div>
+
+    <div class="m-text centered-text card-padding-top">
+      Don't have an account yet? <span class="clickable semi-bold secondary-1" (click)="register()">Register</span>
+    </div>
+  </div>
+</div>

@@ -20,7 +20,6 @@ export class WorkoutService {
   private lastPerformedWorkoutSubject = new BehaviorSubject<Workout | undefined>(undefined);
 
   constructor(private http: HttpClient) {
-    this.refreshData();
   }
 
   private refreshData() {

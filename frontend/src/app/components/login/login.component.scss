@@ -1,0 +1,81 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  padding: var(--l-size) 0;
+  gap: var(--l-size);
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    display: none;
+  }
+
+  .login-container-header {
+    text-align: center;
+    padding: 0 var(--l-size);
+  }
+
+  .login-container-body {
+    flex-grow: 1;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--m-size);
+    padding: 0 var(--l-size);
+
+    app-icon-input, app-toast {
+      width: 100%;
+    }
+  }
+
+  .login-container-footer {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--m-size);
+    padding: 0 var(--l-size);
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--gray-1);
+
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid var(--gray-1);
+      }
+
+      &::before {
+        margin-right: 10px;
+      }
+
+      &::after {
+        margin-left: 10px;
+      }
+    }
+
+    .social {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .error-message {
+    text-align: left;
+    padding-left: 3rem;
+    width: 100%;
+    color: var(--danger);
+  }
+}

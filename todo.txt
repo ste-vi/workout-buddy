@@ -1,9 +1,11 @@
-- Add duration sets
-- Add offline access to workout and templates operations
-- Add login
+- Fix login height issue on ios
 - Add auth
+- Add error popup for exceptions from BE
 - Init user profile
 - Add CRU for user metrics
+- Fix PR sets calculation
+- Add duration sets
+- Add offline access to workout and templates operations
 - Add db migrations
 
 // far

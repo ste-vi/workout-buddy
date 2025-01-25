@@ -13,6 +13,7 @@ import { NgIf } from '@angular/common';
 export class NavbarComponent implements OnInit {
   protected currentPage: string = 'dashboard';
   protected isStandalone: boolean = false;
+  protected showForPage: boolean = true;
 
   constructor(private router: Router) {}
 
@@ -23,6 +24,11 @@ export class NavbarComponent implements OnInit {
         const path = currentUrl.split('/').pop();
         if (path) {
           this.currentPage = path;
+          if (path === 'login') {
+            this.showForPage = false;
+          } else {
+            this.showForPage = true;
+          }
         }
       }
     });
