@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { NavigationEnd, Router } from '@angular/router';
 import { NgIf } from '@angular/common';
+import {excludedRoutes} from "../../../app.routes";
 
 @Component({
   selector: 'app-navbar',
@@ -24,11 +25,10 @@ export class NavbarComponent implements OnInit {
         const path = currentUrl.split('/').pop();
         if (path) {
           this.currentPage = path;
-          if (path === 'login') {
-            this.showForPage = false;
-          } else {
-            this.showForPage = true;
-          }
+          const isExcludedRoute = excludedRoutes.some((route) =>
+            this.router.url.startsWith(route),
+          );
+          this.showForPage = !isExcludedRoute;
         }
       }
     });

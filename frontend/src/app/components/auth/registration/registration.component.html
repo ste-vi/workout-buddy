@@ -1,0 +1,63 @@
+<div class="registration-container  black-color" [@fadeInOut]>
+  <div class="registration-container-header">
+    <div class="m-text">Hey there,</div>
+    <h4>Create an account</h4>
+  </div>
+
+  <form [formGroup]="registrationForm" #registrationFormElement class="registration-container-body">
+    <app-icon-input leftIcon="user" placeholder="Username"
+                    [formControlName]="'username'">
+    </app-icon-input>
+    <div *ngIf="isSubmitted && registrationForm.get('username')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Username is required
+    </div>
+    <app-icon-input leftIcon="email" placeholder="Email"
+                    [formControlName]="'email'">
+    </app-icon-input>
+    <div *ngIf="isSubmitted && registrationForm.get('email')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Email is invalid
+    </div>
+    <app-icon-input leftIcon="password"
+                    [rightIcon]="passwordVisibilityIcon"
+                    placeholder="Password"
+                    [type]="passwordInputType"
+                    [formControlName]="'password'"
+                    autocomplete="current-password"
+                    (rightIconClick)="togglePasswordVisibility()">
+    </app-icon-input>
+    <div *ngIf="isSubmitted && registrationForm.get('password')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Password is required
+    </div>
+    <app-icon-input leftIcon="password"
+                    [rightIcon]="confirmPasswordVisibilityIcon"
+                    placeholder="Confirm password"
+                    [type]="confirmPasswordInputType"
+                    [formControlName]="'confirmPassword'"
+                    autocomplete="current-password"
+                    (rightIconClick)="toggleConfirmPasswordVisibility()">
+    </app-icon-input>
+    <div *ngIf="isSubmitted && registrationForm.get('confirmPassword')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Confirm password does not match password
+    </div>
+
+    <app-toast #errorToast></app-toast>
+  </form>
+  <div class="registration-container-footer">
+    <app-button type="submit" name="Register"
+                [textClasses]="['white-color', 'semi-bold']"
+                (click)="register()">
+    </app-button>
+    <div class="divider s-text">Or</div>
+    <div class="social" (click)="googleSignUp()">
+      <app-social-button icon="google"></app-social-button>
+    </div>
+
+    <div class="m-text centered-text card-padding-top">
+      Already have an account? <span class="clickable semi-bold secondary-1" (click)="login()">Login</span>
+    </div>
+  </div>
+</div>

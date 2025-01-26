@@ -1,14 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ButtonComponent } from '../common/button/button.component';
-import { SocialButtonComponent } from '../common/social-button/social-button.component';
-import { IconInputComponent } from '../common/icon-input/icon-input.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { collapse } from '../../animations/collapse';
-import { AuthService } from '../auth/auth-service';
 import { Router } from '@angular/router';
-import {ToastComponent} from "../common/toast/toast.component";
+import { IconInputComponent } from '../../common/icon-input/icon-input.component';
+import { ToastComponent } from '../../common/toast/toast.component';
+import { ButtonComponent } from '../../common/button/button.component';
+import { SocialButtonComponent } from '../../common/social-button/social-button.component';
+import { collapse } from '../../../animations/collapse';
+import {AuthService} from "../auth-service";
+import {fadeInOut} from "../../../animations/fade-in-out";
 
 @Component({
   selector: 'app-login',
@@ -20,10 +25,14 @@ import {ToastComponent} from "../common/toast/toast.component";
     ReactiveFormsModule,
     NgIf,
     ToastComponent,
+    IconInputComponent,
+    ToastComponent,
+    ButtonComponent,
+    SocialButtonComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  animations: [collapse],
+  animations: [collapse, fadeInOut],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
@@ -78,5 +87,7 @@ export class LoginComponent implements OnInit {
 
   forgotPassword() {}
 
-  register() {}
+  register() {
+    this.router.navigate(['/register']).then();
+  }
 }

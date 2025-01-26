@@ -4,13 +4,20 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { StartWorkoutComponent } from './components/start-workout/start-workout.component';
 import { WorkoutHistoryComponent } from './components/workout-history/workout-history.component';
 import { ProgressComponent } from './components/progress/progress.component';
-import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './components/auth/auth-guard';
+import {LoginComponent} from "./components/auth/login/login.component";
+import {RegistrationComponent} from "./components/auth/registration/registration.component";
+
+export const excludedRoutes = ['/login', '/register'];
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegistrationComponent,
   },
   {
     path: 'dashboard',

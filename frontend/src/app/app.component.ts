@@ -142,6 +142,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.setIconPath(`${this.iconsPath}/statistics.svg`),
       )
       .addSvgIcon('persona', this.setIconPath(`${this.iconsPath}/persona.svg`))
+      .addSvgIcon('user', this.setIconPath(`${this.iconsPath}/user.svg`))
       .addSvgIcon(
         'settings',
         this.setIconPath(`${this.iconsPath}/settings.svg`),

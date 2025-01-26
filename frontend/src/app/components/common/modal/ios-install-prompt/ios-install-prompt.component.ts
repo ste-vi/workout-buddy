@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { dialogOpenClose } from '../../../../animations/dialog-open-close';
 import { fadeInOut } from '../../../../animations/fade-in-out';
 import { MediumButtonComponent } from '../../medium-button/medium-button.component';
+import {excludedRoutes} from "../../../../app.routes";
 
 @Component({
   selector: 'app-ios-install-prompt',
@@ -16,7 +17,6 @@ import { MediumButtonComponent } from '../../medium-button/medium-button.compone
 })
 export class IosInstallPromptComponent implements OnInit {
   showPrompt = false;
-  private excludedRoutes = ['/login', '/register'];
 
   constructor(private router: Router) {}
 
@@ -37,7 +37,7 @@ export class IosInstallPromptComponent implements OnInit {
       (window.navigator as any)['standalone'];
     const hasPromptBeenShown =
       localStorage.getItem('iosPromptShown') === 'true';
-    const isExcludedRoute = this.excludedRoutes.some((route) =>
+    const isExcludedRoute = excludedRoutes.some((route) =>
       this.router.url.startsWith(route),
     );
 

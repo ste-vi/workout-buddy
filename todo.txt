@@ -9,4 +9,4 @@
 - Add db migrations
 
 // far
-implement DB backups
+implement DB cd backups
