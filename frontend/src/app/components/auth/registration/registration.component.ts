@@ -14,6 +14,7 @@ import { ButtonComponent } from '../../common/button/button.component';
 import { SocialButtonComponent } from '../../common/social-button/social-button.component';
 import { fadeInOut } from '../../../animations/fade-in-out';
 import { collapse } from '../../../animations/collapse';
+import {OnboardingService} from "../../../services/communication/onboarding.service";
 
 @Component({
   selector: 'app-registration',
@@ -40,8 +41,6 @@ export class RegistrationComponent {
   confirmPasswordVisibilityIcon: string = 'visibility';
   isSubmitted = false;
 
-  @ViewChild('registrationFormElement') registrationFormElement!: ElementRef;
-
   @ViewChild('errorToast')
   errorToast!: ToastComponent;
 
@@ -49,6 +48,7 @@ export class RegistrationComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private onboardingService: OnboardingService
   ) {
     this.registrationForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -97,6 +97,7 @@ export class RegistrationComponent {
         next: () => {
           this.router.navigate(['/dashboard']).then();
           this.registrationForm.reset();
+          this.onboardingService.startOnboarding();
         },
         error: (error) => {
           this.errorToast.open('Error', [error.toString()], 'danger');

@@ -1,0 +1,79 @@
+<div class="personal-info-container black-color" [@sideModalOpenClose]>
+  <div class="personal-info-container-header">
+    <h4>Let's complete your profile</h4>
+    <div class="s-text gray-1-color">It will help you to track the progress</div>
+  </div>
+
+  <form [formGroup]="personalInfoForm" #personalInfoFormElement class="personal-info-container-body">
+    <app-toast #errorToast></app-toast>
+
+    <div class="gender-select">
+      <div class="gray-1-color gender-header">
+        <mat-icon svgIcon="user"></mat-icon>
+        <div>Gender</div>
+      </div>
+      <div class="gender-options">
+        <div class="gender-option clickable">
+          <input type="radio" id="male" name="gender" formControlName="gender" value="male">
+          <label for="male" class="m-text">Male</label>
+        </div>
+        <div class="gender-option clickable">
+          <input type="radio" id="female" name="gender" formControlName="gender" value="female">
+          <label for="female" class="m-text">Female</label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isSubmitted && personalInfoForm.get('gender')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Gender is required
+    </div>
+
+    <app-icon-input leftIcon="calendar" placeholder="Birth date"
+                    [formControlName]="'dateOfBirth'">
+    </app-icon-input>
+    <div *ngIf="isSubmitted && personalInfoForm.get('dateOfBirth')?.invalid" [@collapse]
+         class="error-message s-text semi-bold">
+      Birth date is required
+      
+    </div>
+
+    <div class="measurement-input-container">
+      <app-icon-input leftIcon="scale" placeholder="Weight"
+                      [formControlName]="'weight'" [type]="'number'">
+      </app-icon-input>
+      <div class="measurement-input-unit secondary-background m-text">
+        KG
+      </div>
+    </div>
+    <div
+      *ngIf="isSubmitted && (personalInfoForm.get('weight')?.value < 30 || personalInfoForm.get('weight')?.value > 250)"
+      [@collapse]
+      class="error-message s-text semi-bold">
+      Weight is invalid
+    </div>
+
+    <div class="measurement-input-container">
+      <app-icon-input leftIcon="swap" placeholder="Height"
+                      [formControlName]="'height'" [type]="'number'">
+      </app-icon-input>
+      <div class="measurement-input-unit secondary-background m-text">
+        CM
+      </div>
+    </div>
+    <div
+      *ngIf="isSubmitted && (personalInfoForm.get('height')?.value < 30 || personalInfoForm.get('height')?.value > 250)"
+      [@collapse]
+      class="error-message s-text semi-bold">
+      Height is invalid
+    </div>
+
+  </form>
+
+  <div class="personal-info-container-footer">
+    <app-button type="submit" name="Continue"
+                [textClasses]="['white-color', 'semi-bold']"
+                (click)="saveAndContinue()">
+    </app-button>
+  </div>
+
+</div>

@@ -1,0 +1,101 @@
+.personal-info-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background-color: white;
+  gap: var(--l-size);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  .personal-info-container-header {
+    text-align: center;
+    padding: 0 var(--l-size);
+    padding-top: var(--l-size);
+  }
+
+  .personal-info-container-body {
+    flex: 1 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--m-size);
+    padding: 0 var(--l-size);
+
+    .gender-select {
+      background-color: var(--border);
+      border-radius: 18px;
+      padding: 1rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .gender-header {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .gender-options {
+        display: flex;
+        gap: 1rem;
+
+        .gender-option {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+
+          input {
+            cursor: pointer;
+          }
+
+          label {
+            cursor: pointer;
+            padding-left: 0.25rem;
+          }
+        }
+
+      }
+    }
+
+    app-icon-input {
+      width: 100%;
+    }
+
+    .measurement-input-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--m-size);
+
+      .measurement-input-unit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 68px;
+        height: 54px;
+        color: white;
+        border-radius: 18px;
+      }
+    }
+  }
+
+  .personal-info-container-footer {
+    flex-shrink: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--m-size);
+    padding: 0 var(--l-size);
+    padding-bottom: calc(var(--l-size) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .error-message {
+    text-align: left;
+    padding-left: 3rem;
+    width: 100%;
+    color: var(--danger);
+  }
+
+}
+

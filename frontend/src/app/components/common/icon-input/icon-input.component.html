@@ -5,8 +5,9 @@
               [ngClass]="{'gray-1-color': !hasInput, 'filled-icon': hasInput}"
               [svgIcon]="leftIcon"></mat-icon>
   </div>
-  <input [type]="type" [placeholder]="placeholder" [autocomplete]="autocomplete" [value]="value"
-         (input)="onInput($event)">
+  <input [type]="type" [placeholder]="placeholder"
+         [disabled]="disable" [autocomplete]="autocomplete" [value]="value"
+         (input)="onInput($event)" inputmode="numeric">
   <mat-icon *ngIf="rightIcon" class="icon-right gray-1-color" [svgIcon]="rightIcon"
             (click)="onRightIconClick()"></mat-icon>
 </div>

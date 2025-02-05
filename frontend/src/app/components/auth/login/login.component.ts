@@ -41,8 +41,6 @@ export class LoginComponent implements OnInit {
   passwordVisibilityIcon: string = 'visibility';
   isSubmitted = false;
 
-  @ViewChild('loginFormElement') loginFormElement!: ElementRef;
-
   @ViewChild('errorToast')
   errorToast!: ToastComponent;
 

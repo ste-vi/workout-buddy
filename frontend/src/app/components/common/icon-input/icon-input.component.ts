@@ -29,6 +29,7 @@ export class IconInputComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
   @Input() autocomplete: string = 'off';
+  @Input() disable: boolean = false;
   @Output() rightIconClick = new EventEmitter<void>();
 
   hasInput: boolean = false;

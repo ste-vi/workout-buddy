@@ -86,6 +86,7 @@ export class AppComponent implements OnInit, OnDestroy {
       .addSvgIcon('login', this.setIconPath(`${this.iconsPath}/login.svg`))
       .addSvgIcon('email', this.setIconPath(`${this.iconsPath}/email.svg`))
       .addSvgIcon('scale', this.setIconPath(`${this.iconsPath}/scale.svg`))
+      .addSvgIcon('calendar', this.setIconPath(`${this.iconsPath}/calendar.svg`))
       .addSvgIcon('password', this.setIconPath(`${this.iconsPath}/password.svg`))
       .addSvgIcon('visibility', this.setIconPath(`${this.iconsPath}/visibility.svg`))
       .addSvgIcon('visibility-off', this.setIconPath(`${this.iconsPath}/visibility-off.svg`))
