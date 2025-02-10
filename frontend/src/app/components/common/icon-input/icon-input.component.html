@@ -7,7 +7,8 @@
   </div>
   <input [type]="type" [placeholder]="placeholder"
          [disabled]="disable" [autocomplete]="autocomplete" [value]="value"
-         (input)="onInput($event)" inputmode="numeric">
+         [mask]="mask" [dropSpecialCharacters]="false"
+         (input)="onInput($event)" [attr.inputmode]="type === 'number' ? 'numeric' : null">
   <mat-icon *ngIf="rightIcon" class="icon-right gray-1-color" [svgIcon]="rightIcon"
             (click)="onRightIconClick()"></mat-icon>
 </div>

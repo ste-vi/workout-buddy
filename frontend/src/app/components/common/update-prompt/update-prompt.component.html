@@ -1,0 +1,11 @@
+<div class="modal-overlay" *ngIf="showUpdatePrompt" [@fadeInOut]></div>
+<div *ngIf="showUpdatePrompt" class="update-prompt" [@dialogOpenClose]>
+  <div class="m-text centered-text">New version available</div>
+  <div class="s-text gray-1-color card-padding-top card-padding-bottom"> A new version of the app is available. Confirm
+    to update
+  </div>
+  <app-medium-button name="Update"
+                     [classes]="['primary-background', 'black-color']"
+                     [textClasses]="['white-color', 'semi-bold']"
+                     (click)="reloadApp()"></app-medium-button>
+</div>

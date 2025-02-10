@@ -9,6 +9,7 @@ import com.stevi.workoutbuddy.domain.sets.service.SetsService
 import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
 import com.stevi.workoutbuddy.domain.tag.service.TagService
+import com.stevi.workoutbuddy.domain.user.service.UserService
 import com.stevi.workoutbuddy.domain.workout.model.request.WorkoutUpdateRequest
 import com.stevi.workoutbuddy.domain.workout.model.response.LastPerformedWorkout
 import com.stevi.workoutbuddy.domain.workout.model.response.WorkoutCompletionResponse

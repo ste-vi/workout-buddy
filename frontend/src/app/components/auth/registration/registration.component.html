@@ -8,9 +8,9 @@
     <app-icon-input leftIcon="user" placeholder="Username"
                     [formControlName]="'username'">
     </app-icon-input>
-    <div *ngIf="isSubmitted && registrationForm.get('username')?.invalid" [@collapse]
+    <div *ngIf="isSubmitted && registrationForm.get('username')?.errors?.['minlength']"
          class="error-message s-text semi-bold">
-      Username is required
+      Username must be at least 4 characters long
     </div>
     <app-icon-input leftIcon="email" placeholder="Email"
                     [formControlName]="'email'">
@@ -27,9 +27,9 @@
                     autocomplete="current-password"
                     (rightIconClick)="togglePasswordVisibility()">
     </app-icon-input>
-    <div *ngIf="isSubmitted && registrationForm.get('password')?.invalid" [@collapse]
+    <div *ngIf="isSubmitted && registrationForm.get('password')?.errors?.['minlength']"
          class="error-message s-text semi-bold">
-      Password is required
+      Password must be at least 6 characters long
     </div>
     <app-icon-input leftIcon="password"
                     [rightIcon]="confirmPasswordVisibilityIcon"

@@ -1,0 +1,27 @@
+.success-onboarding-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  background-color: white;
+  padding: var(--l-size);
+
+  .success-onboarding-container-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .svg-container {
+      padding-bottom: var(--l-size);
+    }
+  }
+
+  .success-onboarding-container-footer {
+    width: 100%;
+    margin-top: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}

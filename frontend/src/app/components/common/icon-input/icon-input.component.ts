@@ -8,6 +8,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import {NgClass, NgIf} from '@angular/common';
+import {NgxMaskDirective} from "ngx-mask";
 
 @Component({
   selector: 'app-icon-input',
@@ -21,7 +22,7 @@ import {NgClass, NgIf} from '@angular/common';
       multi: true,
     },
   ],
-  imports: [MatIcon, NgIf, NgClass],
+  imports: [MatIcon, NgIf, NgClass, NgxMaskDirective],
 })
 export class IconInputComponent implements ControlValueAccessor {
   @Input() leftIcon: string = '';
@@ -29,6 +30,7 @@ export class IconInputComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
   @Input() autocomplete: string = 'off';
+  @Input() mask: string = '';
   @Input() disable: boolean = false;
   @Output() rightIconClick = new EventEmitter<void>();
 

@@ -1,1 +1,20 @@
-<p>success works!</p>
+<div class="success-onboarding-container black-color" [@sideModalOpenClose]>
+
+  <div class="success-onboarding-container-body">
+    <div class="svg-container">
+      <img ngSrc="assets/images/svg/completed-onboarding.svg" alt="Onboarding Success" height="304" width="278">
+    </div>
+
+    <div class="centered-text">
+      <h4>Onboarding Complete!</h4>
+      <div class="gray-1-color m-text">You're all set to start your fitness journey</div>
+    </div>
+  </div>
+
+  <div class="success-onboarding-container-footer">
+    <app-button type="submit" name="Go To Home"
+                [textClasses]="['white-color', 'semi-bold']"
+                (click)="finishOnboarding()">
+    </app-button>
+  </div>
+</div>

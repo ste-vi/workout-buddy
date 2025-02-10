@@ -2,7 +2,7 @@ package com.stevi.workoutbuddy.domain.tag.service
 
 import com.stevi.workoutbuddy.domain.tag.model.request.TagRequest
 import com.stevi.workoutbuddy.domain.tag.model.response.TagResponse
-import com.stevi.workoutbuddy.domain.workout.service.UserService
+import com.stevi.workoutbuddy.domain.user.service.UserService
 import com.stevi.workoutbuddy.entity.Tag
 import com.stevi.workoutbuddy.repository.TagRepository
 import org.springframework.stereotype.Service

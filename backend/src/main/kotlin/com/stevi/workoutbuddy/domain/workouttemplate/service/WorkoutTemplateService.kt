@@ -3,7 +3,7 @@ package com.stevi.workoutbuddy.domain.workouttemplate.service
 import com.stevi.workoutbuddy.domain.exercises.service.ExerciseInstanceService
 import com.stevi.workoutbuddy.domain.sets.service.SetsService
 import com.stevi.workoutbuddy.domain.tag.service.TagService
-import com.stevi.workoutbuddy.domain.workout.service.UserService
+import com.stevi.workoutbuddy.domain.user.service.UserService
 import com.stevi.workoutbuddy.domain.workout.service.WorkoutService
 import com.stevi.workoutbuddy.domain.workouttemplate.model.request.WorkoutTemplateRequest
 import com.stevi.workoutbuddy.domain.workouttemplate.model.response.WorkoutTemplatePreviewResponse

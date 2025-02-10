@@ -3,7 +3,7 @@ package com.stevi.workoutbuddy.domain.weight.service
 import com.stevi.workoutbuddy.common.model.response.PageResponse
 import com.stevi.workoutbuddy.domain.weight.model.request.BodyWeightMeasureRequest
 import com.stevi.workoutbuddy.domain.weight.model.response.BodyWeightMeasureResponse
-import com.stevi.workoutbuddy.domain.workout.service.UserService
+import com.stevi.workoutbuddy.domain.user.service.UserService
 import com.stevi.workoutbuddy.entity.BodyWeightMeasure
 import com.stevi.workoutbuddy.repository.BodyWeightMeasureRepository
 import org.springframework.data.domain.PageRequest

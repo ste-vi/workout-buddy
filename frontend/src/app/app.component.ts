@@ -17,6 +17,7 @@ import {
 import {AuthService} from "./components/auth/auth-service";
 import {filter} from "rxjs";
 import {switchMap} from "rxjs/operators";
+import {UpdatePromptComponent} from "./components/common/update-prompt/update-prompt.component";
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ import {switchMap} from "rxjs/operators";
     NetworkStatusComponent,
     OngoingWorkoutComponent,
     CompletedWorkoutModalComponent,
+    UpdatePromptComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -43,20 +45,22 @@ export class AppComponent implements OnInit, OnDestroy {
     private domSanitizer: DomSanitizer,
     private workoutService: WorkoutService,
     private ongoingWorkoutService: OngoingWorkoutService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.initSvgIcons();
   }
 
   ngOnInit() {
-    this.authService.isAuthenticated$.pipe(
-      filter(isAuthenticated => isAuthenticated),
-      switchMap(() => this.workoutService.getOngoingWorkout())
-    ).subscribe((workout) => {
-      if (workout) {
-        this.ongoingWorkoutService.openModal(new Workout(workout));
-      }
-    });
+    this.authService.isAuthenticated$
+      .pipe(
+        filter((isAuthenticated) => isAuthenticated),
+        switchMap(() => this.workoutService.getOngoingWorkout()),
+      )
+      .subscribe((workout) => {
+        if (workout) {
+          this.ongoingWorkoutService.openModal(new Workout(workout));
+        }
+      });
   }
 
   ngOnDestroy() {}
@@ -81,15 +85,30 @@ export class AppComponent implements OnInit, OnDestroy {
       .addSvgIcon('clear', this.setIconPath(`${this.iconsPath}/clear.svg`))
       .addSvgIcon('danger', this.setIconPath(`${this.iconsPath}/danger.svg`))
       .addSvgIcon('warning', this.setIconPath(`${this.iconsPath}/warning.svg`))
-      .addSvgIcon('clipboard-remove', this.setIconPath(`${this.iconsPath}/clipboard-remove.svg`))
+      .addSvgIcon(
+        'clipboard-remove',
+        this.setIconPath(`${this.iconsPath}/clipboard-remove.svg`),
+      )
       .addSvgIcon('library', this.setIconPath(`${this.iconsPath}/library.svg`))
       .addSvgIcon('login', this.setIconPath(`${this.iconsPath}/login.svg`))
       .addSvgIcon('email', this.setIconPath(`${this.iconsPath}/email.svg`))
       .addSvgIcon('scale', this.setIconPath(`${this.iconsPath}/scale.svg`))
-      .addSvgIcon('calendar', this.setIconPath(`${this.iconsPath}/calendar.svg`))
-      .addSvgIcon('password', this.setIconPath(`${this.iconsPath}/password.svg`))
-      .addSvgIcon('visibility', this.setIconPath(`${this.iconsPath}/visibility.svg`))
-      .addSvgIcon('visibility-off', this.setIconPath(`${this.iconsPath}/visibility-off.svg`))
+      .addSvgIcon(
+        'calendar',
+        this.setIconPath(`${this.iconsPath}/calendar.svg`),
+      )
+      .addSvgIcon(
+        'password',
+        this.setIconPath(`${this.iconsPath}/password.svg`),
+      )
+      .addSvgIcon(
+        'visibility',
+        this.setIconPath(`${this.iconsPath}/visibility.svg`),
+      )
+      .addSvgIcon(
+        'visibility-off',
+        this.setIconPath(`${this.iconsPath}/visibility-off.svg`),
+      )
       .addSvgIcon('google', this.setIconPath(`${this.iconsPath}/google.svg`))
       .addSvgIcon('options', this.setIconPath(`${this.iconsPath}/options.svg`))
       .addSvgIcon('edit', this.setIconPath(`${this.iconsPath}/edit.svg`))

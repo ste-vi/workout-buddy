@@ -5,6 +5,7 @@ import { ButtonComponent } from '../../common/button/button.component';
 import { IconInputComponent } from '../../common/icon-input/icon-input.component';
 import { NgIf } from '@angular/common';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -43,7 +44,7 @@ export class PersonalInfoComponent {
   ) {
     this.personalInfoForm = this.fb.group({
       gender: ['', [Validators.required]],
-      dateOfBirth: ['', [Validators.required]],
+      dateOfBirth: ['', [Validators.required, this.dateValidator]],
       height: [
         '',
         [Validators.required, Validators.min(30), Validators.max(250)],
@@ -63,6 +64,26 @@ export class PersonalInfoComponent {
       return;
     }
 
-    this.onboardingService.completePersonalInfo();
+    const formValues = this.personalInfoForm.value;
+    const personalInfo = {
+      gender: formValues.gender,
+      dateOfBirth: formValues.dateOfBirth,
+      height: formValues.height,
+      weight: formValues.weight
+    };
+
+    this.onboardingService.completePersonalInfo(personalInfo);
+  }
+
+  dateValidator(control: AbstractControl): { [key: string]: any } | null {
+    if (control.value) {
+      const [day, month, year] = control.value.split('/').map(Number);
+      const date = new Date(year, month - 1, day);
+      const currentYear = new Date().getFullYear();
+      if (isNaN(date.getTime()) || year < 1950 || year > currentYear - 5) {
+        return { invalidDate: true };
+      }
+    }
+    return null;
   }
 }

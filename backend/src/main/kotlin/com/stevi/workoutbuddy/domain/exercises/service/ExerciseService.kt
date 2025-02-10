@@ -5,11 +5,12 @@ import com.stevi.workoutbuddy.domain.exercises.model.request.CreateExerciseReque
 import com.stevi.workoutbuddy.domain.exercises.model.response.ExerciseResponse
 import com.stevi.workoutbuddy.domain.exercises.specification.ExerciseSpecification
 import com.stevi.workoutbuddy.domain.sets.service.SetsService
-import com.stevi.workoutbuddy.domain.workout.service.UserService
 import com.stevi.workoutbuddy.entity.Exercise
+import com.stevi.workoutbuddy.entity.User
 import com.stevi.workoutbuddy.enumeration.BodyPart
 import com.stevi.workoutbuddy.enumeration.ExerciseCategory
 import com.stevi.workoutbuddy.repository.ExerciseRepository
+import com.stevi.workoutbuddy.repository.UserRepository
 import com.stevi.workoutbuddy.security.SecurityUtil
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.data.domain.PageRequest
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ExerciseService(
     private val exerciseRepository: ExerciseRepository,
-    private val userService: UserService,
+    private val userRepository: UserRepository,
     private val setsService: SetsService
 ) {
 
@@ -62,7 +63,7 @@ class ExerciseService(
             bodyPart = request.bodyPart,
             category = request.category,
             deleted = false,
-            user = userService.getCurrentUser()
+            user = userRepository.findById(SecurityUtil.getCurrentUserId()).orElseThrow()
         )
         val savedExercise = exerciseRepository.save(exercise)
         return ExerciseResponse.fromEntity(savedExercise, null)
@@ -90,5 +91,10 @@ class ExerciseService(
         val exercise = exerciseRepository.findByIdAndUserId(id, SecurityUtil.getCurrentUserId())
             ?: throw EntityNotFoundException("Exercise not found with id: $id")
         exerciseRepository.delete(exercise)
+    }
+
+    @Transactional
+    fun initDefaultExercisesForUser(user: User) {
+        // todo
     }
 }

@@ -15,6 +15,7 @@ import { SocialButtonComponent } from '../../common/social-button/social-button.
 import { fadeInOut } from '../../../animations/fade-in-out';
 import { collapse } from '../../../animations/collapse';
 import {OnboardingService} from "../../../services/communication/onboarding.service";
+import {Authentication} from "../../../models/authentication";
 
 @Component({
   selector: 'app-registration',
@@ -51,9 +52,9 @@ export class RegistrationComponent {
     private onboardingService: OnboardingService
   ) {
     this.registrationForm = this.fb.group({
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.minLength(4)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
     });
   }
@@ -95,7 +96,6 @@ export class RegistrationComponent {
       )
       .subscribe({
         next: () => {
-          this.router.navigate(['/dashboard']).then();
           this.registrationForm.reset();
           this.onboardingService.startOnboarding();
         },
