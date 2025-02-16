@@ -131,6 +131,9 @@ export class WorkoutsCalendarComponent implements OnInit {
   }
 
   openViewModal(day: Date) {
+    if (!this.hasWorkout(day)) {
+      return;
+    }
     const workoutHistoryPreviews = this.workoutHistoryPreviews.filter(
       (preview) => preview.endTime.toDateString() === day.toDateString(),
     );

@@ -6,14 +6,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IconInputComponent } from '../../common/icon-input/icon-input.component';
 import { ToastComponent } from '../../common/toast/toast.component';
 import { ButtonComponent } from '../../common/button/button.component';
 import { SocialButtonComponent } from '../../common/social-button/social-button.component';
 import { collapse } from '../../../animations/collapse';
-import {AuthService} from "../auth-service";
-import {fadeInOut} from "../../../animations/fade-in-out";
+import { AuthService } from '../auth-service';
+import { fadeInOut } from '../../../animations/fade-in-out';
 
 @Component({
   selector: 'app-login',
@@ -48,11 +48,22 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
+    this.handleOauth();
+  }
+
+  private handleOauth() {
+    this.authService.removeAuthorization();
+    const accessToken = this.activatedRoute.snapshot.queryParams['accessToken'];
+    if (accessToken) {
+      this.authService.authorize(accessToken);
+      this.router.navigate(['/']).then((r) => '');
+    }
   }
 
   ngOnInit() {}
@@ -65,23 +76,33 @@ export class LoginComponent implements OnInit {
       : 'visibility';
   }
 
+  googleLogin() {
+    this.authService.loginViaGoogle();
+  }
+
   login() {
     this.isSubmitted = true;
     if (this.loginForm.valid) {
       this.authService
-        .login(this.loginForm.value.email, this.loginForm.value.password)
-        .subscribe((success) => {
-          if (success) {
+        .loginWithCredentials(
+          this.loginForm.value.email,
+          this.loginForm.value.password,
+        )
+        .subscribe({
+          next: () => {
             this.router.navigate(['/dashboard']).then();
-          } else {
-            let errorMessage = 'Credentials are not correct';
-            this.errorToast.open('Error', [errorMessage], 'danger');
-          }
+          },
+          error: (error) => {
+            console.log(error);
+            this.errorToast.open(
+              'Error',
+              [error.message?.toString()],
+              'danger',
+            );
+          },
         });
     }
   }
-
-  googleLogin() {}
 
   forgotPassword() {}
 

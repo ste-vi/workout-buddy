@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 class UserController(private val userService: UserService) {
 
     @PostMapping("/onboarding/complete")

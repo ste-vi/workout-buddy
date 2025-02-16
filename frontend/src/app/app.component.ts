@@ -8,16 +8,15 @@ import 'keen-slider/keen-slider.min.css';
 import { IosInstallPromptComponent } from './components/common/modal/ios-install-prompt/ios-install-prompt.component';
 import { NetworkStatusComponent } from './components/common/network-status/network-status.component';
 import { OngoingWorkoutComponent } from './components/ongoing-workout/ongoing-workout.component';
-import { WorkoutService } from './services/api/workout.service';
 import { OngoingWorkoutService } from './services/communication/ongoing-workout.service';
-import {Workout} from "./models/workout";
-import {
-    CompletedWorkoutModalComponent
-} from "./components/ongoing-workout/completed-workout-modal/completed-workout-modal.component";
-import {AuthService} from "./components/auth/auth-service";
-import {filter} from "rxjs";
-import {switchMap} from "rxjs/operators";
-import {UpdatePromptComponent} from "./components/common/update-prompt/update-prompt.component";
+import { Workout } from './models/workout';
+import { CompletedWorkoutModalComponent } from './components/ongoing-workout/completed-workout-modal/completed-workout-modal.component';
+import { AuthService } from './components/auth/auth-service';
+import { filter } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { UpdatePromptComponent } from './components/common/update-prompt/update-prompt.component';
+import { ProcessService } from './services/api/process.service';
+import { OnboardingService } from './services/communication/onboarding.service';
 
 @Component({
   selector: 'app-root',
@@ -43,9 +42,10 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private workoutService: WorkoutService,
+    private processService: ProcessService,
     private ongoingWorkoutService: OngoingWorkoutService,
     private authService: AuthService,
+    private onboardingService: OnboardingService,
   ) {
     this.initSvgIcons();
   }
@@ -54,11 +54,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authService.isAuthenticated$
       .pipe(
         filter((isAuthenticated) => isAuthenticated),
-        switchMap(() => this.workoutService.getOngoingWorkout()),
+        switchMap(() => this.processService.getOngoingProcess()),
       )
-      .subscribe((workout) => {
-        if (workout) {
-          this.ongoingWorkoutService.openModal(new Workout(workout));
+      .subscribe((process) => {
+        if (process.workout) {
+          this.ongoingWorkoutService.openModal(new Workout(process.workout));
+        } else if (process.onboardingInProgress) {
+          this.onboardingService.startOnboarding();
         }
       });
   }
@@ -91,6 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .addSvgIcon('library', this.setIconPath(`${this.iconsPath}/library.svg`))
       .addSvgIcon('login', this.setIconPath(`${this.iconsPath}/login.svg`))
+      .addSvgIcon('logout', this.setIconPath(`${this.iconsPath}/logout.svg`))
       .addSvgIcon('email', this.setIconPath(`${this.iconsPath}/email.svg`))
       .addSvgIcon('scale', this.setIconPath(`${this.iconsPath}/scale.svg`))
       .addSvgIcon(

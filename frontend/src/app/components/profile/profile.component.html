@@ -3,7 +3,7 @@
   <div class="profile-container-header">
     <app-header-button icon="left-arrow" class="not-visible"></app-header-button>
     <b class="l-text">Profile</b>
-    <app-header-button icon="two-dots"></app-header-button>
+    <app-header-button icon="two-dots" (click)="openProfileMenu($event)"></app-header-button>
   </div>
 
   <div class="profile-info-container">
@@ -15,7 +15,7 @@
           <div class="user-progress s-text">You're getting stronger!</div>
         </div>
       </div>
-      <div class="profile-edit-button ">
+      <div class="profile-edit-button">
         <app-medium-button name="Edit" [classes]="['primary-background', 'white-color']"></app-medium-button>
       </div>
     </div>
@@ -82,5 +82,7 @@
       </div>
     </div>
   </div>
+
+  <app-context-menu #profileMenu [menuItems]="profileMenuItems"></app-context-menu>
 
 </div>

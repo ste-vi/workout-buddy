@@ -21,8 +21,8 @@ class User(
     @Column(nullable = false)
     val email: String,
 
-    @Column(nullable = false)
-    var password: String,
+    @Column(nullable = true)
+    var password: String?,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
@@ -33,9 +33,6 @@ class User(
 
     @Column(nullable = true)
     var height: Int? = null,
-
-    @Column(nullable = true)
-    var weight: Int? = null,
 
     @Column(nullable = false)
     var activeOnboarding: Boolean,

@@ -30,10 +30,15 @@ export class OnboardingService {
   }
 
   completePersonalInfo(personalInfo: OnboardingPersonalInfo) {
-    const currentData = this.onboardingDataSubject.getValue();
-    if (currentData) {
-      this.onboardingDataSubject.next(personalInfo);
-    }
+    // Format the date from dd/MM/yyyy to yyyy-MM-dd
+    const [day, month, year] = personalInfo.dateOfBirth.split('/');
+    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    const formattedPersonalInfo = {
+      ...personalInfo,
+      dateOfBirth: formattedDate
+    };
+
+    this.onboardingDataSubject.next(formattedPersonalInfo);
     this.router.navigate(['/onboarding/success']).then();
   }
 

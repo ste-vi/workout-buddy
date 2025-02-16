@@ -23,5 +23,5 @@ data class PersonalInfoRequest(
     @field:NotNull(message = "Weight is required")
     @field:Min(value = 30, message = "Weight must be at least 30 kg")
     @field:Max(value = 250, message = "Weight must be at most 250 kg")
-    val weight: Int
+    val weight: Double
 )

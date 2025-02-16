@@ -51,9 +51,7 @@ export class PersonalInfoComponent {
       ],
       weight: [
         '',
-        [Validators.required],
-        Validators.min(30),
-        Validators.max(250),
+        [Validators.required, Validators.min(30), Validators.max(250)],
       ],
     });
   }
@@ -61,6 +59,7 @@ export class PersonalInfoComponent {
   saveAndContinue() {
     this.isSubmitted = true;
     if (this.personalInfoForm.invalid) {
+      console.log('Form is invalid');
       return;
     }
 
@@ -69,7 +68,7 @@ export class PersonalInfoComponent {
       gender: formValues.gender,
       dateOfBirth: formValues.dateOfBirth,
       height: formValues.height,
-      weight: formValues.weight
+      weight: formValues.weight,
     };
 
     this.onboardingService.completePersonalInfo(personalInfo);

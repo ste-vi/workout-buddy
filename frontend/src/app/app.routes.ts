@@ -26,8 +26,16 @@ export const routes: Routes = [
     path: 'register',
     component: RegistrationComponent,
   },
-  { path: 'onboarding/personal-info', component: PersonalInfoComponent },
-  { path: 'onboarding/success', component: SuccessComponent },
+  {
+    path: 'onboarding/personal-info',
+    component: PersonalInfoComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'onboarding/success',
+    component: SuccessComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'dashboard',
     component: DashboardComponent,

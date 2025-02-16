@@ -4,17 +4,20 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../components/auth/auth-service';
 
-export function errorInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn,
-) {
-  return next(req).pipe(
-    catchError((err) => {
-      if (err.status === 401) {
-        inject(AuthService).logout();
-      }
-      const error = err.error || err.statusText;
-      return throwError(error);
-    }),
-  );
+export function errorInterceptorFn(authService: AuthService) {
+  return (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
+    return next(req).pipe(
+      catchError((err) => {
+        if (err.status === 401 && !req.url.includes('/login')) {
+          authService.logout();
+        }
+        const error = err.error || err.statusText;
+        return throwError(() => error);
+      }),
+    );
+  };
 }
+
+export const errorInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
+  return errorInterceptorFn(inject(AuthService))(req, next);
+};

@@ -31,12 +31,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/workouts")
 class WorkoutController(private val workoutService: WorkoutService) {
 
-    @GetMapping("/ongoing")
-    @ResponseStatus(HttpStatus.OK)
-    fun getOngoingWorkout(): WorkoutResponse? {
-        return workoutService.findOngoingWorkout(SecurityUtil.getCurrentUserId())
-    }
-
     @GetMapping("/latest")
     @ResponseStatus(HttpStatus.OK)
     fun getLastPerformedWorkout(): WorkoutResponse? {

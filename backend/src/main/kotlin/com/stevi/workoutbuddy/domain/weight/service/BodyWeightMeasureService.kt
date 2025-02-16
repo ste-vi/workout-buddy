@@ -3,9 +3,12 @@ package com.stevi.workoutbuddy.domain.weight.service
 import com.stevi.workoutbuddy.common.model.response.PageResponse
 import com.stevi.workoutbuddy.domain.weight.model.request.BodyWeightMeasureRequest
 import com.stevi.workoutbuddy.domain.weight.model.response.BodyWeightMeasureResponse
-import com.stevi.workoutbuddy.domain.user.service.UserService
 import com.stevi.workoutbuddy.entity.BodyWeightMeasure
+import com.stevi.workoutbuddy.entity.User
 import com.stevi.workoutbuddy.repository.BodyWeightMeasureRepository
+import com.stevi.workoutbuddy.repository.UserRepository
+import com.stevi.workoutbuddy.security.SecurityUtil
+import java.time.LocalDateTime
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -15,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class BodyWeightMeasureService(
     private val bodyWeightMeasureRepository: BodyWeightMeasureRepository,
-    private val userService: UserService
+    private val userRepository: UserRepository
 ) {
 
     @Transactional
@@ -23,10 +26,20 @@ class BodyWeightMeasureService(
         val bodyWeightMeasure = BodyWeightMeasure(
             weight = request.value,
             date = request.date,
-            user = userService.getCurrentUser()
+            user = userRepository.getReferenceById(SecurityUtil.getCurrentUserId())
         )
         val savedMeasure = bodyWeightMeasureRepository.save(bodyWeightMeasure)
         return BodyWeightMeasureResponse.fromEntity(savedMeasure)
+    }
+
+    @Transactional
+    fun initBodyWeightMeasure(weight: Double, user: User) {
+        val bodyWeightMeasure = BodyWeightMeasure(
+            weight = weight,
+            date = LocalDateTime.now(),
+            user = user
+        )
+        bodyWeightMeasureRepository.save(bodyWeightMeasure)
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +55,8 @@ class BodyWeightMeasureService(
         size: Int,
         sortOrder: String
     ): PageResponse<BodyWeightMeasureResponse> {
-        val sort = Sort.by(if (sortOrder.equals("asc", ignoreCase = true)) Sort.Direction.ASC else Sort.Direction.DESC, "date")
+        val sort =
+            Sort.by(if (sortOrder.equals("asc", ignoreCase = true)) Sort.Direction.ASC else Sort.Direction.DESC, "date")
         val pageable = PageRequest.of(page, size, sort)
 
         val measures = bodyWeightMeasureRepository.findByUserId(

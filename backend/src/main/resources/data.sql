@@ -8,7 +8,7 @@ VALUES (80.5, '2023-06-01 07:00:00', 1),
        (80.2, '2023-06-02 07:00:00', 1),
        (79.8, '2023-06-03 07:00:00', 1);
 -- Get the user_id
-WITH user_id AS (SELECT id FROM users WHERE username = 'testuser')
+WITH user_id AS (SELECT id FROM users WHERE username = 'stevi')
 
 -- Insert exercises
 INSERT

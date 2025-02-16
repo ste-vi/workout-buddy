@@ -100,7 +100,7 @@ export class RegistrationComponent {
           this.onboardingService.startOnboarding();
         },
         error: (error) => {
-          this.errorToast.open('Error', [error.toString()], 'danger');
+          this.errorToast.open('Error', [error.message?.toString()], 'danger');
         }
       });
   }

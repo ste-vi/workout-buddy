@@ -1,6 +1,7 @@
 package com.stevi.workoutbuddy.config
 
 import com.stevi.workoutbuddy.common.model.response.ErrorResponse
+import com.stevi.workoutbuddy.exception.AuthenticationException
 import com.stevi.workoutbuddy.exception.ResourceNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,6 +24,12 @@ class GlobalExceptionHandler {
     fun handleIllegalStateException(ex: IllegalStateException): ResponseEntity<ErrorResponse> {
         val errorResponse = ErrorResponse(ex.message ?: "Illegal state exception", HttpStatus.BAD_REQUEST.value())
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(AuthenticationException::class)
+    fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(ex.message ?: "Authentication failed", HttpStatus.UNAUTHORIZED.value())
+        return ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)

@@ -36,10 +36,6 @@ export class WorkoutService {
       .pipe(tap((workout) => this.lastPerformedWorkoutSubject.next(workout)));
   }
 
-  getOngoingWorkout(): Observable<Workout | undefined> {
-    return this.http.get<Workout | undefined>(`${this.apiUrl}/ongoing`);
-  }
-
   getWorkoutById(workoutId: number): Observable<Workout> {
     return this.http.get<Workout>(`${this.apiUrl}/${workoutId}`);
   }
